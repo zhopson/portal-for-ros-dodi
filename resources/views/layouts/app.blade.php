@@ -39,42 +39,43 @@
                 </div>
             @endif-->
                     
-                @guest    
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
 <!--                        {{ config('app.name', 'Laravel') }}-->
                         Главная
                     </a>
-                @else    
-                    <a class="navbar-brand" href="{{ url('/') }}">
-<!--                        {{ config('app.name', 'Laravel') }}-->
-                        Главная
-                    </a>
-                    <a class="navbar-brand" href="{{ url('/lc') }}">
-                        Личный кабинет
-                    </a>
-                    <a class="navbar-brand" href="{{ url('/telephony') }}"> <!--route('telephony')-->
-                        Телефония
-                    </a>
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        Тех.поддержка
-                    </a>
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        Мониторинг
-                    </a>
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        WiKi
-                    </a>
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        Администрирование
-                    </a>
-                @endguest
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;
+
+                        @guest    
+                        @else    
+                        <li><a href="{{ url('/lc') }}">Личный кабинет</a></li>
+                        <li><a href="{{ url('/telephony') }}">Телефония</a></li><!--route('telephony')-->
+                        <li><a href="{{ url('/') }}">Тех.поддержка</a></li>
+                        <li><a href="{{ url('/') }}">Мониторинг</a></li>
+                        <li><a href="{{ url('/') }}">WiKi</a></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Администрирование <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+
+
+                        @endguest
+
+                        
                     </ul>
 
                     <!-- Right Side Of Navbar -->
