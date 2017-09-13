@@ -10,4 +10,15 @@ class Chain extends Model
   {
     return $this->belongsTo('App\User');
   }
-}
+
+  public function client()
+  {
+    return $this->belongsTo('App\Client');
+  }
+
+  public function user_closed()
+  {
+    return $this->belongsTo('App\User','who_closed');
+  }
+  
+  }

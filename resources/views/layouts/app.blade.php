@@ -55,7 +55,20 @@
                         @else    
                         <li><a href="{{ url('/lc') }}">Личный кабинет</a></li>
                         <li><a href="{{ url('/telephony') }}">Телефония</a></li><!--route('telephony')-->
-                        <li><a href="{{ url('/') }}">Тех.поддержка</a></li>
+<!--                        <li><a href="{{ url('/') }}">Тех.поддержка</a></li>-->
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Тех.поддержка<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/chains') }}">Протоколы</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Звонки</a></li>
+                                <li><a href="#">Обращения</a></li>
+                                <li><a href="#">Задачи</a></li>
+                                <li><a href="#">Заметки</a></li>
+                            </ul>
+                        </li>
+                        
                         <li><a href="{{ url('/') }}">Мониторинг</a></li>
                         <li><a href="{{ url('/') }}">WiKi</a></li>
 

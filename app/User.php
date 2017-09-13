@@ -46,5 +46,10 @@ class User extends Authenticatable
   {
     return $this->HasMany('App\Chain');
   }
+
+  public function who_closed()
+  {
+    return $this->HasMany('App\Chain','who_closed');
+  }
   
   }

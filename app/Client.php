@@ -10,4 +10,10 @@ class Client extends Model
   {
     return $this->belongsTo('App\User');
   }
+  
+  public function chains()
+  {
+    return $this->HasMany('App\Chain');
+  }
+  
 }

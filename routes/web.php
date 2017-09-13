@@ -24,3 +24,5 @@ Route::get('lc', function () {
 });
 
 Route::get('/telephony', 'TelephonyController@index')->name('telephony');
+
+Route::get('/chains', 'tsupport\ChainsController@index')->name('chains');
