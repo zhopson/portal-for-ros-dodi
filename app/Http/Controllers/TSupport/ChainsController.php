@@ -45,5 +45,43 @@ class ChainsController extends Controller
             'users' => $users,
         ]);
     }
+    
+    public function chain_view($id) {
+
+    $chains_items = DB::table('chain_items')
+            ->leftJoin('tasks', 'chain_items.task_id', '=', 'tasks.id')
+            ->leftJoin('calls', 'chain_items.call_id', '=', 'calls.id')
+            ->leftJoin('requests', 'chain_items.request_id', '=', 'requests.id')
+            ->leftJoin('users', 'chain_items.user_id', '=', 'users.id')
+            ->select('chain_items.id',
+                    'chain_items.creation_time',
+                    'users.name as avtor',
+                    'chain_items.update_time',
+                    'chain_items.call_id',
+                    'chain_items.task_id',
+                    'chain_items.request_id',
+                    'chain_items.note_id',
+                    'tasks.responsible_id',
+                    'tasks.progress',
+                    'calls.interlocutor',
+                    'calls.status as call_status',
+                    'tasks.status as task_status',
+                    'requests.provider_id',
+                    'tasks.start_time',
+                    'tasks.deadline_time',
+                    'chain_items.message'
+                    )
+            ->where('chain_items.chain_id', '=', $id)
+            ->orderBy('creation_time', 'desc')->get();
+    
+        $users = User::select('id','name')->get();
+    
+//        return view('tsupport.chain_view', compact('chains_items','users','id'));
+        return view('tsupport.chain_view', [
+            'chains_items' => $chains_items,
+            'users' => $users,
+            'id' => $id,
+        ]);
+    }
 
 }

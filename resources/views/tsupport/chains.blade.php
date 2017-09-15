@@ -51,7 +51,7 @@
                                 <div>{{ date('d.m.y H:i',$chain->update_time) }}</div>
                             </td>
                             <td class="table-text">
-                                <div>{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</div>
+                                <div><a href="#">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a></div>
                             </td>
                             <td class="table-text">
                                 <div>{{ $chain->address_id }}</div>
@@ -69,7 +69,7 @@
                                 <div>{{ date('d.m.y H:i',$chain->opening_time) }}</div>
                             </td>
                             <td class="table-text">
-                                <div>{{ $chain->last_comment }}</div>
+                                <div><a href="{{ route('chains.view', ['id' => $chain->id]) }}">{{ $chain->last_comment }}</a></div>
                             </td>
                             <td class="table-text">
                                 <div>{{ $chain->cat_name }}</div>
@@ -83,7 +83,7 @@
                     </tbody>
                 </table> 
                 @else
-                Нет Протоколов
+                <h3>Нет Протоколов!!!!!</h3>
                 @endif
             </div>        
         </div>

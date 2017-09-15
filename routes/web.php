@@ -25,4 +25,11 @@ Route::get('lc', function () {
 
 Route::get('/telephony', 'TelephonyController@index')->name('telephony');
 
-Route::get('/chains', 'tsupport\ChainsController@index')->name('chains');
+Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
+
+Route::get('/chains/view/{id}','TSupport\ChainsController@chain_view')->name('chains.view');
+
+//Route::get('chains/view/{id}', function ($id) {
+//    return 'User '.$id;
+//})->name('chains.view');
+
