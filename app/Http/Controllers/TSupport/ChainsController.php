@@ -48,6 +48,23 @@ class ChainsController extends Controller
     
     public function chain_view($id) {
 
+    $chain = DB::table('chains')
+            ->leftJoin('users', 'chains.user_id', '=', 'users.id')
+            ->leftJoin('clients', 'chains.client_id', '=', 'clients.id')
+            ->leftJoin('chains_categories', 'chains.id', '=', 'chains_categories.chain_id')
+            ->leftJoin('categories', 'categories.id', '=', 'chains_categories.category_id')
+            ->select('chains.status',
+                    'chains.creation_time',
+                    'users.name as avtor',
+                    'chains.client_id',
+                    'clients.surname',
+                    'clients.name as c_name',
+                    'clients.patronymic',                    
+                    'clients.address_id',
+                    'categories.name as category'
+                    )
+            ->where('chains.id', '=', $id)->first();
+        
     $chains_items = DB::table('chain_items')
             ->leftJoin('tasks', 'chain_items.task_id', '=', 'tasks.id')
             ->leftJoin('calls', 'chain_items.call_id', '=', 'calls.id')
@@ -74,14 +91,14 @@ class ChainsController extends Controller
             ->where('chain_items.chain_id', '=', $id)
             ->orderBy('creation_time', 'desc')->get();
     
-        $users = User::select('id','name')->get();
+    $users = User::select('id','name')->get();
     
-//        return view('tsupport.chain_view', compact('chains_items','users','id'));
-        return view('tsupport.chain_view', [
-            'chains_items' => $chains_items,
-            'users' => $users,
-            'id' => $id,
-        ]);
+        return view('tsupport.chain_view', compact('chain','chains_items','users','id'));
+//        return view('tsupport.chain_view', [
+//            'chains_items' => $chains_items,
+//            'users' => $users,
+//            'id' => $id,
+//        ]);
     }
 
 }

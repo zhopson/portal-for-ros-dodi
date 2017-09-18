@@ -13,7 +13,7 @@
                         Статус
                     </div>
                     <div class="col-md-1">
-                        Закрыт
+                        {{ $chain->status }}
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                         Создан
                     </div>
                     <div class="col-md-1">
-                        Дата
+                        {{ date('d.m.y H:i',$chain->creation_time) }}
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                         Автор
                     </div>
                     <div class="col-md-1">
-                        user
+                        {{ $chain->avtor }}
                     </div>
                 </div>
             </div>
@@ -42,9 +42,8 @@
                     <div class="col-md-1">
                         Пользователь
                     </div>
-                    <div class="col-md-1">
-                        <div><a href="#">test</a></div>
-<!--                        $chain->surname." ".$chain->c_name." ".$chain->patronymic-->
+                    <div class="col-md-3">
+                        {{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}
                     </div>
                 </div>
             </div>
@@ -54,7 +53,7 @@
                         Адрес
                     </div>
                     <div class="col-md-2">
-                        Якутск, ул. Дзержинского д.12/3
+                        {{ $chain->address_id }}
                     </div>
                 </div>
             </div>
