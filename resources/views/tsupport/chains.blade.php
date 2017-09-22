@@ -10,13 +10,13 @@
             <div class="row">
                 <div style="margin-top:-18px" >
                     <div class="col-md-2">
-                        <a href="#"><h6><span class="label label-default">Новый</span>&nbsp;Исходящий звонок</h6></a>
+                        <a href="#"><h6><span class="label label-default">Новый</span> Исходящий звонок</h6></a>
                     </div>
                     <div class="col-md-1">
-                        <a href="#"><h6><span class="label label-default">Новая</span>&nbsp;Задача</h6></a>
+                        <a href="#"><h6><span class="label label-default">Новая</span> Задача</h6></a>
                     </div>
-                    <div class="col-md-1">
-                        <a href="#"><h6><span class="label label-default">Новое</span>&nbsp;Обращение</h6></a>
+                    <div class="col-md-2">
+                        <a href="#"><h6><span class="label label-default">Новое</span> Обращение</h6></a>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                                 <div><a href="#">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a></div>
                             </td>
                             <td class="table-text">
-                                <div>{{ $chain->address_id }}</div>
+                                <div>{{ $chain->address }}</div>
                             </td>
                             <td class="table-text">
                                 <div>{{ $chain->u_name }}</div>
