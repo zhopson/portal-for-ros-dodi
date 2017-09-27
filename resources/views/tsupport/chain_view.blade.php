@@ -26,10 +26,12 @@
                         {{ date('d.m.y H:i',$chain->creation_time) }}
                     </div>
                     <div class="col-md-1 col-md-offset-4">
-                        <strong>Категория</strong>
+                        <strong>Категории</strong>
                     </div>
                     <div class="col-md-3">
-                        {{ $chain->category }}
+                        @foreach (explode(",",$chain->categories) as $category)
+                            <li>{{ trim($category, '{"}') }}</li>
+                        @endforeach                        
                     </div>
                 </div>
             </div>

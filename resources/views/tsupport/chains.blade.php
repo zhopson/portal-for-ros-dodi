@@ -51,7 +51,7 @@
                                 <div>{{ date('d.m.y H:i',$chain->update_time) }}</div>
                             </td>
                             <td class="table-text">
-                                <div><a href="#">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a></div>
+                                <div><a href="{{ route('clients.view', ['id' => $chain->client_id]) }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a></div>
                             </td>
                             <td class="table-text">
                                 <div>{{ $chain->address }}</div>
@@ -72,7 +72,11 @@
                                 <div><a href="{{ route('chains.view', ['id' => $chain->id]) }}">{{ $chain->last_comment }}</a></div>
                             </td>
                             <td class="table-text">
-                                <div>{{ $chain->cat_name }}</div>
+                                @foreach (explode(",",$chain->cat_names) as $cat_name)
+                                    @if($cat_name != 'NULL')
+                                        <li>{{ rtrim($cat_name, ", ") }}</li>
+                                    @endif    
+                                @endforeach                                
                             </td>
                         </tr>
                         @endforeach

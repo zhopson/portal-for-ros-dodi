@@ -11,31 +11,33 @@ use Illuminate\Support\Facades\DB;
 class ChainsController extends Controller
 {
     public function index() {
-        
-    $chains = DB::table('chains')
-            ->leftJoin('clients', 'chains.client_id', '=', 'clients.id')
-            ->leftJoin('users', 'chains.user_id', '=', 'users.id')
-            ->leftJoin('chains_categories', 'chains.id', '=', 'chains_categories.chain_id')
-            ->leftJoin('categories', 'categories.id', '=', 'chains_categories.category_id')
-            ->leftJoin('chain_items', 'chains.last_item_id', '=', 'chain_items.id')
-            ->leftJoin('clt_adr_area_view', 'clients.address_id', '=', 'clt_adr_area_view.address_id')
-            ->select('chains.id',
-                    'chains.update_time',
-                    'clients.surname',
-                    'clients.name as c_name',
-                    'clients.patronymic',
-                    'clt_adr_area_view.title as address',
-//                    'clients.address_id',
-//                    'get_uus_by_code(clients.address_id) as address',
-                    'users.name as u_name',
-                    'chain_items.user_id as operator_id',
-                    'chains.status',
-                    'chains.opening_time',
-                    'chains.last_comment',
-                    'categories.name as cat_name'
-                    )
-            ->orderBy('update_time', 'desc')
-            ->paginate(100);        
+
+    $chains = DB::table('chains_view')->paginate(100); 
+    
+//    $chains = DB::table('chains')
+//            ->leftJoin('clients', 'chains.client_id', '=', 'clients.id')
+//            ->leftJoin('users', 'chains.user_id', '=', 'users.id')
+//            ->leftJoin('chains_categories', 'chains.id', '=', 'chains_categories.chain_id')
+//            ->leftJoin('categories', 'categories.id', '=', 'chains_categories.category_id')
+//            ->leftJoin('chain_items', 'chains.last_item_id', '=', 'chain_items.id')
+//            ->leftJoin('clt_adr_area_view', 'clients.address_id', '=', 'clt_adr_area_view.address_id')
+//            ->select('chains.id',
+//                    'chains.update_time',
+//                    'clients.surname',
+//                    'clients.name as c_name',
+//                    'clients.patronymic',
+//                    'clt_adr_area_view.title as address',
+////                    'clients.address_id',
+////                    'get_uus_by_code(clients.address_id) as address',
+//                    'users.name as u_name',
+//                    'chain_items.user_id as operator_id',
+//                    'chains.status',
+//                    'chains.opening_time',
+//                    'chains.last_comment',
+//                    'categories.name as cat_name'
+//                    )
+//            ->orderBy('update_time', 'desc')
+//            ->paginate(100);        
         
   
         $users = User::select('id','name')->get();//::all();
@@ -58,19 +60,10 @@ class ChainsController extends Controller
             ->leftJoin('categories', 'categories.id', '=', 'chains_categories.category_id')
             //->leftJoin('clt_adr_full_view', 'clients.address_id', '=', 'clt_adr_full_view.address_id')
 //            ->leftJoin('postals', 'clients.address_id', '=', 'postals.address_id')
-            ->select('chains.status',
-                    'chains.creation_time',
-                    'users.name as avtor',
-                    'chains.client_id',
-                    'clients.surname',
-                    'clients.name as c_name',
-                    'clients.patronymic', 
-                    //'clt_adr_full_view.title as address',
-                    'clients.address_number as dom',
-                    'clients.address_building as korp',
-                    'clients.address_apartment as kv',
-                    'categories.name as category'
-                    )
+            ->select(DB::raw('chains.status,chains.creation_time,users.name as avtor,chains.client_id,clients.surname,clients.name as c_name,clients.patronymic, 
+                    clients.address_number as dom,clients.address_building as korp,clients.address_apartment as kv,array_agg(categories.name) as categories'
+                    ))
+            ->groupBy('chains.status','chains.creation_time','users.name','chains.client_id','clients.surname','clients.name','clients.patronymic','clients.address_number','clients.address_building','clients.address_apartment')
             ->where('chains.id', '=', $id)->first();
     
     $adr_code = DB::table('chains')

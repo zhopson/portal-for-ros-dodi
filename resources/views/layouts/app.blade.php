@@ -66,6 +66,8 @@
                                 <li><a href="#">Обращения</a></li>
                                 <li><a href="#">Задачи</a></li>
                                 <li><a href="#">Заметки</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{ url('/clients') }}">Пользователи</a></li>
                             </ul>
                         </li>
                         

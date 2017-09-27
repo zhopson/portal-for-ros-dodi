@@ -29,7 +29,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
 
+    Route::get('/clients', 'ClientsController@index')->name('clients');
+
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
+
+    Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
 
     Route::get('calls/edit/{id}', function ($id) {
         return 'call ' . $id;
