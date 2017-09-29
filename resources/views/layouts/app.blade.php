@@ -126,6 +126,9 @@
         </nav>
 
         @yield('content')
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container"></div>
+        </nav>
     </div>
 
     <!-- Scripts -->

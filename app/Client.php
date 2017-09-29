@@ -20,5 +20,9 @@ class Client extends Model
   {
     return $this->HasMany('App\Task');
   }
-  
+
+  public function groups()
+  {
+    return $this->belongsToMany('App\Group','groups_clients', 'clients_id', 'groups_id');
+  }
 }

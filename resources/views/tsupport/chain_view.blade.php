@@ -28,11 +28,15 @@
                     <div class="col-md-1 col-md-offset-4">
                         <strong>Категории</strong>
                     </div>
+                    @if ($chain->categories != '{NULL}')
                     <div class="col-md-3">
                         @foreach (explode(",",$chain->categories) as $category)
                             <li>{{ trim($category, '{"}') }}</li>
                         @endforeach                        
                     </div>
+                    @else
+                        Без категорий
+                    @endif
                 </div>
             </div>
             <div class="row">
@@ -51,7 +55,7 @@
                         Пользователь
                     </div>
                     <div class="col-md-3">
-                        {{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}
+                        <a href="{{ route('clients.view', ['id' => $chain->client_id]) }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a>
                     </div>
                 </div>
             </div>
