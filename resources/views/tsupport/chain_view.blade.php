@@ -86,16 +86,16 @@
                     </div>
                 @else
                     <div class="col-md-1">
-                        <a href="#"><h6><span class="label label-default">Новая</span> Заметка</h6></a>
+                        <a href="#"><h6><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Заметка</h6></a>
                     </div>
                     <div class="col-md-1">
-                        <a href="#"><h6><span class="label label-default">Новая</span> Задача</h6></a>
+                        <a href="#"><h6><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</h6></a>
                     </div>
                     <div class="col-md-1">
-                        <a href="#"><h6><span class="label label-default">Новый</span> Звонок</h6></a>
+                        <a href="#"><h6><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</h6></a>
                     </div>
                     <div class="col-md-2">
-                        <a href="#"><h6><span class="label label-default">Новое</span> Обращение</h6></a>
+                        <a href="#"><h6><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</h6></a>
                     </div>
                     <div class="col-md-1 col-md-offset-5">
 <!--                        <a href="#"><h5>Обновить</h5></a>-->
@@ -153,15 +153,15 @@
                             </td>
                             <td class="table-text">
                                 @if ($item->call_id) 
-                                <div>Звонок</div>
+                                <div><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</div>
                                 @elseif ($item->task_id)
-                                <div>Задача</div>
+                                <div><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</div>
                                 @elseif ($item->request_id)
-                                <div>Обращение</div>
+                                <div><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</div>
                                 @elseif ($item->note_id)
-                                <div>Заметка</div>
+                                <div><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Заметка</div>
                                 @else
-                                <div>Уведомление</div>
+                                <div><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Уведомление</div>
                                 @endif
                             </td>
                             <td class="table-text">

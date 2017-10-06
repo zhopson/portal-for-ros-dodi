@@ -6,6 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    protected $fillable = [
+        'clients_type_id',
+        'surname',
+        'name',
+        'patronymic',
+        'sex',
+        'mother',
+        'father',
+        'language',
+    ];
+
+    const CREATED_AT = 'creation_time';
+    const UPDATED_AT = 'updating_time';
+
   public function user()
   {
     return $this->belongsTo('App\User');

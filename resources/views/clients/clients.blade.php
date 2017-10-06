@@ -10,7 +10,7 @@
             <div class="row">
                 <div style="margin-top:-18px" >
                     <div class="col-md-2">
-                        <a href="#"><h6><span class="label label-default">Новый</span>Пользователь</h6></a>
+                        <a href="{{ route('clients.new') }}"><h6><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить</h6></a>
                     </div>
                 </div>
             </div>

@@ -29,12 +29,18 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
 
-    Route::get('/clients', 'ClientsController@index')->name('clients');
-
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
+    
+    Route::get('/clients', 'ClientsController@index')->name('clients');
 
     Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
 
+    Route::get('/clients/new', 'ClientsController@clt_new')->name('clients.new');
+    
+    Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
+
+    Route::get('/clients/edit/{id}', 'ClientsController@clt_edit')->name('clients.edit');
+    
     Route::get('calls/edit/{id}', function ($id) {
         return 'call ' . $id;
     })->name('calls.edit');
