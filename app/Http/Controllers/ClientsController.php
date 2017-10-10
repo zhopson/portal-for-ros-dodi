@@ -178,10 +178,14 @@ class ClientsController extends Controller
         $providers = Provider::all();
         $clt_groups = Group::all();
         $clt_contracts = Contract::all();
-        $regions = DB::table('fias_addressobjects_view')
-                ->select('shortname','offname')
-                ->where([['areacode', '=', '000'],['citycode', '=', '000'],['placecode', '=', '000'],['streetcode', '=', '0000']])
-                ->get();
+//        $regions = DB::connection('pgsql_adr')->table('fias_addressobjects')
+//                ->select('shortname','offname')
+//                ->where([['areacode', '=', '000'],['citycode', '=', '000'],['placecode', '=', '000'],['streetcode', '=', '0000']])
+//                ->get();
+        $regions = DB::connection('pgsql_adr')->table('fias_addressobjects')
+                ->select('shortname','offname','aoguid')
+                ->whereNull('parentguid')
+                ->get();        
         //$new_clt =  session('new_clt');
 //        var_dump($new_clt);
         $new_clt = Client::find($id);

@@ -68,6 +68,20 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_adr' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', '178.170.180.16'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'portal'),
+//            'username' => env('DB_USERNAME', 'forge'),
+            'username' => env('DB_USERNAME', 'site_user'),
+            'password' => env('DB_PASSWORD', 'eloquent135'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'fias_base',
+            'sslmode' => 'prefer',
+        ],
+        
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),

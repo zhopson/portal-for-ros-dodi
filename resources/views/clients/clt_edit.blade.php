@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('head')
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js?2"></script>
+@endsection
 @section('content')
 
 <div class="container-fluid" style="margin:0 60px 0 60px">
@@ -115,7 +118,7 @@
                             @endif
                         </div>
                         @if ($new_clt->clients_type_id==1)
-                        <div id='id_clt_health_view'>
+                        <div id='id_clt_health_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
                                 <h4 style="margin-bottom:-3px">Здоровье</h4>
                             </div>
@@ -127,7 +130,7 @@
                             </div>
                         </div>
                         @endif
-                        <div id='id_clt_address_view'>
+                        <div id='id_clt_address_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
                                 <h4 style="margin-bottom:-3px">Адрес</h4>
                             </div>
@@ -145,6 +148,38 @@
                                         @foreach ($regions as $region) 
                                             <option value="{{ $region->offname }}">{{ $region->shortname.'. '.$region->offname }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_adr_raion" class="col-sm-4 control-label">Район</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="id_clt_edit_adr_raion" name="v_clt_adr_raion">
+                                        <option value="0">- Выберите -</option>
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_adr_city" class="col-sm-4 control-label">Город</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="id_clt_edit_adr_city" name="v_clt_adr_city">
+                                        <option value="0">- Выберите -</option>
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_adr_np" class="col-sm-4 control-label">Населенный пункт</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="id_clt_edit_adr_np" name="v_clt_adr_np">
+                                        <option value="0">- Выберите -</option>
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_adr_st" class="col-sm-4 control-label">Улица</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="id_clt_edit_adr_st" name="v_clt_adr_st">
+                                        <option value="0">- Выберите -</option>
                                     </select>
                                 </div>
                             </div>                            
@@ -167,7 +202,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id='id_clt_contacts_view'>
+                        <div id='id_clt_contacts_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
                                 <h4 style="margin-bottom:-3px">Контактные данные</h4>
                             </div>
@@ -198,7 +233,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id='id_clt_inet_view'>
+                        <div id='id_clt_inet_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
                                 <h4 style="margin-bottom:-3px">Интернет</h4>
                             </div>
@@ -206,6 +241,7 @@
                                 <label for="id_clt_edit_inet_prd" class="col-sm-4 control-label">Провайдер</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_inet_prd" name="v_clt_inet_prd">
+                                        <option value="0"></option>
                                         @foreach ($providers as $provider) 
                                         <option value="{{ $provider->id }}">{{ $provider->name }}</option>
                                         @endforeach
@@ -241,7 +277,7 @@
                                 </tbody>                                
                             </table>
                         </div>
-                        <div id='id_clt_dop_view'>
+                        <div id='id_clt_dop_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
                                 <h4 style="margin-bottom:-3px">Дополнительно</h4>
                             </div>
@@ -250,7 +286,7 @@
                                 <div class="col-sm-2">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="" id="id_clt_edit_dop_active">
+                                            <input type="checkbox" value="" id="id_clt_edit_dop_active" checked>
                                             Активный
                                         </label>
                                     </div>
@@ -260,6 +296,7 @@
                                 <label for="id_clt_edit_dop_gr" class="col-sm-4 control-label">Группы</label>
                                 <div class="col-sm-7">
                                     <select class="form-control" id="id_clt_edit_dop_gr" name="v_clt_dop_gr">
+                                        <option value="0"></option>
                                         @foreach ($clt_groups as $clt_group) 
                                         <option value="{{ $clt_group->id }}">{{ $clt_group->name }}</option>
                                         @endforeach
@@ -286,6 +323,7 @@
                                 <label for="id_clt_edit_dop_contract" class="col-sm-4 control-label">Контракт</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_dop_contract" name="v_clt_dop_contract">
+                                        <option value="0"></option>
                                         @foreach ($clt_contracts as $clt_contract) 
                                         <option value="{{ $clt_contract->id }}">{{ $clt_contract->title }}</option>
                                         @endforeach
@@ -299,7 +337,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" >
+                        <div class="form-group">
                             <div class="col-sm-offset-10 col-sm-1" style="margin-right:10px">
                                 <button type="submit" class="btn btn-primary">Сохранить</button>
                             </div>
@@ -310,15 +348,15 @@
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-2">
-            <ul class="nav nav-pills nav-stacked">
-                <li role="presentation" class="active"><a href="#">Пользователь</a></li>
+            <ul class="nav nav-pills nav-stacked" id="id_clt_edit_nav_buttons">
+                <li role="presentation" id="id_clt_edit_nav_user" class="active"><a href="#">Пользователь</a></li>
                 @if ($new_clt->clients_type_id==1)
-                <li role="presentation"><a href="#">Здоровье</a></li>
+                <li role="presentation" id="id_clt_edit_nav_health"><a href="#">Здоровье</a></li>
                 @endif
-                <li role="presentation"><a href="#">Адрес</a></li>   
-                <li role="presentation"><a href="#">Контактные данные</a></li>   
-                <li role="presentation"><a href="#">Интернет</a></li>   
-                <li role="presentation"><a href="#">Дополнительно</a></li>   
+                <li role="presentation" id="id_clt_edit_nav_addr"><a href="#">Адрес</a></li>   
+                <li role="presentation" id="id_clt_edit_nav_contacts"><a href="#">Контактные данные</a></li>   
+                <li role="presentation" id="id_clt_edit_nav_inet"><a href="#">Интернет</a></li>   
+                <li role="presentation" id="id_clt_edit_nav_dop"><a href="#">Дополнительно</a></li>   
             </ul>
             <ul class="nav nav-pills nav-stacked" style="margin-top:50px">
                 <li role="presentation"><a href="{{ url('/clients') }}">Вернуться назад</a></li>   
@@ -328,33 +366,140 @@
 </div>
 
 <script type="text/javascript">
-//$( document ).ready(function() {    
-//$('#id_clt_type').change(function(){
-//  if($(this).val()==1) {
-//     // alert('Ученик');
-//    $('#id_clt_common_section').css('display', 'inline');
-//    $('#id_clt_fio_section').css('display', 'inline');
-//    $('#id_clt_parents_section').css('display', 'inline');
-//    $('#id_clt_lang_section').css('display', 'inline');
-//    $('#id_clt_org_section').css('display', 'none');
-//  }
-//  if($(this).val()==2) {
-//    // alert('Учитель')
-//    $('#id_clt_common_section').css('display', 'inline');
-//    $('#id_clt_fio_section').css('display', 'inline');
-//    $('#id_clt_parents_section').css('display', 'none');
-//    $('#id_clt_lang_section').css('display', 'inline');
-//    $('#id_clt_org_section').css('display', 'none');
-//  }
-//  if($(this).val()==3) {
-//    //  alert('Школа')
-//    $('#id_clt_common_section').css('display', 'inline');
-//    $('#id_clt_fio_section').css('display', 'none');
-//    $('#id_clt_parents_section').css('display', 'none');
-//    $('#id_clt_lang_section').css('display', 'none');
-//    $('#id_clt_org_section').css('display', 'inline');
-//  }
-//});
-//});
+$( document ).ready(function() {    
+$("li").click(function(){
+    //$("p").removeClass("myClass noClass")
+    var id = $(this).attr("id");
+    if (id==='id_clt_edit_nav_user') {
+        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+        $("#id_clt_edit_nav_user").addClass("active");
+        
+        $('#id_clt_user_view').css('display', 'inline');
+        $('#id_clt_health_view').css('display', 'none');
+        $('#id_clt_address_view').css('display', 'none');
+        $('#id_clt_contacts_view').css('display', 'none');
+        $('#id_clt_inet_view').css('display', 'none');
+        $('#id_clt_dop_view').css('display', 'none');
+        //alert('user');
+    }
+    if (id==='id_clt_edit_nav_health') {
+        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+        $("#id_clt_edit_nav_health").addClass("active");
+        
+        $('#id_clt_user_view').css('display', 'none');
+        $('#id_clt_health_view').css('display', 'inline');
+        $('#id_clt_address_view').css('display', 'none');
+        $('#id_clt_contacts_view').css('display', 'none');
+        $('#id_clt_inet_view').css('display', 'none');
+        $('#id_clt_dop_view').css('display', 'none');
+        //alert('health');
+    }
+    if (id==='id_clt_edit_nav_addr') {
+        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+        $("#id_clt_edit_nav_addr").addClass("active");
+        
+        $('#id_clt_user_view').css('display', 'none');
+        $('#id_clt_health_view').css('display', 'none');
+        $('#id_clt_address_view').css('display', 'inline');
+        $('#id_clt_contacts_view').css('display', 'none');
+        $('#id_clt_inet_view').css('display', 'none');
+        $('#id_clt_dop_view').css('display', 'none');
+        //alert('addr');
+    }
+    if (id==='id_clt_edit_nav_contacts') {
+        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+        $("#id_clt_edit_nav_contacts").addClass("active");
+
+        $('#id_clt_user_view').css('display', 'none');
+        $('#id_clt_health_view').css('display', 'none');
+        $('#id_clt_address_view').css('display', 'none');
+        $('#id_clt_contacts_view').css('display', 'inline');
+        $('#id_clt_inet_view').css('display', 'none');
+        $('#id_clt_dop_view').css('display', 'none');
+        //alert('contacts');
+    }
+    if (id==='id_clt_edit_nav_inet') {
+        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+        $("#id_clt_edit_nav_inet").addClass("active");
+        
+        $('#id_clt_user_view').css('display', 'none');
+        $('#id_clt_health_view').css('display', 'none');
+        $('#id_clt_address_view').css('display', 'none');
+        $('#id_clt_contacts_view').css('display', 'none');
+        $('#id_clt_inet_view').css('display', 'inline');
+        $('#id_clt_dop_view').css('display', 'none');       
+        //alert('inet');
+    }
+    if (id==='id_clt_edit_nav_dop') {
+        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+        $("#id_clt_edit_nav_dop").addClass("active");
+        
+        $('#id_clt_user_view').css('display', 'none');
+        $('#id_clt_health_view').css('display', 'none');
+        $('#id_clt_address_view').css('display', 'none');
+        $('#id_clt_contacts_view').css('display', 'none');
+        $('#id_clt_inet_view').css('display', 'none');
+        $('#id_clt_dop_view').css('display', 'inline');         
+        //alert('dop');
+    }
+});
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$('#id_clt_edit_adr_region').change(function(){
+  if ($(this).val().indexOf("Саха")!==-1){
+      //alert($("#id_clt_edit_adr_region option:selected").text());
+                var data = $(this).val();
+                //var formData = new FormData(data);
+		$.ajax({
+			// На какой URL будет послан запрос
+			url: '/adresses/regions/list',
+			// Тип запроса
+			type: 'POST',
+			// Какие данные нужно передать
+			data: {'region': data},
+			// Эта опция не разрешает jQuery изменять данные
+			//processData: false,		
+			// Эта опция не разрешает jQuery изменять типы данных
+			//contentType: false,		
+			// Формат данных ответа с сервера
+			dataType: 'json',
+                        //dataType: 'text',
+                        //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+			// Функция удачного ответа с сервера
+			success: function(result) { 	
+				// Получили ответ с сервера (ответ содержится в переменной result)
+				// Если в ответе есть объект 
+				if (result.status===1) {
+                                    var s='';
+                                    var rows = result.uus_arr[0];
+                                    for (loop = 0; loop < rows.length; loop++) {
+                                        $('#id_clt_edit_adr_raion')
+                                            .append($('<option>', { value : rows[loop].rtf_aoguid })
+                                            .text(rows[loop].rtf_shortname + '. ' + rows[loop].rtf_formalname));
+                                    }
+//                                    result.uus_arr[0].forEach(function(row) {
+////                                            $('#id_clt_edit_adr_raion')
+////                                                    .append($('<option>', { value : row.rtf_aoguid })
+////                                                    .text(row.rtf_shortname||' '||row.rtf_formalname))
+////                                                    $('#id_clt_edit_adr_raion').append($(document.createElement("option")).
+////                                                                    attr("value",row.rtf_aoguid).text(row.rtf_shortname||' '||row.rtf_formalname));
+
+//                                     });
+				} 
+			},
+			// Что-то пошло не так
+			error: function (result) {
+
+			}
+		}); 
+                
+  }
+});
+});
 </script>
 @endsection
