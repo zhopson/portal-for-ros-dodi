@@ -11,7 +11,7 @@
     }
 
     .full-height {
-        height: 100vh;
+        height: 90vh;
     }
 
     .flex-center {
@@ -35,7 +35,7 @@
     }
 
     .title {
-        font-size: 84px;
+        font-size: 74px;
     }
 
     .links > a {
@@ -57,15 +57,12 @@
 <div class="flex-center position-ref full-height">
     <div class="content">
         <div class="title m-b-md">
-            Добро пожаловать на портал РОС ДОДИ!
+            Добро пожаловать на портал <mark>РОС ДОДИ</mark>!
         </div>
 
         <div class="links">
-            <a href="https://laravel.com/docs">Documentation</a>
-            <a href="https://laracasts.com">Laracasts</a>
-            <a href="https://laravel-news.com">News</a>
-            <a href="https://forge.laravel.com">Forge</a>
-            <a href="https://github.com/laravel/laravel">GitHub</a>
+            <a href="#">Информация о проекте</a>
+            <a href="#">Контакты</a>
         </div>
     </div>
 </div>    

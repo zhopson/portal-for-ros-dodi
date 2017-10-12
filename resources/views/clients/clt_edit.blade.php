@@ -146,7 +146,7 @@
                                     <select class="form-control" id="id_clt_edit_adr_region" name="v_clt_adr_region">
                                         <option value="0">- Выберите -</option>
                                         @foreach ($regions as $region) 
-                                            <option value="{{ $region->offname }}">{{ $region->shortname.'. '.$region->offname }}</option>
+                                            <option value="{{ $region->aoguid }}">{{ $region->shortname.'. '.$region->offname }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -366,7 +366,8 @@
 </div>
 
 <script type="text/javascript">
-$( document ).ready(function() {    
+$( document ).ready(function() {  
+    
 $("li").click(function(){
     //$("p").removeClass("myClass noClass")
     var id = $(this).attr("id");
@@ -451,20 +452,66 @@ $.ajaxSetup({
 });
 
 $('#id_clt_edit_adr_region').change(function(){
-  if ($(this).val().indexOf("Саха")!==-1){
+//  if ($(this).val().indexOf("Саха")!==-1){
       //alert($("#id_clt_edit_adr_region option:selected").text());
+                $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
                 var data = $(this).val();
-                //var formData = new FormData(data);
+                ajax_fill_addr_sel("#id_clt_edit_adr_raion",data,'raion');
+//  }
+});
+
+$('#id_clt_edit_adr_raion').change(function(){
+  //if ($(this).val()!=="0"){
+                $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                var data = $(this).val();
+                ajax_fill_addr_sel("#id_clt_edit_adr_np",data,'np');
+ // }
+});
+
+$('#id_clt_edit_adr_city').change(function(){
+  //if ($(this).val()!=="0"){
+                if ($('#id_clt_edit_adr_raion').val()==="0") {
+                    $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;}
+                $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                var data = $(this).val();
+                ajax_fill_addr_sel("#id_clt_edit_adr_np",data,'np_city');
+ // }
+});
+
+$('#id_clt_edit_adr_np').change(function(){
+  //if ($(this).val()!=="0"){
+                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
+                var data = $(this).val();
+                //var parent;
+//                if ($('#id_clt_edit_adr_city').val()!=="0") parent = $('#id_clt_edit_adr_city').val();
+//                else if ($('#id_clt_edit_adr_raion').val()!=="0") parent = $('#id_clt_edit_adr_raion').val();
+                ajax_fill_addr_sel("#id_clt_edit_adr_st",data,'st');
+  //}
+});
+
+function ajax_fill_addr_sel(id_sel,pdata,padr_part) {
+//            var formData = {
+//                'adr_part_val': pdata,
+//                'adr_part': padr_part
+//            };
+                
 		$.ajax({
 			// На какой URL будет послан запрос
-			url: '/adresses/regions/list',
+			url: '/adresses/adr_part_list',
 			// Тип запроса
 			type: 'POST',
 			// Какие данные нужно передать
-			data: {'region': data},
-			// Эта опция не разрешает jQuery изменять данные
+			data: {'adr_part_val': pdata, 'adr_part': padr_part},
+                        //data: formData,
+			// !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять данные
 			//processData: false,		
-			// Эта опция не разрешает jQuery изменять типы данных
+			// !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять типы данных
 			//contentType: false,		
 			// Формат данных ответа с сервера
 			dataType: 'json',
@@ -475,31 +522,53 @@ $('#id_clt_edit_adr_region').change(function(){
 				// Получили ответ с сервера (ответ содержится в переменной result)
 				// Если в ответе есть объект 
 				if (result.status===1) {
-                                    var s='';
-                                    var rows = result.uus_arr[0];
+                                    
+                                    var rows = result.adr_arr;
                                     for (loop = 0; loop < rows.length; loop++) {
-                                        $('#id_clt_edit_adr_raion')
-                                            .append($('<option>', { value : rows[loop].rtf_aoguid })
-                                            .text(rows[loop].rtf_shortname + '. ' + rows[loop].rtf_formalname));
+                                        $(id_sel)
+                                            .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
+                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                                     }
-//                                    result.uus_arr[0].forEach(function(row) {
-////                                            $('#id_clt_edit_adr_raion')
-////                                                    .append($('<option>', { value : row.rtf_aoguid })
-////                                                    .text(row.rtf_shortname||' '||row.rtf_formalname))
-////                                                    $('#id_clt_edit_adr_raion').append($(document.createElement("option")).
-////                                                                    attr("value",row.rtf_aoguid).text(row.rtf_shortname||' '||row.rtf_formalname));
+                                    
+                                    if (id_sel==='#id_clt_edit_adr_raion') {
+                                        rows = result.city_arr;
+                                        for (loop = 0; loop < rows.length; loop++) {
+                                            $('#id_clt_edit_adr_city')
+                                                .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                                        }
 
-//                                     });
+                                        rows = result.punkt_arr;
+                                        for (loop = 0; loop < rows.length; loop++) {
+                                            $('#id_clt_edit_adr_np')
+                                                .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                                        }
+                                    }
+                                    else if (id_sel==='#id_clt_edit_adr_np') {
+                                        
+                                        rows = result.city_arr;
+                                        for (loop = 0; loop < rows.length; loop++) {
+                                            $('#id_clt_edit_adr_city')
+                                                .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                                        }
+                                        
+                                        rows = result.st_arr;
+                                        for (loop = 0; loop < rows.length; loop++) {
+                                            $('#id_clt_edit_adr_st')
+                                                .append($('<option>', { value : rows[loop].aoid }) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                                        }
+                                    }
 				} 
 			},
 			// Что-то пошло не так
 			error: function (result) {
 
 			}
-		}); 
-                
-  }
-});
+		});     
+}
 });
 </script>
 @endsection

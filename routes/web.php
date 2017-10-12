@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/clients/edit/{id}', 'ClientsController@clt_edit')->name('clients.edit');
     
-    Route::any('/adresses/regions/list', 'AddressController@list_regions')->name('adresses.regions.list');
+    Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');
     
     Route::get('calls/edit/{id}', function ($id) {
         return 'call ' . $id;
