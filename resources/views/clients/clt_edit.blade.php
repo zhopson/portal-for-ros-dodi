@@ -21,25 +21,25 @@
                                     <h4 style="margin-bottom:-3px">Личные данные</h4>
                                 </div>
                                 <div class="form-group" style="margin-top:10px">
-                                    <label for="id_clt_edit_surname" class="col-sm-4 control-label">Фамилия</label>
+                                    <label for="id_clt_edit_surname" class="col-sm-3 control-label">Фамилия</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="id_clt_edit_surname" value="{{$new_clt->surname}}" required >
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="id_clt_edit_name" class="col-sm-4 control-label">Имя</label>
+                                    <label for="id_clt_edit_name" class="col-sm-3 control-label">Имя</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="id_clt_edit_name" value="{{$new_clt->name}}" required >
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="id_clt_edit_otch" class="col-sm-4 control-label">Отчество</label>
+                                    <label for="id_clt_edit_otch" class="col-sm-3 control-label">Отчество</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="id_clt_edit_otch" value="{{$new_clt->patronymic}}" required >
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label">Пол</label>
+                                    <label class="col-sm-3 control-label">Пол</label>
                                     <div class="col-sm-8">
                                         @if ($new_clt->sex==1)
                                         <label class="radio-inline">
@@ -66,13 +66,13 @@
                                     <h4 style="margin-bottom:-3px">Родители</h4>
                                 </div>
                                 <div class="form-group" style="margin-top:10px">
-                                    <label for="id_clt_edit_father" class="col-sm-4 control-label">Отец</label>
+                                    <label for="id_clt_edit_father" class="col-sm-3 control-label">Отец</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="id_clt_edit_father" value="{{$new_clt->father}}">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="id_clt_edit_mother" class="col-sm-4 control-label">Мать</label>
+                                    <label for="id_clt_edit_mother" class="col-sm-3 control-label">Мать</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="id_cltedit__mother" value="{{$new_clt->mother}}">
                                     </div>
@@ -85,19 +85,19 @@
                                     <h4 style="margin-bottom:-3px">Владение языками</h4>
                                 </div>
                                 <div class="form-group" style="margin-top:10px">
-                                    <label for="id_clt_edit_langs" class="col-sm-4 control-label">Языки</label>
+                                    <label for="id_clt_edit_langs" class="col-sm-3 control-label">Языки</label>
                                     <div class="col-sm-8">
                                         <select multiple class="form-control" id="id_clt_edit_langs">
                                             @foreach (array("russian" => "русский", "english" => "английский", "sakha" => "якутский") as $key => $value)
                                             @if (strpos($new_clt->language, $key)!==false)
-                                                <option selected>{{ $value }}</option>
+                                            <option selected>{{ $value }}</option>
                                             @else
-                                                <option>{{ $value }}</option>
+                                            <option>{{ $value }}</option>
                                             @endif
                                             @endforeach  
-<!--                                            <option selected>русский</option>
-                                            <option>английский</option>
-                                            <option>якутский</option>-->
+                                            <!--                                            <option selected>русский</option>
+                                                                                        <option>английский</option>
+                                                                                        <option>якутский</option>-->
                                         </select>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                     <h4 style="margin-bottom:-3px">Организация</h4>
                                 </div>
                                 <div class="form-group" style="margin-top:10px">
-                                    <label for="id_clt_edit_org" class="col-sm-4 control-label">Наименование</label>
+                                    <label for="id_clt_edit_org" class="col-sm-3 control-label">Наименование</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="id_clt_edit_org" value="{{$new_clt->name}}">
                                     </div>
@@ -123,7 +123,7 @@
                                 <h4 style="margin-bottom:-3px">Здоровье</h4>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_diag" class="col-sm-4 control-label">Диагноз</label>
+                                <label for="id_clt_edit_diag" class="col-sm-3 control-label">Диагноз</label>
                                 <div class="col-sm-8">
                                     <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_diag" value="{{$new_clt->diagnose}}"></textarea>
                                 </div>
@@ -135,24 +135,24 @@
                                 <h4 style="margin-bottom:-3px">Адрес</h4>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_adr_ind" class="col-sm-4 control-label">Почтовый индекс</label>
+                                <label for="id_clt_edit_adr_ind" class="col-sm-3 control-label">Почтовый индекс</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="id_clt_edit_adr_ind">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_adr_region" class="col-sm-4 control-label">Регион</label>
+                                <label for="id_clt_edit_adr_region" class="col-sm-3 control-label">Регион</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_region" name="v_clt_adr_region">
                                         <option value="0">- Выберите -</option>
                                         @foreach ($regions as $region) 
-                                            <option value="{{ $region->aoguid }}">{{ $region->shortname.'. '.$region->offname }}</option>
+                                        <option value="{{ $region->aoguid }}">{{ $region->shortname.'. '.$region->offname }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>                            
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_adr_raion" class="col-sm-4 control-label">Район</label>
+                                <label for="id_clt_edit_adr_raion" class="col-sm-3 control-label">Район</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_raion" name="v_clt_adr_raion">
                                         <option value="0">- Выберите -</option>
@@ -160,7 +160,7 @@
                                 </div>
                             </div>                            
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_adr_city" class="col-sm-4 control-label">Город</label>
+                                <label for="id_clt_edit_adr_city" class="col-sm-3 control-label">Город</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_city" name="v_clt_adr_city">
                                         <option value="0">- Выберите -</option>
@@ -168,7 +168,7 @@
                                 </div>
                             </div>                            
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_adr_np" class="col-sm-4 control-label">Населенный пункт</label>
+                                <label for="id_clt_edit_adr_np" class="col-sm-3 control-label">Населенный пункт</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_np" name="v_clt_adr_np">
                                         <option value="0">- Выберите -</option>
@@ -176,7 +176,7 @@
                                 </div>
                             </div>                            
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_adr_st" class="col-sm-4 control-label">Улица</label>
+                                <label for="id_clt_edit_adr_st" class="col-sm-3 control-label">Улица</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_st" name="v_clt_adr_st">
                                         <option value="0">- Выберите -</option>
@@ -184,19 +184,19 @@
                                 </div>
                             </div>                            
                             <div class="form-group">
-                                <label for="id_clt_edit_adr_dom" class="col-sm-4 control-label">Дом</label>
+                                <label for="id_clt_edit_adr_dom" class="col-sm-3 control-label">Дом</label>
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control" id="id_clt_edit_adr_dom">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="id_clt_edit_adr_korp" class="col-sm-4 control-label">Корпус</label>
+                                <label for="id_clt_edit_adr_korp" class="col-sm-3 control-label">Корпус</label>
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control" id="id_clt_edit_adr_korp">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="id_clt_edit_adr_kv" class="col-sm-4 control-label">Квартира</label>
+                                <label for="id_clt_edit_adr_kv" class="col-sm-3 control-label">Квартира</label>
                                 <div class="col-sm-2">
                                     <input type="text" class="form-control" id="id_clt_edit_adr_kv">
                                 </div>
@@ -206,28 +206,32 @@
                             <div class="page-header" style="margin: 20px 0 0 10px">
                                 <h4 style="margin-bottom:-3px">Контактные данные</h4>
                             </div>
-                            <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_contacts_tel" class="col-sm-4 control-label">Телефон</label>
-                                <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="id_clt_edit_contacts_tel">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="id_clt_edit_contacts_name">
-                                </div>
-                                <div class="col-sm-1">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                    </span>
+                            <div id="id_clt_contacts_container" class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_contacts_tel" class="col-sm-3 control-label">Телефон</label>
+
+                                <div class="ContactsBlock" style="margin-bottom: 5px">
+
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" id="id_clt_edit_contacts_tel">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="id_clt_edit_contacts_name">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" id="id_clt_edit_contacts_btnadd"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="id_clt_edit_contacts_mail" class="col-sm-4 control-label">Электронная почта</label>
+                                <label for="id_clt_edit_contacts_mail" class="col-sm-3 control-label">Электронная почта</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="id_clt_edit_contacts_mail">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="id_clt_edit_contacts_skype" class="col-sm-4 control-label">Skype</label>
+                                <label for="id_clt_edit_contacts_skype" class="col-sm-3 control-label">Skype</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="id_clt_edit_contacts_skype">
                                 </div>
@@ -238,7 +242,7 @@
                                 <h4 style="margin-bottom:-3px">Интернет</h4>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <label for="id_clt_edit_inet_prd" class="col-sm-4 control-label">Провайдер</label>
+                                <label for="id_clt_edit_inet_prd" class="col-sm-3 control-label">Провайдер</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_inet_prd" name="v_clt_inet_prd">
                                         <option value="0"></option>
@@ -248,7 +252,7 @@
                                     </select>
                                 </div>
                             </div>                            
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="id_clt_edit_inet_table">
                                 <thead>
                                     <tr class="active">
                                         <th>Адрес</th>
@@ -257,8 +261,8 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
+                                <tbody id="id_clt_edit_inet_table_tbody">
+                                    <tr class="info">
                                         <td class="table-text">
                                             <input type="text" class="form-control" id="id_clt_edit_inet_ip">
                                         </td>
@@ -270,7 +274,7 @@
                                         </td>
                                         <td class="table-text">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                                <button class="btn btn-default" type="button" id="id_clt_edit_inet_btnadd"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                             </span>
                                         </td>
                                     </tr>
@@ -282,7 +286,7 @@
                                 <h4 style="margin-bottom:-3px">Дополнительно</h4>
                             </div>
                             <div class="form-group">
-                                <label for="id_clt_edit_dop_active" class="col-sm-4 control-label">Статус</label>
+                                <label for="id_clt_edit_dop_active" class="col-sm-3 control-label">Статус</label>
                                 <div class="col-sm-2">
                                     <div class="checkbox">
                                         <label>
@@ -292,8 +296,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="id_clt_edit_dop_gr" class="col-sm-4 control-label">Группы</label>
+                            <div class="form-group" id="id_clt_dop_grps_container">
+                                <label for="id_clt_edit_dop_gr" class="col-sm-3 control-label">Группы</label>
+                                <div class="MBlock" style="margin-bottom: 5px">
                                 <div class="col-sm-7">
                                     <select class="form-control" id="id_clt_edit_dop_gr" name="v_clt_dop_gr">
                                         <option value="0"></option>
@@ -304,12 +309,19 @@
                                 </div>
                                 <div class="col-sm-1">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                        <button class="btn btn-default" type="button" id="id_clt_edit_dop_grps_btnadd"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                                     </span>                                    
                                 </div>
+                                </div>
+                                
+                                
+                                
+                                
+                                
+                                
                             </div>                            
                             <div class="form-group">
-                                <label for="id_clt_edit_dop_problem" class="col-sm-4 control-label"></label>
+                                <label for="id_clt_edit_dop_problem" class="col-sm-3 control-label"></label>
                                 <div class="col-sm-2">
                                     <div class="checkbox">
                                         <label>
@@ -320,7 +332,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="id_clt_edit_dop_contract" class="col-sm-4 control-label">Контракт</label>
+                                <label for="id_clt_edit_dop_contract" class="col-sm-3 control-label">Контракт</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_dop_contract" name="v_clt_dop_contract">
                                         <option value="0"></option>
@@ -331,14 +343,14 @@
                                 </div>
                             </div>                            
                             <div class="form-group">
-                                <label for="id_clt_edit_dop_prim" class="col-sm-4 control-label">Примечание</label>
+                                <label for="id_clt_edit_dop_prim" class="col-sm-3 control-label">Примечание</label>
                                 <div class="col-sm-8">
                                     <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_dop_prim"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-10 col-sm-1" style="margin-right:10px">
+                            <div class="col-sm-offset-9 col-sm-1" style="margin-right:10px">
                                 <button type="submit" class="btn btn-primary">Сохранить</button>
                             </div>
                         </div>
@@ -366,209 +378,384 @@
 </div>
 
 <script type="text/javascript">
-$( document ).ready(function() {  
-    
-$("li").click(function(){
-    //$("p").removeClass("myClass noClass")
-    var id = $(this).attr("id");
-    if (id==='id_clt_edit_nav_user') {
-        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
-        $("#id_clt_edit_nav_user").addClass("active");
-        
-        $('#id_clt_user_view').css('display', 'inline');
-        $('#id_clt_health_view').css('display', 'none');
-        $('#id_clt_address_view').css('display', 'none');
-        $('#id_clt_contacts_view').css('display', 'none');
-        $('#id_clt_inet_view').css('display', 'none');
-        $('#id_clt_dop_view').css('display', 'none');
-        //alert('user');
-    }
-    if (id==='id_clt_edit_nav_health') {
-        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
-        $("#id_clt_edit_nav_health").addClass("active");
-        
-        $('#id_clt_user_view').css('display', 'none');
-        $('#id_clt_health_view').css('display', 'inline');
-        $('#id_clt_address_view').css('display', 'none');
-        $('#id_clt_contacts_view').css('display', 'none');
-        $('#id_clt_inet_view').css('display', 'none');
-        $('#id_clt_dop_view').css('display', 'none');
-        //alert('health');
-    }
-    if (id==='id_clt_edit_nav_addr') {
-        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
-        $("#id_clt_edit_nav_addr").addClass("active");
-        
-        $('#id_clt_user_view').css('display', 'none');
-        $('#id_clt_health_view').css('display', 'none');
-        $('#id_clt_address_view').css('display', 'inline');
-        $('#id_clt_contacts_view').css('display', 'none');
-        $('#id_clt_inet_view').css('display', 'none');
-        $('#id_clt_dop_view').css('display', 'none');
-        //alert('addr');
-    }
-    if (id==='id_clt_edit_nav_contacts') {
-        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
-        $("#id_clt_edit_nav_contacts").addClass("active");
+$(document).ready(function () {
 
-        $('#id_clt_user_view').css('display', 'none');
-        $('#id_clt_health_view').css('display', 'none');
-        $('#id_clt_address_view').css('display', 'none');
-        $('#id_clt_contacts_view').css('display', 'inline');
-        $('#id_clt_inet_view').css('display', 'none');
-        $('#id_clt_dop_view').css('display', 'none');
-        //alert('contacts');
-    }
-    if (id==='id_clt_edit_nav_inet') {
-        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
-        $("#id_clt_edit_nav_inet").addClass("active");
-        
-        $('#id_clt_user_view').css('display', 'none');
-        $('#id_clt_health_view').css('display', 'none');
-        $('#id_clt_address_view').css('display', 'none');
-        $('#id_clt_contacts_view').css('display', 'none');
-        $('#id_clt_inet_view').css('display', 'inline');
-        $('#id_clt_dop_view').css('display', 'none');       
-        //alert('inet');
-    }
-    if (id==='id_clt_edit_nav_dop') {
-        $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
-        $("#id_clt_edit_nav_dop").addClass("active");
-        
-        $('#id_clt_user_view').css('display', 'none');
-        $('#id_clt_health_view').css('display', 'none');
-        $('#id_clt_address_view').css('display', 'none');
-        $('#id_clt_contacts_view').css('display', 'none');
-        $('#id_clt_inet_view').css('display', 'none');
-        $('#id_clt_dop_view').css('display', 'inline');         
-        //alert('dop');
-    }
-});
+    $("li").click(function () {
+        //$("p").removeClass("myClass noClass")
+        var id = $(this).attr("id");
+        if (id === 'id_clt_edit_nav_user') {
+            $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+            $("#id_clt_edit_nav_user").addClass("active");
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
+            $('#id_clt_user_view').css('display', 'inline');
+            $('#id_clt_health_view').css('display', 'none');
+            $('#id_clt_address_view').css('display', 'none');
+            $('#id_clt_contacts_view').css('display', 'none');
+            $('#id_clt_inet_view').css('display', 'none');
+            $('#id_clt_dop_view').css('display', 'none');
+            //alert('user');
+        }
+        if (id === 'id_clt_edit_nav_health') {
+            $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+            $("#id_clt_edit_nav_health").addClass("active");
 
-$('#id_clt_edit_adr_region').change(function(){
+            $('#id_clt_user_view').css('display', 'none');
+            $('#id_clt_health_view').css('display', 'inline');
+            $('#id_clt_address_view').css('display', 'none');
+            $('#id_clt_contacts_view').css('display', 'none');
+            $('#id_clt_inet_view').css('display', 'none');
+            $('#id_clt_dop_view').css('display', 'none');
+            //alert('health');
+        }
+        if (id === 'id_clt_edit_nav_addr') {
+            $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+            $("#id_clt_edit_nav_addr").addClass("active");
+
+            $('#id_clt_user_view').css('display', 'none');
+            $('#id_clt_health_view').css('display', 'none');
+            $('#id_clt_address_view').css('display', 'inline');
+            $('#id_clt_contacts_view').css('display', 'none');
+            $('#id_clt_inet_view').css('display', 'none');
+            $('#id_clt_dop_view').css('display', 'none');
+            //alert('addr');
+        }
+        if (id === 'id_clt_edit_nav_contacts') {
+            $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+            $("#id_clt_edit_nav_contacts").addClass("active");
+
+            $('#id_clt_user_view').css('display', 'none');
+            $('#id_clt_health_view').css('display', 'none');
+            $('#id_clt_address_view').css('display', 'none');
+            $('#id_clt_contacts_view').css('display', 'inline');
+            $('#id_clt_inet_view').css('display', 'none');
+            $('#id_clt_dop_view').css('display', 'none');
+            //alert('contacts');
+        }
+        if (id === 'id_clt_edit_nav_inet') {
+            $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+            $("#id_clt_edit_nav_inet").addClass("active");
+
+            $('#id_clt_user_view').css('display', 'none');
+            $('#id_clt_health_view').css('display', 'none');
+            $('#id_clt_address_view').css('display', 'none');
+            $('#id_clt_contacts_view').css('display', 'none');
+            $('#id_clt_inet_view').css('display', 'inline');
+            $('#id_clt_dop_view').css('display', 'none');
+            //alert('inet');
+        }
+        if (id === 'id_clt_edit_nav_dop') {
+            $("#id_clt_edit_nav_buttons").find("li").removeClass("active");
+            $("#id_clt_edit_nav_dop").addClass("active");
+
+            $('#id_clt_user_view').css('display', 'none');
+            $('#id_clt_health_view').css('display', 'none');
+            $('#id_clt_address_view').css('display', 'none');
+            $('#id_clt_contacts_view').css('display', 'none');
+            $('#id_clt_inet_view').css('display', 'none');
+            $('#id_clt_dop_view').css('display', 'inline');
+            //alert('dop');
+        }
+    });
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#id_clt_edit_adr_region').change(function () {
 //  if ($(this).val().indexOf("Саха")!==-1){
-      //alert($("#id_clt_edit_adr_region option:selected").text());
-                $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                var data = $(this).val();
-                ajax_fill_addr_sel("#id_clt_edit_adr_raion",data,'raion');
+        //alert($("#id_clt_edit_adr_region option:selected").text());
+        $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        var data = $(this).val();
+        ajax_fill_addr_sel("#id_clt_edit_adr_raion", data, 'raion');
 //  }
-});
+    });
 
-$('#id_clt_edit_adr_raion').change(function(){
-  //if ($(this).val()!=="0"){
-                $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                var data = $(this).val();
-                ajax_fill_addr_sel("#id_clt_edit_adr_np",data,'np');
- // }
-});
+    $('#id_clt_edit_adr_raion').change(function () {
+        //if ($(this).val()!=="0"){
+        $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        var data = $(this).val();
+        ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np');
+        // }
+    });
 
-$('#id_clt_edit_adr_city').change(function(){
-  //if ($(this).val()!=="0"){
-                if ($('#id_clt_edit_adr_raion').val()==="0") {
-                    $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;}
-                $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                var data = $(this).val();
-                ajax_fill_addr_sel("#id_clt_edit_adr_np",data,'np_city');
- // }
-});
+    $('#id_clt_edit_adr_city').change(function () {
+        //if ($(this).val()!=="0"){
+        if ($('#id_clt_edit_adr_raion').val() === "0") {
+            $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        }
+        $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        var data = $(this).val();
+        ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np_city');
+        // }
+    });
 
-$('#id_clt_edit_adr_np').change(function(){
-  //if ($(this).val()!=="0"){
-                $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>') ;
-                var data = $(this).val();
-                //var parent;
+    $('#id_clt_edit_adr_np').change(function () {
+        //if ($(this).val()!=="0"){
+        $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        var data = $(this).val();
+        //var parent;
 //                if ($('#id_clt_edit_adr_city').val()!=="0") parent = $('#id_clt_edit_adr_city').val();
 //                else if ($('#id_clt_edit_adr_raion').val()!=="0") parent = $('#id_clt_edit_adr_raion').val();
-                ajax_fill_addr_sel("#id_clt_edit_adr_st",data,'st');
-  //}
-});
+        ajax_fill_addr_sel("#id_clt_edit_adr_st", data, 'st');
+        //}
+    });
 
-function ajax_fill_addr_sel(id_sel,pdata,padr_part) {
+    function ajax_fill_addr_sel(id_sel, pdata, padr_part) {
 //            var formData = {
 //                'adr_part_val': pdata,
 //                'adr_part': padr_part
 //            };
-                
-		$.ajax({
-			// На какой URL будет послан запрос
-			url: '/adresses/adr_part_list',
-			// Тип запроса
-			type: 'POST',
-			// Какие данные нужно передать
-			data: {'adr_part_val': pdata, 'adr_part': padr_part},
-                        //data: formData,
-			// !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять данные
-			//processData: false,		
-			// !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять типы данных
-			//contentType: false,		
-			// Формат данных ответа с сервера
-			dataType: 'json',
-                        //dataType: 'text',
-                        //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-			// Функция удачного ответа с сервера
-			success: function(result) { 	
-				// Получили ответ с сервера (ответ содержится в переменной result)
-				// Если в ответе есть объект 
-				if (result.status===1) {
-                                    
-                                    var rows = result.adr_arr;
-                                    for (loop = 0; loop < rows.length; loop++) {
-                                        $(id_sel)
-                                            .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
+
+        $.ajax({
+            // На какой URL будет послан запрос
+            url: '/adresses/adr_part_list',
+            // Тип запроса
+            type: 'POST',
+            // Какие данные нужно передать
+            data: {'adr_part_val': pdata, 'adr_part': padr_part},
+            //data: formData,
+            // !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять данные
+            //processData: false,		
+            // !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять типы данных
+            //contentType: false,		
+            // Формат данных ответа с сервера
+            dataType: 'json',
+            //dataType: 'text',
+            //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            // Функция удачного ответа с сервера
+            success: function (result) {
+                // Получили ответ с сервера (ответ содержится в переменной result)
+                // Если в ответе есть объект 
+                if (result.status === 1) {
+
+                    var rows = result.adr_arr;
+                    for (loop = 0; loop < rows.length; loop++) {
+                        $(id_sel)
+                                .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                        .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                    }
+
+                    if (id_sel === '#id_clt_edit_adr_raion') {
+                        rows = result.city_arr;
+                        for (loop = 0; loop < rows.length; loop++) {
+                            $('#id_clt_edit_adr_city')
+                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
                                             .text(rows[loop].shortname + '. ' + rows[loop].formalname));
-                                    }
-                                    
-                                    if (id_sel==='#id_clt_edit_adr_raion') {
-                                        rows = result.city_arr;
-                                        for (loop = 0; loop < rows.length; loop++) {
-                                            $('#id_clt_edit_adr_city')
-                                                .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
-                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
-                                        }
+                        }
 
-                                        rows = result.punkt_arr;
-                                        for (loop = 0; loop < rows.length; loop++) {
-                                            $('#id_clt_edit_adr_np')
-                                                .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
-                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
-                                        }
-                                    }
-                                    else if (id_sel==='#id_clt_edit_adr_np') {
-                                        
-                                        rows = result.city_arr;
-                                        for (loop = 0; loop < rows.length; loop++) {
-                                            $('#id_clt_edit_adr_city')
-                                                .append($('<option>', { value : rows[loop].aoguid }) //value : rows[loop].rtf_aoguid
-                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
-                                        }
-                                        
-                                        rows = result.st_arr;
-                                        for (loop = 0; loop < rows.length; loop++) {
-                                            $('#id_clt_edit_adr_st')
-                                                .append($('<option>', { value : rows[loop].aoid }) //value : rows[loop].rtf_aoguid
-                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
-                                        }
-                                    }
-				} 
-			},
-			// Что-то пошло не так
-			error: function (result) {
+                        rows = result.punkt_arr;
+                        for (loop = 0; loop < rows.length; loop++) {
+                            $('#id_clt_edit_adr_np')
+                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                        }
+                    } else if (id_sel === '#id_clt_edit_adr_np') {
 
-			}
-		});     
-}
+                        rows = result.city_arr;
+                        for (loop = 0; loop < rows.length; loop++) {
+                            $('#id_clt_edit_adr_city')
+                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                        }
+
+                        rows = result.st_arr;
+                        for (loop = 0; loop < rows.length; loop++) {
+                            $('#id_clt_edit_adr_st')
+                                    .append($('<option>', {value: rows[loop].aoid}) //value : rows[loop].rtf_aoguid
+                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                        }
+                    }
+                }
+            },
+            // Что-то пошло не так
+            error: function (result) {
+
+            }
+        });
+    }
+    
+    $('#id_clt_edit_contacts_btnadd').click(function () {
+        if ($('#id_clt_edit_contacts_tel').val() !== '') {
+            addcontacts();
+        }
+        return false;
+    });
+    function addcontacts() {
+
+        var raw = $('<div/>', {
+            'class': 'ContactsBlock',
+            style: 'margin-top:5px'
+        }).appendTo($('#id_clt_contacts_container'));
+//                                        var raw = $('<div/>', {
+//                                                'class' : 'row',
+//                                                style : 'margin:5px 1px 0 0;'
+//                                        }).appendTo(div);
+        var div_sm3e = $('<div/>', {
+            'class': 'col-sm-3'
+        }).appendTo(raw);
+        var div_sm4 = $('<div/>', {
+            'class': 'col-sm-4'
+        }).appendTo(raw);
+        var input1 = $('<input/>', {
+            value: $('#id_clt_edit_contacts_tel').val(),
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(div_sm4);
+
+        var div_sm3 = $('<div/>', {
+            'class': 'col-sm-3'
+        }).appendTo(raw);
+        var input2 = $('<input/>', {
+            value: $('#id_clt_edit_contacts_name').val(),
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(div_sm3);
+
+        var div_sm1 = $('<div/>', {
+            'class': 'col-sm-1'
+        }).appendTo(raw);
+        var div_span_sm1 = $('<span/>', {
+            'class': 'input-group-btn'
+        }).appendTo(div_sm1);
+        var btn_del = $('<button/>', {
+            //value : '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>',
+            type: 'button',
+            'class': 'btn btn-default'
+        }).appendTo(div_span_sm1);
+        var span_img = $('<span/>', {
+            'class': 'glyphicon glyphicon-minus',
+            'aria-hidden': 'true'
+        }).appendTo(btn_del);
+        btn_del.click(function () {
+            $(this).parent().parent().parent().remove();
+        });
+    }
+    
+    $('#id_clt_edit_inet_btnadd').click(function () {
+        if ($('#id_clt_edit_inet_ip').val() !== '') {
+            addip();
+        }
+        return false;
+    });
+ 
+    function addip() {
+
+        var raw = $('<tr/>', {
+        }).appendTo($('#id_clt_edit_inet_table_tbody'));
+        var td1 = $('<td/>', {
+            'class': 'table-text'
+        }).appendTo(raw);
+        var input1 = $('<input/>', {
+            value: $('#id_clt_edit_inet_ip').val(),
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(td1);
+        var td2 = $('<td/>', {
+            'class': 'table-text'
+        }).appendTo(raw);
+        var input2 = $('<input/>', {
+            value: $('#id_clt_edit_mask_ip').val(),
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(td2);
+        var td3 = $('<td/>', {
+            'class': 'table-text'
+        }).appendTo(raw);
+        var input3 = $('<input/>', {
+            value: $('#id_clt_edit_gate_ip').val(),
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(td3);
+        var td4 = $('<td/>', {
+            'class': 'table-text',
+            align: 'center'
+        }).appendTo(raw);
+        
+        var div_radio = $('<div/>', {
+            'class': 'radio'
+        }).appendTo(td4);
+        var div_label = $('<label/>', {
+        }).appendTo(div_radio);
+        var radio_sel = $('<input/>', {
+            type: 'radio',
+            name: 'clt_edit_inet_table_optionsRadios',
+            value: $('#id_clt_edit_inet_table_tbody').rows-1
+        }).appendTo(div_label);
+        
+//        btn_del.click(function () {
+//            $(this).parent().parent().parent().remove();
+//        });
+    } 
+
+
+    $('#id_clt_edit_dop_grps_btnadd').click(function () {
+        if ($('#id_clt_edit_dop_gr').val() !== "0") {
+            var flag = 0;
+            $(".DopBlock").each(function(i) {
+                var ltext = $(this).find('.col-sm-6').find('label').text();
+                if (ltext === $('#id_clt_edit_dop_gr option:selected').text()) {
+                    //alert(ltext);
+                    flag = 1;
+                    return false;
+                }
+            });
+            if (flag === 0) { addgroups(); }
+        }
+        return false;
+    });
+    
+    function addgroups() {
+
+        var raw = $('<div/>', {
+            'class': 'DopBlock',
+            style: 'margin-top:5px'
+        }).appendTo($('#id_clt_dop_grps_container'));
+//                                        var raw = $('<div/>', {
+//                                                'class' : 'row',
+//                                                style : 'margin:5px 1px 0 0;'
+//                                        }).appendTo(div);
+        var div_sm3e = $('<div/>', {
+            'class': 'col-sm-3'
+        }).appendTo(raw);
+        var div_sm6 = $('<div/>', {
+            'class': 'col-sm-6'
+        }).appendTo(raw);
+        var label = $('<label/>', {
+            text: $('#id_clt_edit_dop_gr option:selected').text(),
+            //type: 'text',
+            'class': 'control-label'
+        }).appendTo(div_sm6);
+        var div_sm1 = $('<div/>', {
+            'class': 'col-sm-1'
+        }).appendTo(raw);
+        var div_span_sm1 = $('<span/>', {
+            'class': 'input-group-btn'
+        }).appendTo(div_sm1);        
+        var btn_del = $('<button/>', {
+            type: 'button',
+            'class': 'btn btn-default',
+            style: 'margin-left:-6px'
+        }).appendTo(div_span_sm1);
+        var span_img = $('<span/>', {
+            'class': 'glyphicon glyphicon-minus',
+            'aria-hidden': 'true'
+        }).appendTo(btn_del);
+        btn_del.click(function () {
+            $(this).parent().parent().parent().remove();
+        });
+    } 
+ 
+ 
+ 
+ 
 });
 </script>
 @endsection
