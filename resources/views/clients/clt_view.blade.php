@@ -80,6 +80,7 @@
                                     <div class="pull-right">Адрес</div>
                                 </td>
                                 <td class="table-text">
+                                    @if (count($addresses)>0)
                                     {{ $addresses[0]->date }}
                                     @foreach (explode(",",$addresses[0]->adr) as $address)
                                         @if ($address!='""') 
@@ -94,7 +95,8 @@
                                     @endif
                                     @if ($addresses[0]->address_apartment)
                                         {{ ", кв. ".$addresses[0]->address_apartment }} 
-                                    @endif  
+                                    @endif
+                                    @endif
                                 </td>
                             </tr>
                             @if (count($addresses)>1)

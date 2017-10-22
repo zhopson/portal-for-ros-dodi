@@ -4,6 +4,23 @@
 @endsection
 @section('content')
 
+@php
+$city_guid = '';
+$region_guid = '';
+$raion_guid = '';
+$np_guid = '';
+$st_guid = '';
+if ($address_components) {
+foreach ($address_components as $component) { 
+if ($component->taolevel == 1) { $region_guid = $component->taoguid; }
+if ($component->taolevel == 3) { $raion_guid = $component->taoguid; }
+if ($component->taolevel == 4) { $city_guid = $component->taoguid; }
+if ($component->taolevel == 6) { $np_guid = $component->taoguid; }
+if ($component->taolevel > 6) { $st_guid = $component->taoid; }
+}
+}
+@endphp
+
 <div class="container-fluid" style="margin:0 60px 0 60px">
     <div class="row">
         <h3 style="margin-top:-10px">Изменить данные пользователя</h3>
@@ -125,7 +142,7 @@
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_diag" class="col-sm-3 control-label">Диагноз</label>
                                 <div class="col-sm-8">
-                                    <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_diag" value="{{$new_clt->diagnose}}"></textarea>
+                                    <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_diag">{{$new_clt->diagnose}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -135,27 +152,54 @@
                                 <h4 style="margin-bottom:-3px">Адрес</h4>
                             </div>
                             <div class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_adr_prev" class="col-sm-3 control-label">Предыдущие адреса</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="id_clt_edit_adr_prev" name="v_clt_adr_prev ">
+                                        <option value="0"></option>
+                                        @for ($i = 1; $i < count($addresses); $i++)
+                                        <option value="{{ $addresses[$i]->address_aoid }}">
+                                            {{ $addresses[$i]->date.' ' }}
+                                            @foreach (explode(",",$addresses[$i]->adr) as $address)
+                                            @if ($address!='""') 
+                                            {{ trim($address,'()"') }}
+                                            @endif
+                                            @endforeach                                    
+                                            @if ($addresses[$i]->address_number)
+                                            {{ ", д. ".$addresses[$i]->address_number }}
+                                            @endif
+                                            @if ($addresses[$i]->address_building)
+                                            {{ "/".$addresses[$i]->address_building }}
+                                            @endif
+                                            @if ($addresses[$i]->address_apartment)
+                                            {{ ", кв. ".$addresses[$i]->address_apartment }} 
+                                            @endif                                            
+                                        </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_ind" class="col-sm-3 control-label">Почтовый индекс</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="id_clt_edit_adr_ind">
+                                    <input type="text" class="form-control" id="id_clt_edit_adr_ind" value="{{$new_clt->address_postal}}">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_region" class="col-sm-3 control-label">Регион</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_region" name="v_clt_adr_region">
-                                        <option value="0">- Выберите -</option>
+                                        <option value="0" selected>- Выберите -</option>
                                         @foreach ($regions as $region) 
                                         <option value="{{ $region->aoguid }}">{{ $region->shortname.'. '.$region->offname }}</option>
                                         @endforeach
-                                    </select>
+                                    </select>  
                                 </div>
                             </div>                            
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_raion" class="col-sm-3 control-label">Район</label>
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_raion" name="v_clt_adr_raion">
-                                        <option value="0">- Выберите -</option>
+                                        <option value="0" selected>- Выберите -</option>
                                     </select>
                                 </div>
                             </div>                            
@@ -164,6 +208,7 @@
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_city" name="v_clt_adr_city">
                                         <option value="0">- Выберите -</option>
+
                                     </select>
                                 </div>
                             </div>                            
@@ -299,26 +344,20 @@
                             <div class="form-group" id="id_clt_dop_grps_container">
                                 <label for="id_clt_edit_dop_gr" class="col-sm-3 control-label">Группы</label>
                                 <div class="MBlock" style="margin-bottom: 5px">
-                                <div class="col-sm-7">
-                                    <select class="form-control" id="id_clt_edit_dop_gr" name="v_clt_dop_gr">
-                                        <option value="0"></option>
-                                        @foreach ($clt_groups as $clt_group) 
-                                        <option value="{{ $clt_group->id }}">{{ $clt_group->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="id_clt_edit_dop_gr" name="v_clt_dop_gr">
+                                            <option value="0"></option>
+                                            @foreach ($clt_groups as $clt_group) 
+                                            <option value="{{ $clt_group->id }}">{{ $clt_group->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" id="id_clt_edit_dop_grps_btnadd"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                                        </span>                                    
+                                    </div>
                                 </div>
-                                <div class="col-sm-1">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" id="id_clt_edit_dop_grps_btnadd"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                                    </span>                                    
-                                </div>
-                                </div>
-                                
-                                
-                                
-                                
-                                
-                                
                             </div>                            
                             <div class="form-group">
                                 <label for="id_clt_edit_dop_problem" class="col-sm-3 control-label"></label>
@@ -471,7 +510,13 @@ $(document).ready(function () {
         $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         var data = $(this).val();
-        ajax_fill_addr_sel("#id_clt_edit_adr_raion", data, 'raion');
+        console.log('2 region_chg ' + (new Date().toISOString().slice(11, -1)));
+        ajax_fill_addr_sel("#id_clt_edit_adr_raion", data, 'raion', '{{$raion_guid}}');
+        //$('#id_clt_edit_adr_raion option[value="{{$raion_guid}}"]').prop('selected', true);
+        //$('#id_clt_edit_adr_raion option[value="{{$raion_guid}}"]').attr('selected', 'selected');
+        //$('#id_clt_edit_adr_raion').val('{{$raion_guid}}').change();
+        //$('#id_clt_edit_adr_raion').change();
+        //return false;
 //  }
     });
 
@@ -481,7 +526,12 @@ $(document).ready(function () {
         $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         var data = $(this).val();
-        ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np');
+        //if (data === null) data = '{{$raion_guid}}';
+        console.log('22 raion_chg ' + (new Date().toISOString().slice(11, -1)));
+        //if ? 
+        ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np', '{{$np_guid}}');
+        //alert('{{$raion_guid}}');
+        //$('#id_clt_edit_adr_raion').val('{{$raion_guid}}').change();
         // }
     });
 
@@ -493,7 +543,8 @@ $(document).ready(function () {
         $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         var data = $(this).val();
-        ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np_city');
+        console.log('33 city_chg ' + (new Date().toISOString().slice(11, -1)));
+        ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np_city', '{{$st_guid}}');
         // }
     });
 
@@ -504,75 +555,135 @@ $(document).ready(function () {
         //var parent;
 //                if ($('#id_clt_edit_adr_city').val()!=="0") parent = $('#id_clt_edit_adr_city').val();
 //                else if ($('#id_clt_edit_adr_raion').val()!=="0") parent = $('#id_clt_edit_adr_raion').val();
-        ajax_fill_addr_sel("#id_clt_edit_adr_st", data, 'st');
+        console.log('6 np_chg ' + (new Date().toISOString().slice(11, -1)));
+        ajax_fill_addr_sel("#id_clt_edit_adr_st", data, 'st', '{{$st_guid}}');
         //}
     });
 
-    function ajax_fill_addr_sel(id_sel, pdata, padr_part) {
-//            var formData = {
-//                'adr_part_val': pdata,
-//                'adr_part': padr_part
-//            };
-
+    function ajax_fill_addr_sel(id_sel, pdata, padr_part, adr_id = null) {
         $.ajax({
-            // На какой URL будет послан запрос
             url: '/adresses/adr_part_list',
-            // Тип запроса
             type: 'POST',
-            // Какие данные нужно передать
             data: {'adr_part_val': pdata, 'adr_part': padr_part},
-            //data: formData,
-            // !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять данные
-            //processData: false,		
-            // !!! не использовать, параметры на передаются в контроллер. Эта опция не разрешает jQuery изменять типы данных
-            //contentType: false,		
-            // Формат данных ответа с сервера
             dataType: 'json',
-            //dataType: 'text',
-            //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            // Функция удачного ответа с сервера
             success: function (result) {
-                // Получили ответ с сервера (ответ содержится в переменной result)
-                // Если в ответе есть объект 
                 if (result.status === 1) {
-
                     var rows = result.adr_arr;
+                    console.log('3 ajax_start ' + (new Date().toISOString().slice(11, -1)));
                     for (loop = 0; loop < rows.length; loop++) {
-                        $(id_sel)
-                                .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
-                                        .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                        if (padr_part === 'st') {
+                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                                $(id_sel)
+                                    .append($('<option>', {value: rows[loop].aoid, selected: true}) //value : rows[loop].rtf_aoguid
+                                    .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            else
+                                $(id_sel)
+                                    .append($('<option>', {value: rows[loop].aoid}) //value : rows[loop].rtf_aoguid
+                                    .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                        }
+                        else {
+                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                                $(id_sel)
+                                    .append($('<option>', {value: rows[loop].aoguid, selected: true}) //value : rows[loop].rtf_aoguid
+                                    .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            else
+                                $(id_sel)
+                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                    .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                        }
                     }
-
                     if (id_sel === '#id_clt_edit_adr_raion') {
                         rows = result.city_arr;
                         for (loop = 0; loop < rows.length; loop++) {
-                            $('#id_clt_edit_adr_city')
-                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
-                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                                $('#id_clt_edit_adr_city')
+                                        .append($('<option>', {value: rows[loop].aoguid, selected: true}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            else
+                                $('#id_clt_edit_adr_city')
+                                        .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                         }
 
                         rows = result.punkt_arr;
                         for (loop = 0; loop < rows.length; loop++) {
-                            $('#id_clt_edit_adr_np')
-                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
-                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                                $('#id_clt_edit_adr_np')
+                                        .append($('<option>', {value: rows[loop].aoguid, selected: true}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            else
+                                $('#id_clt_edit_adr_np')
+                                        .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                         }
+                        console.log('4 ajax_raion ' + (new Date().toISOString().slice(11, -1)));
                     } else if (id_sel === '#id_clt_edit_adr_np') {
 
                         rows = result.city_arr;
                         for (loop = 0; loop < rows.length; loop++) {
-                            $('#id_clt_edit_adr_city')
-                                    .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
-                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                                $('#id_clt_edit_adr_city')
+                                        .append($('<option>', {value: rows[loop].aoguid, selected: true}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            else
+                                $('#id_clt_edit_adr_city')
+                                        .append($('<option>', {value: rows[loop].aoguid}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                         }
 
                         rows = result.st_arr;
                         for (loop = 0; loop < rows.length; loop++) {
-                            $('#id_clt_edit_adr_st')
-                                    .append($('<option>', {value: rows[loop].aoid}) //value : rows[loop].rtf_aoguid
-                                            .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            if (adr_id !== null && rows[loop].aoid === adr_id)
+                                $('#id_clt_edit_adr_st')
+                                        .append($('<option>', {value: rows[loop].aoid, selected: true}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
+                            else
+                                $('#id_clt_edit_adr_st')
+                                        .append($('<option>', {value: rows[loop].aoid}) //value : rows[loop].rtf_aoguid
+                                                .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                         }
                     }
+                    var r = '{{$raion_guid}}';
+                    var rc = '{{$city_guid}}';
+                    if (padr_part === 'raion' && adr_id !== null && r!=='') {
+                        console.log('5 ajax_raion_sel ' + (new Date().toISOString().slice(11, -1)));
+                        $('#id_clt_edit_adr_raion').val('{{$raion_guid}}').change();
+                    }
+                    else if (padr_part === 'raion' && adr_id !== null && rc!=='') {
+                        console.log('5 ajax_city_sel ' + (new Date().toISOString().slice(11, -1)));
+                        $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();
+                    }
+//                    var r = '{{$city_guid}}';
+//                    if (padr_part==='np_city' && adr_id!==null && r!=='') { 
+//                        console.log('6 ajax_city_sel '+(new Date().toISOString().slice(11, -1)));
+//                        $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();    
+//                    }
+                    var r = '{{$city_guid}}';
+                    var rn = '{{$np_guid}}';
+                    if (padr_part==='np' && adr_id!==null && r!=='') {
+                            console.log('6 ajax_np_sity_sel '+(new Date().toISOString().slice(11, -1)));
+                            $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();    
+                    }
+                    else if (padr_part==='np' && adr_id!==null && rn!=='') {
+                        console.log('6 ajax_np_sel '+(new Date().toISOString().slice(11, -1)));
+                        $('#id_clt_edit_adr_np').val('{{$np_guid}}').change();    
+                    }
+                    var r = '{{$np_guid}}';
+                    if (padr_part==='np_city' && adr_id!==null && r!=='') { 
+                        console.log('7 ajax_np_sel '+(new Date().toISOString().slice(11, -1)));
+                        $('#id_clt_edit_adr_np').val('{{$np_guid}}').change();    
+                    }
+                    var r = '{{$st_guid}}';
+                    if (padr_part==='st' && adr_id!==null && r!=='') { 
+                        console.log('8 ajax_st_sel '+(new Date().toISOString().slice(11, -1)));
+                        $('#id_clt_edit_adr_st').val('{{$st_guid}}').change();    
+                    }
+                    
+//                    if (padr_part==='np' && adr_id!==null) { 
+//                        console.log('9 '+(new Date().toISOString().slice(11, -1)));
+//                        $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();    
+//                        
+//                    }
                 }
             },
             // Что-то пошло не так
@@ -581,7 +692,7 @@ $(document).ready(function () {
             }
         });
     }
-    
+
     $('#id_clt_edit_contacts_btnadd').click(function () {
         if ($('#id_clt_edit_contacts_tel').val() !== '') {
             addcontacts();
@@ -638,14 +749,14 @@ $(document).ready(function () {
             $(this).parent().parent().parent().remove();
         });
     }
-    
+
     $('#id_clt_edit_inet_btnadd').click(function () {
         if ($('#id_clt_edit_inet_ip').val() !== '') {
             addip();
         }
         return false;
     });
- 
+
     function addip() {
 
         var raw = $('<tr/>', {
@@ -678,7 +789,7 @@ $(document).ready(function () {
             'class': 'table-text',
             align: 'center'
         }).appendTo(raw);
-        
+
         var div_radio = $('<div/>', {
             'class': 'radio'
         }).appendTo(td4);
@@ -687,19 +798,19 @@ $(document).ready(function () {
         var radio_sel = $('<input/>', {
             type: 'radio',
             name: 'clt_edit_inet_table_optionsRadios',
-            value: $('#id_clt_edit_inet_table_tbody').rows-1
+            value: $('#id_clt_edit_inet_table_tbody').rows - 1
         }).appendTo(div_label);
-        
+
 //        btn_del.click(function () {
 //            $(this).parent().parent().parent().remove();
 //        });
-    } 
+    }
 
 
     $('#id_clt_edit_dop_grps_btnadd').click(function () {
         if ($('#id_clt_edit_dop_gr').val() !== "0") {
             var flag = 0;
-            $(".DopBlock").each(function(i) {
+            $(".DopBlock").each(function (i) {
                 var ltext = $(this).find('.col-sm-6').find('label').text();
                 if (ltext === $('#id_clt_edit_dop_gr option:selected').text()) {
                     //alert(ltext);
@@ -707,11 +818,13 @@ $(document).ready(function () {
                     return false;
                 }
             });
-            if (flag === 0) { addgroups(); }
+            if (flag === 0) {
+                addgroups();
+            }
         }
         return false;
     });
-    
+
     function addgroups() {
 
         var raw = $('<div/>', {
@@ -738,7 +851,7 @@ $(document).ready(function () {
         }).appendTo(raw);
         var div_span_sm1 = $('<span/>', {
             'class': 'input-group-btn'
-        }).appendTo(div_sm1);        
+        }).appendTo(div_sm1);
         var btn_del = $('<button/>', {
             type: 'button',
             'class': 'btn btn-default',
@@ -751,11 +864,19 @@ $(document).ready(function () {
         btn_del.click(function () {
             $(this).parent().parent().parent().remove();
         });
-    } 
- 
- 
- 
- 
+    }
+
+
+
+
 });
+
+window.onload = function () {
+    console.log('1 onload ' + (new Date().toISOString().slice(11, -1)));
+    var r = '{{$new_clt->address_aoid}}';
+    if (r!=='') 
+        $('#id_clt_edit_adr_region').val('{{$region_guid}}').change();
+
+};
 </script>
 @endsection

@@ -174,7 +174,36 @@ class ClientsController extends Controller
  }
  
  public function clt_edit($id) {
-
+        
+        $new_clt = Client::find($id);
+        
+        $address_components = '';
+        $addresses = '';
+        $raions = '';
+        
+        $regions = DB::connection('pgsql_adr')->table('fias_addressobjects')
+                ->select('shortname','offname','aoguid')
+                ->whereNull('parentguid')
+                ->get();        
+                
+        if ($new_clt->address_aoid) {
+            
+            $address_components = DB::select("select * from public.get_address_components_by_guid(?) order by taolevel",[$new_clt->address_aoid]);
+            $addresses = DB::select("select address_aoid,get_address_by_aoid(address_aoid) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
+            $raion_guid = ''; $city_guid = ''; $np_guid = ''; $st_guid = '';
+//            foreach ($address_components as $component) { 
+//                if ($component->taolevel == 3) { $raion_guid = $component->tparentguid; }
+//                else if ($component->taolevel == 4) { $city_guid = $component->tparentguid; }
+//                else if ($component->taolevel == 6) { $np_guid = $component->tparentguid; }
+//                else { $st_guid = $component->tparentguid; }
+//                
+//            }            
+//            $raions = DB::connection('pgsql_adr')->table('fias_addressobjects')->select('shortname','offname','aoguid')->where('parentguid','=',$regions[0]->aoguid)->get();        
+//            $cities = DB::connection('pgsql_adr')->table('fias_addressobjects')->select('shortname','offname','aoguid')->where('parentguid','=',$city_guid)->get();        
+//            $nps = DB::connection('pgsql_adr')->table('fias_addressobjects')->select('shortname','offname','aoguid')->where('parentguid','=',$np_guid)->get();        
+//            $sts = DB::connection('pgsql_adr')->table('fias_addressobjects')->select('shortname','offname','aoguid')->where('parentguid','=',$st_guid)->get();        
+            
+        }
         $providers = Provider::all();
         $clt_groups = Group::all();
         $clt_contracts = Contract::all();
@@ -182,14 +211,10 @@ class ClientsController extends Controller
 //                ->select('shortname','offname')
 //                ->where([['areacode', '=', '000'],['citycode', '=', '000'],['placecode', '=', '000'],['streetcode', '=', '0000']])
 //                ->get();
-        $regions = DB::connection('pgsql_adr')->table('fias_addressobjects')
-                ->select('shortname','offname','aoguid')
-                ->whereNull('parentguid')
-                ->get();        
         //$new_clt =  session('new_clt');
 //        var_dump($new_clt);
-        $new_clt = Client::find($id);
-        return view('clients.clt_edit',compact('new_clt','providers','clt_groups','clt_contracts','regions'));
+        
+        return view('clients.clt_edit',compact('new_clt','providers','clt_groups','clt_contracts','regions','address_components','addresses'));
  }
  
 }

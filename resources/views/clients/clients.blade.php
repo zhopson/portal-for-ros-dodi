@@ -46,9 +46,11 @@
                             </td>
                             <td class="table-text">
                                 <div><a href="{{ route('clients.view', ['id' => $client->id]) }}">{{ $client->clt_name }}</a></div>
+                                @if ($client->gr_name) 
                                 @foreach (explode(",",$client->gr_name) as $group)
                                 <li>{{ $group }}</li>
                                 @endforeach
+                                @endif
                             </td>
                             <td class="table-text">
                                 <div>{{ $client->type_name }}</div>
@@ -100,7 +102,7 @@
                                 <div>{{ $client->comment }}</div>
                             </td>
                             <td class="table-text">
-                                <div><a href="#"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></div>
+                                <div><a href="{{ route('clients.edit', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></div>
                             </td>
                         </tr>
                         @endforeach

@@ -13,7 +13,7 @@ class AddressController extends Controller {
         if (Request::ajax()) {
             $rname = Request::input('adr_part_val');
             $adr_part = Request::input('adr_part');
-            $parent = Request::input('parent');
+            //$parent = Request::input('parent');
             
             $adr_arr = '';
             $city_arr = '';
@@ -27,11 +27,12 @@ class AddressController extends Controller {
             }
             else if ($adr_part === 'np_city') {
                 $adr_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoguid FROM fias_addressobjects where aolevel=6 and currstatus=0 and parentguid = ?", [$rname]);                
-                $st_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoguid FROM fias_addressobjects where aolevel>6 and currstatus=0 and parentguid = ? order by formalname", [$rname]);                
+                $st_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoid FROM fias_addressobjects where aolevel>6 and currstatus=0 and parentguid = ? order by formalname", [$rname]);                
             }
             else if ($adr_part === 'np') {
                 $adr_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoguid FROM fias_addressobjects where aolevel=6 and currstatus=0 and parentguid = ?", [$rname]);                
                 $city_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoguid FROM fias_addressobjects where aolevel=4 and currstatus=0 and parentguid = ? order by formalname", [$rname]);                
+                //$st_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoid FROM fias_addressobjects where aolevel>6 and currstatus=0 and parentguid = ? order by formalname", [$rname]);                
             }
             else if ($adr_part === 'st') {
                 $adr_arr = DB::connection('pgsql_adr')->select("SELECT formalname, shortname,aoid FROM fias_addressobjects where currstatus=0 and parentguid = ? order by formalname", [$rname]);                
