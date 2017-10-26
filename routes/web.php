@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
 
     Route::get('/clients/edit/{id}', 'ClientsController@clt_edit')->name('clients.edit');
+
+    Route::post('/clients/update/{id}', 'ClientsController@clt_update')->name('clients.update');
     
     Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');
     

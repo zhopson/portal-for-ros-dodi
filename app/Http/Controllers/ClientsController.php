@@ -9,6 +9,7 @@ use App\Client;
 use App\Provider;
 use App\Group;
 use App\Contract;
+use App\Postal;
 
 class ClientsController extends Controller
 {
@@ -153,7 +154,7 @@ class ClientsController extends Controller
                 'name' => $org,
             ]);
         }
-        $id = $new_clt->id;
+        //$id = $new_clt->id;
         //var_dump(explode(",",$new_clt->language));
 //            [
 //        'type' => $type,
@@ -190,7 +191,7 @@ class ClientsController extends Controller
             
             $address_components = DB::select("select * from public.get_address_components_by_guid(?) order by taolevel",[$new_clt->address_aoid]);
             $addresses = DB::select("select address_aoid,get_address_by_aoid(address_aoid) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
-            $raion_guid = ''; $city_guid = ''; $np_guid = ''; $st_guid = '';
+            //$raion_guid = ''; $city_guid = ''; $np_guid = ''; $st_guid = '';
 //            foreach ($address_components as $component) { 
 //                if ($component->taolevel == 3) { $raion_guid = $component->tparentguid; }
 //                else if ($component->taolevel == 4) { $city_guid = $component->tparentguid; }
@@ -217,4 +218,82 @@ class ClientsController extends Controller
         return view('clients.clt_edit',compact('new_clt','providers','clt_groups','clt_contracts','regions','address_components','addresses'));
  }
  
+    public function clt_update(Request $request,$id ) {
+        
+        $clt = Client::find($id);
+        
+        $surname = $request->input('v_clt_edit_surname');
+        $name = $request->input('v_clt_edit_name');
+        $otch = $request->input('v_clt_edit_otch');
+        $sex = $request->input('v_clt_edit_sex');
+        $language = '';
+        if ($request->input('v_clt_edit_langs')) {
+            foreach ($request->input('v_clt_edit_langs') as $values) { $language=$language.$values.','; }
+            $language = rtrim($language,',');
+        }
+        $father = $request->input('v_clt_edit_father');
+        $mother = $request->input('v_clt_edit_mother');
+        $org = $request->input('v_clt_edit_org');
+        $diag = $request->input('v_clt_edit_diag');
+        $adr_prev = $request->input('v_clt_edit_adr_prev');
+        $adr_ind = $request->input('v_clt_edit_adr_ind');
+        $adr_region = $request->input('v_clt_edit_adr_region');
+        $adr_raion = $request->input('v_clt_edit_adr_raion');
+        $adr_city = $request->input('v_clt_edit_adr_city');
+        $adr_np = $request->input('v_clt_edit_adr_np');
+        $adr_st = $request->input('v_clt_edit_adr_st');
+        $adr_dom = $request->input('v_clt_edit_adr_dom');
+        $adr_korp = $request->input('v_clt_edit_adr_korp');
+        $adr_kv = $request->input('v_clt_edit_adr_kv');
+        $contacts_tel = $request->input('v_clt_edit_contacts_tel');
+        $contacts_name = $request->input('v_clt_edit_contacts_name');
+        $contacts_mail = $request->input('v_clt_edit_contacts_mail');
+        $contacts_skype = $request->input('v_clt_edit_contacts_skype');
+        $inet_prd = $request->input('v_clt_edit_inet_prd');
+        $inet_ip = $request->input('v_clt_edit_inet_ip');
+        $mask_ip = $request->input('v_clt_edit_mask_ip');
+        $gate_ip = $request->input('v_clt_edit_gate_ip');
+        $dop_active = $request->input('v_clt_edit_dop_active');
+        $dop_gr = $request->input('v_clt_edit_dop_gr');
+        $dop_problem = $request->input('v_clt_edit_dop_problem');
+        $dop_prim = $request->input('v_clt_edit_dop_prim');
+        //$surname = Request::input('id_clt_edit_surname');
+        //$surname = Input::post('id_clt_edit_surname');
+        //var_dump($surname);
+        
+        //$old_adr_st = $request->old('v_clt_edit_adr_st');
+        //var_dump($adr_st);
+        if ($clt->address_aoid!=$adr_st || $clt->address_number!=$adr_dom || $clt->address_building!=$adr_korp || $clt->address_apartment!=$adr_kv) {
+            
+            if ($adr_st !== '0') {
+
+                $address_id = DB::connection('pgsql_adr')->select("SELECT code FROM fias_addressobjects where aoid = ? limit 1", [$adr_st])[0]->code;
+
+                $clt->address_postal = $adr_ind;
+                $clt->address_number = $adr_dom;
+                $clt->address_building = $adr_korp;
+                $clt->address_apartment = $adr_kv;
+                $clt->address_aoid = $adr_st;
+                $clt->address_id = $address_id;
+
+                $new_postal = Postal::create(['client_id' => $id, 'address_id' => $address_id, 'address_postal' => $adr_ind, 'address_number' => $adr_dom, 'address_building' => $adr_korp, 'address_apartment' => $adr_kv, 'address_aoid' => $adr_st]);
+            }
+        }
+        $phone_book = '';
+        if ($request->input('v_clt_edit_contacts_tel1')) {
+        //v_clt_edit_contacts_tel; v_clt_edit_contacts_name
+            $n = 1;
+            while ( $request->input('v_clt_edit_contacts_tel' . $n) ) {
+               $phone_book = $phone_book.$request->input('v_clt_edit_contacts_tel' . $n).':';
+               if ( $request->input('v_clt_edit_contacts_name' . $n) ) $phone_book = $phone_book.$request->input('v_clt_edit_contacts_name' . $n).'\n';
+               else $phone_book = $phone_book.'\n';
+               $n++; 
+            }
+        }
+        $phone_book = rtrim($phone_book,'\n');
+        $clt->numbers = $phone_book;
+        var_dump($phone_book);
+        //$clt->save();
+    } 
 }
+

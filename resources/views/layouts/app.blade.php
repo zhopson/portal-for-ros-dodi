@@ -126,6 +126,8 @@
         </nav>
 
         @yield('content')
+    </div>
+    <div id="footer">
         <nav class="navbar navbar-default navbar-fixed-bottom">
             	<div class="container">
                 <div class="navbar-header">
@@ -136,6 +138,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+    @yield('footer')
+        
+        
+
+    
 </body>
 </html>

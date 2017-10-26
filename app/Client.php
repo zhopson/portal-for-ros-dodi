@@ -39,4 +39,14 @@ class Client extends Model
   {
     return $this->belongsToMany('App\Group','groups_clients', 'clients_id', 'groups_id');
   }
+  
+  public function ipadddresses()
+  {
+    return $this->hasMany('App\IPAddress', 'clients_id');
+  }
+  
+  public function contract()
+  {
+    return $this->belongsTo('App\Contract');
+  }  
 }

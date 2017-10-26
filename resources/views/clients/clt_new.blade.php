@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head')
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+
 @endsection
 @section('content')
 
@@ -85,7 +85,7 @@
                             <h4 style="margin-bottom:-3px">Владение языками</h4>
                         </div>
                         <div class="form-group" style="margin-top:10px">
-                            <label for="id_clt_type" class="col-sm-4 control-label">Языки</label>
+                            <label for="id_clt_langs" class="col-sm-4 control-label">Языки</label>
                             <div class="col-sm-8">
                                 <select multiple class="form-control" id="id_clt_langs" name="v_clt_langs[]" size=3>
                                     <option value='russian'>русский</option>
@@ -121,7 +121,10 @@
         </div>
     </div>
 </div>
+@endsection
 
+@section('footer')
+<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {    
 $('#id_clt_type').change(function(){

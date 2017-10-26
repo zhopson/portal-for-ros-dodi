@@ -1,15 +1,78 @@
 @extends('layouts.app')
+@section('head')
+<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"> </script>
+@endsection
 
 @section('content')
-<div class="container">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <div class="row">
-        <div class="col-md-6">
-            <div class="page-header" style="margin-top:-18px">
-                <h2>Голосовой портал</h2>
-            </div>            
+        <h3 style="margin-top:-10px">Голосовой портал</h3>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-2">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation" class="active"><a href="{{ url('/telephony') }}">Позвонить</a></li>                        
+                        <li role="presentation"><a href="#">Статистика</a></li>
+                        <li role="presentation"><a href="#">Отчеты</a></li>
+                        <li role="presentation"><a href="#">Обзвон</a></li>                        
+                    </ul>
+                </div>
+                <div class="col-md-2 col-md-offset-1">
+                    <!--                    <form class="form-inline">-->
+                    <div class="form-group">
+                        <label for="id_tel_phone">Номер телефона</label>
+                        <input type="text" class="form-control" id="id_tel_phone" placeholder="81112223333">
+                    </div>
+                    <button id="id_tel_call" class="btn btn-default">Позвонить</button>
+                    <button id="id_tel_hangup" class="btn btn-default">Положить</button>
+                    <!--                    </form>-->
+
+                    <audio id='audio_remote' autoplay='autoplay'></audio>
+                    <audio id='ringbacktone' loop src='sounds/ringbacktone.wav'></audio>
+
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
-    </div>
 </div>
+
+@endsection
+
+@section('footer')
+        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="{{ asset('js/sip.js?svn=1') }}" type="text/javascript"> </script>
+        
+        <script type="text/javascript">
+        $(document).ready(function () {
+        //on page load do init
+            $('#id_tel_call').click(function () {
+                //alert('call');
+                makeCall();
+            });
+            $('#id_tel_hangup').click(function () {
+                sipHangUp();
+            });
+        });
+
+        window.onload = function () {
+            
+            SetVar1('{{Auth::user()->sip_number}}');
+            SetVar2('{{Auth::user()->sip_secret}}');
+            //alert('{{Auth::user()->sip_number}}');
+        //init sip stack
+        SIPml.init(readyCallback, errorCallback);
+
+        //start stip stack
+        sipStack.start();
+
+        //do login
+        login();
+
+        };
+
+
+        </script>
+        
 @endsection

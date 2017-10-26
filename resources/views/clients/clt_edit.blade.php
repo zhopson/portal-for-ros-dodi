@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head')
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js?2"></script>
+
 @endsection
 @section('content')
 
@@ -11,14 +11,27 @@ $raion_guid = '';
 $np_guid = '';
 $st_guid = '';
 if ($address_components) {
-foreach ($address_components as $component) { 
-if ($component->taolevel == 1) { $region_guid = $component->taoguid; }
-if ($component->taolevel == 3) { $raion_guid = $component->taoguid; }
-if ($component->taolevel == 4) { $city_guid = $component->taoguid; }
-if ($component->taolevel == 6) { $np_guid = $component->taoguid; }
-if ($component->taolevel > 6) { $st_guid = $component->taoid; }
+    foreach ($address_components as $component) { 
+        if ($component->taolevel == 1) { $region_guid = $component->taoguid; }
+        if ($component->taolevel == 3) { $raion_guid = $component->taoguid; }
+        if ($component->taolevel == 4) { $city_guid = $component->taoguid; }
+        if ($component->taolevel == 6) { $np_guid = $component->taoguid; }
+        if ($component->taolevel > 6) { $st_guid = $component->taoid; }
+    }
 }
+
+$dom = '';
+$korp = '';
+$kv = '';
+if ($addresses!=='') {
+    if ($addresses[0]->address_number) $dom = $addresses[0]->address_number; 
+    if ($addresses[0]->address_building) $korp = $addresses[0]->address_building; 
+    if ($addresses[0]->address_apartment) $kv = $addresses[0]->address_apartment;
 }
+
+//var_dump($new_clt->ipadddresses);
+
+
 @endphp
 
 <div class="container-fluid" style="margin:0 60px 0 60px">
@@ -29,7 +42,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
         <div class="col-md-6">
             <div class="panel panel-default" style="margin-bottom:55px">
                 <div class="panel-body">
-                    <form class="form-horizontal"  method="POST" action="{{ url('clients.update') }}">
+                    <form class="form-horizontal"  method="POST" action="{{ route('clients.update', ['id' => $new_clt->id]) }}">
                         {{ csrf_field() }}
                         <div id='id_clt_user_view'>
                             @if ($new_clt->clients_type_id==1 || $new_clt->clients_type_id==2 )
@@ -40,19 +53,19 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="form-group" style="margin-top:10px">
                                     <label for="id_clt_edit_surname" class="col-sm-3 control-label">Фамилия</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="id_clt_edit_surname" value="{{$new_clt->surname}}" required >
+                                        <input type="text" class="form-control" id="id_clt_edit_surname" name="v_clt_edit_surname" value="{{$new_clt->surname}}" required >
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="id_clt_edit_name" class="col-sm-3 control-label">Имя</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="id_clt_edit_name" value="{{$new_clt->name}}" required >
+                                        <input type="text" class="form-control" id="id_clt_edit_name" name="v_clt_edit_name" value="{{$new_clt->name}}" required >
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="id_clt_edit_otch" class="col-sm-3 control-label">Отчество</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="id_clt_edit_otch" value="{{$new_clt->patronymic}}" required >
+                                        <input type="text" class="form-control" id="id_clt_edit_otch" name="v_clt_edit_otch" value="{{$new_clt->patronymic}}" required >
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -60,17 +73,17 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                     <div class="col-sm-8">
                                         @if ($new_clt->sex==1)
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" value="id_clt_sexm" required checked> Мужской
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" name="v_clt_edit_sexm" value="1" required checked> Мужской
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" value="id_clt_sexw" required> Женский
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" name="v_clt_edit_sexw" value="0" required> Женский
                                         </label>
                                         @else
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" value="id_clt_sexm" required> Мужской
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" name="v_clt_edit_sexm" value="1" required> Мужской
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" value="id_clt_sexw" required  checked> Женский
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" name="v_clt_edit_sexw" value="0" required  checked> Женский
                                         </label>
                                         @endif
                                     </div>
@@ -85,13 +98,13 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="form-group" style="margin-top:10px">
                                     <label for="id_clt_edit_father" class="col-sm-3 control-label">Отец</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="id_clt_edit_father" value="{{$new_clt->father}}">
+                                        <input type="text" class="form-control" id="id_clt_edit_father" name="v_clt_edit_father" value="{{$new_clt->father}}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="id_clt_edit_mother" class="col-sm-3 control-label">Мать</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="id_cltedit__mother" value="{{$new_clt->mother}}">
+                                        <input type="text" class="form-control" id="id_clt_edit_mother" name="v_clt_edit_mother" value="{{$new_clt->mother}}">
                                     </div>
                                 </div>
                             </div>
@@ -104,12 +117,12 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="form-group" style="margin-top:10px">
                                     <label for="id_clt_edit_langs" class="col-sm-3 control-label">Языки</label>
                                     <div class="col-sm-8">
-                                        <select multiple class="form-control" id="id_clt_edit_langs">
+                                        <select multiple class="form-control" id="id_clt_edit_langs" name="v_clt_edit_langs[]" size=3>
                                             @foreach (array("russian" => "русский", "english" => "английский", "sakha" => "якутский") as $key => $value)
                                             @if (strpos($new_clt->language, $key)!==false)
-                                            <option selected>{{ $value }}</option>
+                                            <option value='{{$key}}' selected>{{ $value }}</option>
                                             @else
-                                            <option>{{ $value }}</option>
+                                            <option value='{{$key}}'>{{ $value }}</option>
                                             @endif
                                             @endforeach  
                                             <!--                                            <option selected>русский</option>
@@ -128,7 +141,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="form-group" style="margin-top:10px">
                                     <label for="id_clt_edit_org" class="col-sm-3 control-label">Наименование</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="id_clt_edit_org" value="{{$new_clt->name}}">
+                                        <input type="text" class="form-control" id="id_clt_edit_org" name="v_clt_edit_org" value="{{$new_clt->name}}">
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +155,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_diag" class="col-sm-3 control-label">Диагноз</label>
                                 <div class="col-sm-8">
-                                    <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_diag">{{$new_clt->diagnose}}</textarea>
+                                    <textarea rows="10" cols="50" class="form-control" name="v_clt_edit_diag" id="id_clt_edit_diag">{{$new_clt->diagnose}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +167,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_prev" class="col-sm-3 control-label">Предыдущие адреса</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_adr_prev" name="v_clt_adr_prev ">
+                                    <select class="form-control" id="id_clt_edit_adr_prev" name="v_clt_edit_adr_prev ">
                                         <option value="0"></option>
                                         @for ($i = 1; $i < count($addresses); $i++)
                                         <option value="{{ $addresses[$i]->address_aoid }}">
@@ -181,24 +194,29 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_ind" class="col-sm-3 control-label">Почтовый индекс</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="id_clt_edit_adr_ind" value="{{$new_clt->address_postal}}">
+                                    <input type="text" class="form-control" id="id_clt_edit_adr_ind" name="v_clt_edit_adr_ind" value="{{$new_clt->address_postal}}">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_region" class="col-sm-3 control-label">Регион</label>
-                                <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_adr_region" name="v_clt_adr_region">
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="id_clt_edit_adr_region" name="v_clt_edit_adr_region">
                                         <option value="0" selected>- Выберите -</option>
                                         @foreach ($regions as $region) 
                                         <option value="{{ $region->aoguid }}">{{ $region->shortname.'. '.$region->offname }}</option>
                                         @endforeach
                                     </select>  
                                 </div>
+                                <div class="col-sm-2">
+                                        <span class="input-group-btn">
+                                            <button data-toggle="tooltip" title="Очистить адресные поля" class="btn btn-default" type="button" id="id_clt_edit_adr_btnnew"><span class="glyphicon glyphicon-erase" aria-hidden="true"></span></button>
+                                        </span>
+                                </div>                                
                             </div>                            
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_raion" class="col-sm-3 control-label">Район</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_adr_raion" name="v_clt_adr_raion">
+                                    <select class="form-control" id="id_clt_edit_adr_raion" name="v_clt_edit_adr_raion">
                                         <option value="0" selected>- Выберите -</option>
                                     </select>
                                 </div>
@@ -206,7 +224,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_city" class="col-sm-3 control-label">Город</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_adr_city" name="v_clt_adr_city">
+                                    <select class="form-control" id="id_clt_edit_adr_city" name="v_clt_edit_adr_city">
                                         <option value="0">- Выберите -</option>
 
                                     </select>
@@ -215,7 +233,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_np" class="col-sm-3 control-label">Населенный пункт</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_adr_np" name="v_clt_adr_np">
+                                    <select class="form-control" id="id_clt_edit_adr_np" name="v_clt_edit_adr_np">
                                         <option value="0">- Выберите -</option>
                                     </select>
                                 </div>
@@ -223,7 +241,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_adr_st" class="col-sm-3 control-label">Улица</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_adr_st" name="v_clt_adr_st">
+                                    <select class="form-control" id="id_clt_edit_adr_st" name="v_clt_edit_adr_st">
                                         <option value="0">- Выберите -</option>
                                     </select>
                                 </div>
@@ -231,19 +249,19 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group">
                                 <label for="id_clt_edit_adr_dom" class="col-sm-3 control-label">Дом</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control" id="id_clt_edit_adr_dom">
+                                    <input type="text" class="form-control" id="id_clt_edit_adr_dom" name="v_clt_edit_adr_dom" value="{{ $dom }}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="id_clt_edit_adr_korp" class="col-sm-3 control-label">Корпус</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control" id="id_clt_edit_adr_korp">
+                                    <input type="text" class="form-control" id="id_clt_edit_adr_korp" name="v_clt_edit_adr_korp" value="{{ $korp }}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="id_clt_edit_adr_kv" class="col-sm-3 control-label">Квартира</label>
                                 <div class="col-sm-2">
-                                    <input type="text" class="form-control" id="id_clt_edit_adr_kv">
+                                    <input type="text" class="form-control" id="id_clt_edit_adr_kv" name="v_clt_edit_adr_kv" value="{{ $kv }}">
                                 </div>
                             </div>
                         </div>
@@ -257,10 +275,10 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="ContactsBlock" style="margin-bottom: 5px">
 
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="id_clt_edit_contacts_tel">
+                                        <input type="text" class="form-control" id="id_clt_edit_contacts_tel" name="v_clt_edit_contacts_tel">
                                     </div>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="id_clt_edit_contacts_name">
+                                        <input type="text" class="form-control" id="id_clt_edit_contacts_name" name="v_clt_edit_contacts_name">
                                     </div>
                                     <div class="col-sm-1">
                                         <span class="input-group-btn">
@@ -272,13 +290,13 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group">
                                 <label for="id_clt_edit_contacts_mail" class="col-sm-3 control-label">Электронная почта</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="id_clt_edit_contacts_mail">
+                                    <input type="text" class="form-control" id="id_clt_edit_contacts_mail" name="v_clt_edit_contacts_mail" value="{{ $new_clt->email }}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="id_clt_edit_contacts_skype" class="col-sm-3 control-label">Skype</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="id_clt_edit_contacts_skype">
+                                    <input type="text" class="form-control" id="id_clt_edit_contacts_skype" name="v_clt_edit_contacts_skype" value="{{ $new_clt->skype }}">
                                 </div>
                             </div>
                         </div>
@@ -289,7 +307,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group" style="margin-top:10px">
                                 <label for="id_clt_edit_inet_prd" class="col-sm-3 control-label">Провайдер</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_inet_prd" name="v_clt_inet_prd">
+                                    <select class="form-control" id="id_clt_edit_inet_prd" name="v_clt_edit_inet_prd">
                                         <option value="0"></option>
                                         @foreach ($providers as $provider) 
                                         <option value="{{ $provider->id }}">{{ $provider->name }}</option>
@@ -297,7 +315,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                     </select>
                                 </div>
                             </div>                            
-                            <table class="table table-hover" id="id_clt_edit_inet_table">
+                            <table class="table table-hover" id="id_clt_edit_inet_table" name="v_clt_edit_inet_table">
                                 <thead>
                                     <tr class="active">
                                         <th>Адрес</th>
@@ -309,13 +327,13 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <tbody id="id_clt_edit_inet_table_tbody">
                                     <tr class="info">
                                         <td class="table-text">
-                                            <input type="text" class="form-control" id="id_clt_edit_inet_ip">
+                                            <input type="text" class="form-control" id="id_clt_edit_inet_ip" name="v_clt_edit_inet_ip">
                                         </td>
                                         <td class="table-text">
-                                            <input type="text" class="form-control" id="id_clt_edit_mask_ip">
+                                            <input type="text" class="form-control" id="id_clt_edit_mask_ip" name="v_clt_edit_mask_ip">
                                         </td>
                                         <td class="table-text">
-                                            <input type="text" class="form-control" id="id_clt_edit_gate_ip">
+                                            <input type="text" class="form-control" id="id_clt_edit_gate_ip" name="v_clt_edit_gate_ip">
                                         </td>
                                         <td class="table-text">
                                             <span class="input-group-btn">
@@ -335,7 +353,11 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="col-sm-2">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="" id="id_clt_edit_dop_active" checked>
+                                            @if ($new_clt->active == 1)
+                                                <input type="checkbox" value="" id="id_clt_edit_dop_active" name="v_clt_edit_dop_active" checked>
+                                            @else
+                                                <input type="checkbox" value="" id="id_clt_edit_dop_active" name="v_clt_edit_dop_active">
+                                            @endif        
                                             Активный
                                         </label>
                                     </div>
@@ -345,7 +367,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <label for="id_clt_edit_dop_gr" class="col-sm-3 control-label">Группы</label>
                                 <div class="MBlock" style="margin-bottom: 5px">
                                     <div class="col-sm-7">
-                                        <select class="form-control" id="id_clt_edit_dop_gr" name="v_clt_dop_gr">
+                                        <select class="form-control" id="id_clt_edit_dop_gr" name="v_clt_edit_dop_gr">
                                             <option value="0"></option>
                                             @foreach ($clt_groups as $clt_group) 
                                             <option value="{{ $clt_group->id }}">{{ $clt_group->name }}</option>
@@ -364,7 +386,11 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                                 <div class="col-sm-2">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="" id="id_clt_edit_dop_problem">
+                                            @if ($new_clt->problematic == 1)
+                                                <input type="checkbox" value="" id="id_clt_edit_dop_problem" name="v_clt_edit_dop_problem" checked>
+                                            @else    
+                                                <input type="checkbox" value="" id="id_clt_edit_dop_problem" name="v_clt_edit_dop_problem">
+                                            @endif 
                                             Проблемный
                                         </label>
                                     </div>
@@ -373,7 +399,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group">
                                 <label for="id_clt_edit_dop_contract" class="col-sm-3 control-label">Контракт</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control" id="id_clt_edit_dop_contract" name="v_clt_dop_contract">
+                                    <select class="form-control" id="id_clt_edit_dop_contract" name="v_clt_edit_dop_contract">
                                         <option value="0"></option>
                                         @foreach ($clt_contracts as $clt_contract) 
                                         <option value="{{ $clt_contract->id }}">{{ $clt_contract->title }}</option>
@@ -384,7 +410,7 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
                             <div class="form-group">
                                 <label for="id_clt_edit_dop_prim" class="col-sm-3 control-label">Примечание</label>
                                 <div class="col-sm-8">
-                                    <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_dop_prim"></textarea>
+                                    <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_dop_prim" name="v_clt_edit_dop_prim">{{ $new_clt->comment }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -416,7 +442,13 @@ if ($component->taolevel > 6) { $st_guid = $component->taoid; }
     </div>
 </div>
 
+@endsection
+
+@section('footer')
+<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+
 <script type="text/javascript">
+var FlagClearAddress;    
 $(document).ready(function () {
 
     $("li").click(function () {
@@ -496,6 +528,20 @@ $(document).ready(function () {
         }
     });
 
+    $('#id_clt_edit_adr_btnnew').click(function () {
+        FlagClearAddress = 1;
+        
+        $('#id_clt_edit_adr_raion').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_city').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_np').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
+        $('#id_clt_edit_adr_dom').val('');
+        $('#id_clt_edit_adr_korp').val('');
+        $('#id_clt_edit_adr_kv').val('');
+        
+        $('#id_clt_edit_adr_region').val('0').change();
+    });
+    ////////////////////////////////////////////////////////////////////////////    
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -572,7 +618,7 @@ $(document).ready(function () {
                     console.log('3 ajax_start ' + (new Date().toISOString().slice(11, -1)));
                     for (loop = 0; loop < rows.length; loop++) {
                         if (padr_part === 'st') {
-                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                            if (adr_id !== null && rows[loop].aoguid === adr_id && FlagClearAddress === 0)
                                 $(id_sel)
                                     .append($('<option>', {value: rows[loop].aoid, selected: true}) //value : rows[loop].rtf_aoguid
                                     .text(rows[loop].shortname + '. ' + rows[loop].formalname));
@@ -582,7 +628,7 @@ $(document).ready(function () {
                                     .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                         }
                         else {
-                            if (adr_id !== null && rows[loop].aoguid === adr_id)
+                            if (adr_id !== null && rows[loop].aoguid === adr_id && FlagClearAddress === 0)
                                 $(id_sel)
                                     .append($('<option>', {value: rows[loop].aoguid, selected: true}) //value : rows[loop].rtf_aoguid
                                     .text(rows[loop].shortname + '. ' + rows[loop].formalname));
@@ -643,6 +689,7 @@ $(document).ready(function () {
                                                 .text(rows[loop].shortname + '. ' + rows[loop].formalname));
                         }
                     }
+                    if ( FlagClearAddress === 0 ) { //$('#id_clt_edit_adr_raion option:selected').val()!=='0'
                     var r = '{{$raion_guid}}';
                     var rc = '{{$city_guid}}';
                     if (padr_part === 'raion' && adr_id !== null && r!=='') {
@@ -653,11 +700,6 @@ $(document).ready(function () {
                         console.log('5 ajax_city_sel ' + (new Date().toISOString().slice(11, -1)));
                         $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();
                     }
-//                    var r = '{{$city_guid}}';
-//                    if (padr_part==='np_city' && adr_id!==null && r!=='') { 
-//                        console.log('6 ajax_city_sel '+(new Date().toISOString().slice(11, -1)));
-//                        $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();    
-//                    }
                     var r = '{{$city_guid}}';
                     var rn = '{{$np_guid}}';
                     if (padr_part==='np' && adr_id!==null && r!=='') {
@@ -678,12 +720,7 @@ $(document).ready(function () {
                         console.log('8 ajax_st_sel '+(new Date().toISOString().slice(11, -1)));
                         $('#id_clt_edit_adr_st').val('{{$st_guid}}').change();    
                     }
-                    
-//                    if (padr_part==='np' && adr_id!==null) { 
-//                        console.log('9 '+(new Date().toISOString().slice(11, -1)));
-//                        $('#id_clt_edit_adr_city').val('{{$city_guid}}').change();    
-//                        
-//                    }
+                    }
                 }
             },
             // Что-то пошло не так
@@ -692,7 +729,7 @@ $(document).ready(function () {
             }
         });
     }
-
+    ////////////////////////////////////////////////////////////////////////////
     $('#id_clt_edit_contacts_btnadd').click(function () {
         if ($('#id_clt_edit_contacts_tel').val() !== '') {
             addcontacts();
@@ -700,7 +737,8 @@ $(document).ready(function () {
         return false;
     });
     function addcontacts() {
-
+        var n = $("#id_clt_contacts_container").children('.ContactsBlock').length;
+        //alert(n);
         var raw = $('<div/>', {
             'class': 'ContactsBlock',
             style: 'margin-top:5px'
@@ -718,6 +756,7 @@ $(document).ready(function () {
         var input1 = $('<input/>', {
             value: $('#id_clt_edit_contacts_tel').val(),
             type: 'text',
+            name: 'v_clt_edit_contacts_tel'+n,
             'class': 'form-control'
         }).appendTo(div_sm4);
 
@@ -727,6 +766,7 @@ $(document).ready(function () {
         var input2 = $('<input/>', {
             value: $('#id_clt_edit_contacts_name').val(),
             type: 'text',
+            name: 'v_clt_edit_contacts_name'+n,
             'class': 'form-control'
         }).appendTo(div_sm3);
 
@@ -749,7 +789,7 @@ $(document).ready(function () {
             $(this).parent().parent().parent().remove();
         });
     }
-
+    ////////////////////////////////////////////////////////////////////////////
     $('#id_clt_edit_inet_btnadd').click(function () {
         if ($('#id_clt_edit_inet_ip').val() !== '') {
             addip();
@@ -805,8 +845,7 @@ $(document).ready(function () {
 //            $(this).parent().parent().parent().remove();
 //        });
     }
-
-
+    ////////////////////////////////////////////////////////////////////////////
     $('#id_clt_edit_dop_grps_btnadd').click(function () {
         if ($('#id_clt_edit_dop_gr').val() !== "0") {
             var flag = 0;
@@ -872,11 +911,55 @@ $(document).ready(function () {
 });
 
 window.onload = function () {
+    FlagClearAddress = 0;
     console.log('1 onload ' + (new Date().toISOString().slice(11, -1)));
     var r = '{{$new_clt->address_aoid}}';
     if (r!=='') 
         $('#id_clt_edit_adr_region').val('{{$region_guid}}').change();
-
+    ////////////////////////////////////////////////////////////////////////////
+    @if ($new_clt->numbers) 
+        @foreach (explode("\n",$new_clt->numbers) as $number)
+            @php    
+                    $name = '';
+                    $num_arr = (explode(":",$number));
+                    $phone = $num_arr[0];
+                    if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
+                        { $name = $num_arr[1]; }
+            @endphp
+            $('#id_clt_edit_contacts_tel').val('{{$phone}}');
+            $('#id_clt_edit_contacts_name').val('{{$name}}');
+            $('#id_clt_edit_contacts_btnadd').click();
+            
+            $('#id_clt_edit_contacts_tel').val('');
+            $('#id_clt_edit_contacts_name').val('');
+        @endforeach
+    @endif
+    ////////////////////////////////////////////////////////////////////////////
+    var r = '{{$new_clt->provider_id}}';
+    if (r!=='') 
+        $('#id_clt_edit_inet_prd').val('{{$new_clt->provider_id}}').change();
+    ////////////////////////////////////////////////////////////////////////////
+    @foreach ($new_clt->ipadddresses as $ipadddress) 
+            $('#id_clt_edit_inet_ip').val('{{long2ip($ipadddress->address)}}');
+            $('#id_clt_edit_mask_ip').val('{{long2ip($ipadddress->netmask)}}');
+            $('#id_clt_edit_gate_ip').val('{{long2ip($ipadddress->gateway)}}');
+            $('#id_clt_edit_inet_btnadd').click();
+            
+            $('#id_clt_edit_inet_ip').val('');
+            $('#id_clt_edit_mask_ip').val('');
+            $('#id_clt_edit_gate_ip').val('');
+    @endforeach    
+    ////////////////////////////////////////////////////////////////////////////
+    var r = '{{$new_clt->contract_id}}';
+    if (r!=='') 
+        $('#id_clt_edit_dop_contract').val('{{$new_clt->contract_id}}').change();
+    ////////////////////////////////////////////////////////////////////////////
+    @foreach ($new_clt->groups as $group)
+        $('#id_clt_edit_dop_gr').val('{{$group->id}}').change();
+        $('#id_clt_edit_dop_grps_btnadd').click();
+        $('#id_clt_edit_dop_gr').val('0').change();
+    @endforeach    
+    //id_clt_edit_dop_gr
 };
 </script>
 @endsection
