@@ -29,10 +29,20 @@ if ($addresses!=='') {
     if ($addresses[0]->address_apartment) $kv = $addresses[0]->address_apartment;
 }
 
-//var_dump($new_clt->ipadddresses);
+//Request::flash();
 
 
 @endphp
+
+@if (count($errors) > 0)
+  <div class="alert alert-danger">
+    <ul>
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
 
 <div class="container-fluid" style="margin:0 60px 0 60px">
     <div class="row">
@@ -354,9 +364,9 @@ if ($addresses!=='') {
                                     <div class="checkbox">
                                         <label>
                                             @if ($new_clt->active == 1)
-                                                <input type="checkbox" value="" id="id_clt_edit_dop_active" name="v_clt_edit_dop_active" checked>
+                                                <input type="checkbox" id="id_clt_edit_dop_active" name="v_clt_edit_dop_active" checked>
                                             @else
-                                                <input type="checkbox" value="" id="id_clt_edit_dop_active" name="v_clt_edit_dop_active">
+                                                <input type="checkbox" id="id_clt_edit_dop_active" name="v_clt_edit_dop_active">
                                             @endif        
                                             Активный
                                         </label>
@@ -387,9 +397,9 @@ if ($addresses!=='') {
                                     <div class="checkbox">
                                         <label>
                                             @if ($new_clt->problematic == 1)
-                                                <input type="checkbox" value="" id="id_clt_edit_dop_problem" name="v_clt_edit_dop_problem" checked>
+                                                <input type="checkbox" id="id_clt_edit_dop_problem" name="v_clt_edit_dop_problem" checked>
                                             @else    
-                                                <input type="checkbox" value="" id="id_clt_edit_dop_problem" name="v_clt_edit_dop_problem">
+                                                <input type="checkbox" id="id_clt_edit_dop_problem" name="v_clt_edit_dop_problem">
                                             @endif 
                                             Проблемный
                                         </label>
@@ -449,6 +459,68 @@ if ($addresses!=='') {
 
 <script type="text/javascript">
 var FlagClearAddress;    
+
+    function addip(ip,mask,gw,id = null) {
+        var n = $("#id_clt_edit_inet_table_tbody").children('.table-tr-ips').length+1;
+        //alert(n+1);
+        var raw = $('<tr/>', {
+            'class': 'table-tr-ips'
+        }).appendTo($('#id_clt_edit_inet_table_tbody'));
+        var td1 = $('<td/>', {
+            'class': 'table-text'
+        }).appendTo(raw);
+        var input_id = $('<input/>', {
+            value: id,
+            name: 'v_clt_edit_id_ip'+n,
+            type: 'hidden',
+            'class': 'form-control'
+        }).appendTo(td1);        
+        var input1 = $('<input/>', {
+            value: ip,
+            name: 'v_clt_edit_inet_ip'+n,
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(td1);
+        var td2 = $('<td/>', {
+            'class': 'table-text'
+        }).appendTo(raw);
+        var input2 = $('<input/>', {
+            value: mask,
+            name: 'v_clt_edit_mask_ip'+n,
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(td2);
+        var td3 = $('<td/>', {
+            'class': 'table-text'
+        }).appendTo(raw);
+        var input3 = $('<input/>', {
+            value: gw,
+            name: 'v_clt_edit_gate_ip'+n,
+            type: 'text',
+            'class': 'form-control'
+        }).appendTo(td3);
+        var td4 = $('<td/>', {
+            'class': 'table-text',
+            align: 'center'
+        }).appendTo(raw);
+
+        var div_radio = $('<div/>', {
+            'class': 'radio'
+        }).appendTo(td4);
+        var div_label = $('<label/>', {
+        }).appendTo(div_radio);
+        var radio_sel = $('<input/>', {
+            type: 'radio',
+            name: 'clt_edit_inet_table_optionsRadios',
+            value: n//$('#id_clt_edit_inet_table_tbody').rows - 1
+        }).appendTo(div_label);
+
+//        btn_del.click(function () {
+//            $(this).parent().parent().parent().remove();
+//        });
+    }
+
+
 $(document).ready(function () {
 
     $("li").click(function () {
@@ -792,59 +864,11 @@ $(document).ready(function () {
     ////////////////////////////////////////////////////////////////////////////
     $('#id_clt_edit_inet_btnadd').click(function () {
         if ($('#id_clt_edit_inet_ip').val() !== '') {
-            addip();
+            addip($('#id_clt_edit_inet_ip').val(),$('#id_clt_edit_mask_ip').val(),$('#id_clt_edit_gate_ip').val());
         }
         return false;
     });
 
-    function addip() {
-
-        var raw = $('<tr/>', {
-        }).appendTo($('#id_clt_edit_inet_table_tbody'));
-        var td1 = $('<td/>', {
-            'class': 'table-text'
-        }).appendTo(raw);
-        var input1 = $('<input/>', {
-            value: $('#id_clt_edit_inet_ip').val(),
-            type: 'text',
-            'class': 'form-control'
-        }).appendTo(td1);
-        var td2 = $('<td/>', {
-            'class': 'table-text'
-        }).appendTo(raw);
-        var input2 = $('<input/>', {
-            value: $('#id_clt_edit_mask_ip').val(),
-            type: 'text',
-            'class': 'form-control'
-        }).appendTo(td2);
-        var td3 = $('<td/>', {
-            'class': 'table-text'
-        }).appendTo(raw);
-        var input3 = $('<input/>', {
-            value: $('#id_clt_edit_gate_ip').val(),
-            type: 'text',
-            'class': 'form-control'
-        }).appendTo(td3);
-        var td4 = $('<td/>', {
-            'class': 'table-text',
-            align: 'center'
-        }).appendTo(raw);
-
-        var div_radio = $('<div/>', {
-            'class': 'radio'
-        }).appendTo(td4);
-        var div_label = $('<label/>', {
-        }).appendTo(div_radio);
-        var radio_sel = $('<input/>', {
-            type: 'radio',
-            name: 'clt_edit_inet_table_optionsRadios',
-            value: $('#id_clt_edit_inet_table_tbody').rows - 1
-        }).appendTo(div_label);
-
-//        btn_del.click(function () {
-//            $(this).parent().parent().parent().remove();
-//        });
-    }
     ////////////////////////////////////////////////////////////////////////////
     $('#id_clt_edit_dop_grps_btnadd').click(function () {
         if ($('#id_clt_edit_dop_gr').val() !== "0") {
@@ -858,14 +882,14 @@ $(document).ready(function () {
                 }
             });
             if (flag === 0) {
-                addgroups();
+                addgroups($('#id_clt_edit_dop_gr option:selected').val());
             }
         }
         return false;
     });
 
-    function addgroups() {
-
+    function addgroups(id=null) {
+        //var n = $("#id_clt_dop_grps_container").children('.DopBlock').length;
         var raw = $('<div/>', {
             'class': 'DopBlock',
             style: 'margin-top:5px'
@@ -882,9 +906,16 @@ $(document).ready(function () {
         }).appendTo(raw);
         var label = $('<label/>', {
             text: $('#id_clt_edit_dop_gr option:selected').text(),
+            //value: '1',
             //type: 'text',
             'class': 'control-label'
         }).appendTo(div_sm6);
+        var gr_id = $('<input/>', {
+            value: id,
+            name: 'v_clt_edit_dop_grs'+id,
+            type: 'hidden',
+            'class': 'form-control'
+        }).appendTo(div_sm6);        
         var div_sm1 = $('<div/>', {
             'class': 'col-sm-1'
         }).appendTo(raw);
@@ -940,10 +971,15 @@ window.onload = function () {
         $('#id_clt_edit_inet_prd').val('{{$new_clt->provider_id}}').change();
     ////////////////////////////////////////////////////////////////////////////
     @foreach ($new_clt->ipadddresses as $ipadddress) 
-            $('#id_clt_edit_inet_ip').val('{{long2ip($ipadddress->address)}}');
-            $('#id_clt_edit_mask_ip').val('{{long2ip($ipadddress->netmask)}}');
-            $('#id_clt_edit_gate_ip').val('{{long2ip($ipadddress->gateway)}}');
-            $('#id_clt_edit_inet_btnadd').click();
+//            $('#id_clt_edit_inet_ip').val('{{long2ip($ipadddress->address)}}');
+//            $('#id_clt_edit_mask_ip').val('{{long2ip($ipadddress->netmask)}}');
+//            $('#id_clt_edit_gate_ip').val('{{long2ip($ipadddress->gateway)}}');
+            //$('#id_clt_edit_inet_btnadd').click();
+            addip('{{long2ip($ipadddress->address)}}','{{long2ip($ipadddress->netmask)}}','{{long2ip($ipadddress->gateway)}}',{{$ipadddress->id}});
+            
+            var r = '{{ $ipadddress->default }}';
+            if (r === '1') 
+                $("input[name='clt_edit_inet_table_optionsRadios'][value='{{$loop->iteration}}']").attr("checked", true);
             
             $('#id_clt_edit_inet_ip').val('');
             $('#id_clt_edit_mask_ip').val('');

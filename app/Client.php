@@ -42,7 +42,7 @@ class Client extends Model
   
   public function ipadddresses()
   {
-    return $this->hasMany('App\IPAddress', 'clients_id');
+    return $this->hasMany('App\IPAddress', 'clients_id')->orderBy('id');
   }
   
   public function contract()

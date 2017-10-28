@@ -10,6 +10,11 @@ use App\Provider;
 use App\Group;
 use App\Contract;
 use App\Postal;
+use App\IPAddress;
+use App\GroupClient;
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 
 class ClientsController extends Controller
 {
@@ -220,6 +225,35 @@ class ClientsController extends Controller
  
     public function clt_update(Request $request,$id ) {
         
+        if ($request->input('v_clt_edit_inet_ip1')) {
+            $n = 1;
+            while ( $request->input('v_clt_edit_inet_ip' . $n) ) {
+
+		$rules = array(
+			'v_clt_edit_inet_ip' . $n 	=> array('ip'),
+                    //'v_clt_edit_inet_ip*' 	=> 'required|email|unique:users,email',
+		);
+                    $messages = array(
+                    'v_clt_edit_inet_ip' . $n.'.ip' => 'Неверный формат ip',
+                    );
+
+                $validator = Validator::make(Input::all(), $rules,$messages);
+
+		if($validator->fails()){
+                        //var_dump($validator->messages());
+			return \Redirect::back()->withInput()->withErrors($validator);
+                        
+		}        
+                
+               $n++; 
+               //$default_ip_ind
+            }
+        }
+        
+        
+
+        
+        //var_dump($request->old('v_clt_edit_surname'));exit;
         $clt = Client::find($id);
         
         $surname = $request->input('v_clt_edit_surname');
@@ -253,16 +287,19 @@ class ClientsController extends Controller
         $inet_ip = $request->input('v_clt_edit_inet_ip');
         $mask_ip = $request->input('v_clt_edit_mask_ip');
         $gate_ip = $request->input('v_clt_edit_gate_ip');
+        $default_ip_ind = $request->input('clt_edit_inet_table_optionsRadios');
         $dop_active = $request->input('v_clt_edit_dop_active');
-        $dop_gr = $request->input('v_clt_edit_dop_gr');
         $dop_problem = $request->input('v_clt_edit_dop_problem');
+        $dop_contract = $request->input('v_clt_edit_dop_contract');
         $dop_prim = $request->input('v_clt_edit_dop_prim');
         //$surname = Request::input('id_clt_edit_surname');
         //$surname = Input::post('id_clt_edit_surname');
-        //var_dump($surname);
+//        if ($default_ip_ind == 1)
+//        var_dump($default_ip_ind);
+//        exit;
         
         //$old_adr_st = $request->old('v_clt_edit_adr_st');
-        //var_dump($adr_st);
+        
         if ($clt->address_aoid!=$adr_st || $clt->address_number!=$adr_dom || $clt->address_building!=$adr_korp || $clt->address_apartment!=$adr_kv) {
             
             if ($adr_st !== '0') {
@@ -292,8 +329,54 @@ class ClientsController extends Controller
         }
         $phone_book = rtrim($phone_book,'\n');
         $clt->numbers = $phone_book;
-        var_dump($phone_book);
-        //$clt->save();
+        $clt->email = $contacts_mail;
+        $clt->skype = $contacts_skype;
+        $clt->provider_id = $inet_prd;
+        if ($dop_active == 'on') $clt->active = 1;
+        else $clt->active = 0;
+        if ($dop_problem == 'on') $clt->problematic = 1;
+        else $clt->problematic = 0;
+        if ($dop_contract!='0') $clt->contract_id = $dop_contract;
+        else $clt->contract_id = null;
+        if ($dop_prim != null) $clt->comment = $dop_prim;
+        else $clt->comment = '';
+        
+        if ($request->input('v_clt_edit_inet_ip1')) {
+            $n = 1;
+            while ( $request->input('v_clt_edit_inet_ip' . $n) ) {
+               $ip = '';  $mask = '';  $gate = '';  $act = 0;
+               $ip = $request->input('v_clt_edit_inet_ip' . $n);
+               if ( $request->input('v_clt_edit_mask_ip' . $n) ) $mask = $request->input('v_clt_edit_mask_ip' . $n);
+               if ( $request->input('v_clt_edit_gate_ip' . $n) ) $gate = $request->input('v_clt_edit_gate_ip' . $n);
+               $id_ip = $request->input('v_clt_edit_id_ip' . $n);
+               if ($default_ip_ind == $n) $act = 1;
+               $new_ip = IPAddress::updateOrCreate(['id' => $id_ip], ['address' => ip2long($ip),'clients_id' => $id, 'netmask' => ip2long($mask), 'gateway' => ip2long($gate), 'default' => $act]);
+               $n++; 
+            }
+        }
+
+        $n = 1;
+        $groups_len = Group::all()->count();
+        $grps_clt = GroupClient::where('clients_id', '=', $id)->delete();
+        while ( $n <= $groups_len ) {
+            if ( $request->input('v_clt_edit_dop_grs' . $n) ) {
+                 //var_dump($request->input('v_clt_edit_dop_grs' . $n));
+                $gr_id = $request->input('v_clt_edit_dop_grs' . $n);
+                //$grp_clt = GroupClient::where([['clients_id', '=', $id],['groups_id', '=', $gr_id]])->first();
+                //$grp_clt = GroupClient::updateOrCreate(['clients_id' => $id], ['groups_id' => $gr_id]);
+                //GroupClient::Create(['clients_id' => $id], ['groups_id' => $gr_id]);
+                $new_grp_clt = new GroupClient;
+                $new_grp_clt->clients_id = $id;
+                $new_grp_clt->groups_id = $gr_id;
+                $new_grp_clt->save();
+            }
+            $n++; 
+        }
+//        var_dump($dop_gr);
+        //
+        //
+        //
+        $clt->save();
     } 
 }
 
