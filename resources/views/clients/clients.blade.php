@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="panel panel-default" style="margin: -15px 5px 0px 5px">
+<div class="panel panel-default" style="margin: -15px 5px 25px 5px">
     <div class="panel-heading">
         <h3 class="panel-title">Клиенты</h3>
     </div>

@@ -45,6 +45,11 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');
     
+    Route::get('/tasks/new/{id}', 'TSupport\TasksController@tsk_new')->name('tasks.new');
+
+    Route::post('/tasks/store/{id}', 'TSupport\TasksController@tsk_store')->name('tasks.store');
+
+    
     Route::get('calls/edit/{id}', function ($id) {
         return 'call ' . $id;
     })->name('calls.edit');

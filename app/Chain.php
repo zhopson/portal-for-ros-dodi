@@ -21,4 +21,11 @@ class Chain extends Model
     return $this->belongsTo('App\User','who_closed');
   }
   
+  public function categories()
+  {
+    return $this->belongsToMany('App\Category','chains_categories');
+  }
+
+  
+  
   }

@@ -249,17 +249,13 @@ class ClientsController extends Controller
                //$default_ip_ind
             }
         }
-        
-        
-
-        
         //var_dump($request->old('v_clt_edit_surname'));exit;
         $clt = Client::find($id);
         
         $surname = $request->input('v_clt_edit_surname');
         $name = $request->input('v_clt_edit_name');
         $otch = $request->input('v_clt_edit_otch');
-        $sex = $request->input('v_clt_edit_sex');
+        $sex = $request->input('inlineRadio_clt_sex');
         $language = '';
         if ($request->input('v_clt_edit_langs')) {
             foreach ($request->input('v_clt_edit_langs') as $values) { $language=$language.$values.','; }
@@ -299,35 +295,63 @@ class ClientsController extends Controller
 //        exit;
         
         //$old_adr_st = $request->old('v_clt_edit_adr_st');
+        $clt->surname = $surname;
+        $clt->name = $name;
+        $clt->patronymic = $otch;
+        $clt->sex = $sex;
+        $clt->language = $language;
+        $clt->mother = $mother;
+        $clt->father = $father;
+        if ($clt->clients_type_id == 3) $clt->name = $org;
+        $clt->diagnose = $diag;
+
+        if (!$adr_ind) $adr_ind = '';
+        if (!$adr_dom) $adr_dom = '';
+        if (!$adr_korp) $adr_korp = '';
+        if (!$adr_kv) $adr_kv = '';
         
-        if ($clt->address_aoid!=$adr_st || $clt->address_number!=$adr_dom || $clt->address_building!=$adr_korp || $clt->address_apartment!=$adr_kv) {
+        if (  ( $clt->address_aoid!=$adr_st || $clt->address_number!=$adr_dom || $clt->address_building!=$adr_korp || $clt->address_apartment!=$adr_kv ) && $adr_region !=='0'  ) {
             
-            if ($adr_st !== '0') {
+            if (  $adr_st !== '0' && ($adr_city !== '0' || $adr_np !== '0') ) {
 
                 $address_id = DB::connection('pgsql_adr')->select("SELECT code FROM fias_addressobjects where aoid = ? limit 1", [$adr_st])[0]->code;
-
+                
                 $clt->address_postal = $adr_ind;
                 $clt->address_number = $adr_dom;
                 $clt->address_building = $adr_korp;
                 $clt->address_apartment = $adr_kv;
                 $clt->address_aoid = $adr_st;
                 $clt->address_id = $address_id;
-
+                
                 $new_postal = Postal::create(['client_id' => $id, 'address_id' => $address_id, 'address_postal' => $adr_ind, 'address_number' => $adr_dom, 'address_building' => $adr_korp, 'address_apartment' => $adr_kv, 'address_aoid' => $adr_st]);
+                
+                $clt->postal_id = $new_postal->id;
             }
+            else 
+                return \Redirect::back()->withInput()->withErrors($errors = ["Некоторые поле адреса не заполнены!"]);
         }
+        
         $phone_book = '';
-        if ($request->input('v_clt_edit_contacts_tel1')) {
-        //v_clt_edit_contacts_tel; v_clt_edit_contacts_name
-            $n = 1;
-            while ( $request->input('v_clt_edit_contacts_tel' . $n) ) {
-               $phone_book = $phone_book.$request->input('v_clt_edit_contacts_tel' . $n).':';
-               if ( $request->input('v_clt_edit_contacts_name' . $n) ) $phone_book = $phone_book.$request->input('v_clt_edit_contacts_name' . $n).'\n';
-               else $phone_book = $phone_book.'\n';
-               $n++; 
+        $n = 1;
+        while ( $n <= 10 ) {
+            if ($request->input('v_clt_edit_contacts_tel' . $n)) {
+                $phone_book = $phone_book . $request->input('v_clt_edit_contacts_tel' . $n) . ':';
+                if ($request->input('v_clt_edit_contacts_name' . $n))
+                    $phone_book = $phone_book . $request->input('v_clt_edit_contacts_name' . $n) . PHP_EOL;
+                else
+                    $phone_book = $phone_book . PHP_EOL;
             }
+            $n++;
         }
-        $phone_book = rtrim($phone_book,'\n');
+        $phone_book = rtrim($phone_book,PHP_EOL);
+        
+        $clt->address_postal = $adr_ind;
+        $clt_postal = Postal::find($clt->postal_id);
+        if ($clt_postal) {
+            $clt_postal->address_postal = $adr_ind;
+            $clt_postal->save();
+        }
+        
         $clt->numbers = $phone_book;
         $clt->email = $contacts_mail;
         $clt->skype = $contacts_skype;
@@ -341,18 +365,24 @@ class ClientsController extends Controller
         if ($dop_prim != null) $clt->comment = $dop_prim;
         else $clt->comment = '';
         
-        if ($request->input('v_clt_edit_inet_ip1')) {
             $n = 1;
-            while ( $request->input('v_clt_edit_inet_ip' . $n) ) {
-               $ip = '';  $mask = '';  $gate = '';  $act = 0;
-               $ip = $request->input('v_clt_edit_inet_ip' . $n);
-               if ( $request->input('v_clt_edit_mask_ip' . $n) ) $mask = $request->input('v_clt_edit_mask_ip' . $n);
-               if ( $request->input('v_clt_edit_gate_ip' . $n) ) $gate = $request->input('v_clt_edit_gate_ip' . $n);
-               $id_ip = $request->input('v_clt_edit_id_ip' . $n);
-               if ($default_ip_ind == $n) $act = 1;
-               $new_ip = IPAddress::updateOrCreate(['id' => $id_ip], ['address' => ip2long($ip),'clients_id' => $id, 'netmask' => ip2long($mask), 'gateway' => ip2long($gate), 'default' => $act]);
-               $n++; 
+        while ( $n <= 10 ) {
+            if ($request->input('v_clt_edit_inet_ip' . $n)) {
+                $ip = '';
+                $mask = '';
+                $gate = '';
+                $act = 0;
+                $ip = $request->input('v_clt_edit_inet_ip' . $n);
+                if ($request->input('v_clt_edit_mask_ip' . $n))
+                    $mask = $request->input('v_clt_edit_mask_ip' . $n);
+                if ($request->input('v_clt_edit_gate_ip' . $n))
+                    $gate = $request->input('v_clt_edit_gate_ip' . $n);
+                $id_ip = $request->input('v_clt_edit_id_ip' . $n);
+                if ($default_ip_ind == $n)
+                    $act = 1;
+                $new_ip = IPAddress::updateOrCreate(['id' => $id_ip], ['address' => ip2long($ip), 'clients_id' => $id, 'netmask' => ip2long($mask), 'gateway' => ip2long($gate), 'default' => $act]);
             }
+            $n++;
         }
 
         $n = 1;
@@ -372,11 +402,14 @@ class ClientsController extends Controller
             }
             $n++; 
         }
-//        var_dump($dop_gr);
+        //var_dump($sex);
         //
         //
         //
+        //exit;
         $clt->save();
+        
+        return redirect()->route('clients.edit', ['id' => $id])->with('status', 'Изменения сохранены!');   
     } 
 }
 

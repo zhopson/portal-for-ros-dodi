@@ -44,6 +44,12 @@ if ($addresses!=='') {
   </div>
 @endif
 
+@if (session('status'))
+  <div class="alert alert-success">
+        {{ session('status') }}
+  </div>
+@endif
+
 <div class="container-fluid" style="margin:0 60px 0 60px">
     <div class="row">
         <h3 style="margin-top:-10px">Изменить данные пользователя</h3>
@@ -83,17 +89,17 @@ if ($addresses!=='') {
                                     <div class="col-sm-8">
                                         @if ($new_clt->sex==1)
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" name="v_clt_edit_sexm" value="1" required checked> Мужской
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" value="1" required checked> Мужской
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" name="v_clt_edit_sexw" value="0" required> Женский
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" value="0" required> Женский
                                         </label>
                                         @else
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" name="v_clt_edit_sexm" value="1" required> Мужской
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexm" value="1" required> Мужской
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" name="v_clt_edit_sexw" value="0" required  checked> Женский
+                                            <input type="radio" name="inlineRadio_clt_sex" id="id_clt_edit_sexw" value="0" required  checked> Женский
                                         </label>
                                         @endif
                                     </div>
