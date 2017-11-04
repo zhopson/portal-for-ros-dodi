@@ -199,24 +199,24 @@
                             </td>
                             <td class="table-text">
                                 @if ($item->start_time)
-                                <div>{{ date('d.m.y H:i',$item->start_time) }}</div>
+                                <div>{{ date('d.m.y',$item->start_time) }}</div>
                                 @endif
                             </td>
                             <td class="table-text">
                                 @if ($item->deadline_time)
-                                <div>{{ date('d.m.y H:i',$item->deadline_time) }}</div>
+                                <div>{{ date('d.m.y',$item->deadline_time) }}</div>
                                 @endif
                             </td>
                             <td class="table-text">
                                 @if ($chain->status == 'OPENED')
                                     @if ($item->call_id) 
-                                    <a href="{{ route('calls.edit', ['id' => $item->call_id]) }}">{{ $item->message }}</a>
+                                    <a href="{{ route('calls.edit', ['id' => $item->call_id]) }}" data-toggle="tooltip" title="Редактировать звонок">{{ $item->message }}</a>
                                     @elseif ($item->task_id)
-                                    <a href="{{ route('tasks.edit', ['id' => $item->task_id]) }}">{{ $item->message }}</a>
+                                    <a href="{{ route('tasks.edit', ['id' => $item->task_id]) }}" data-toggle="tooltip" title="Редактировать задачу">{{ $item->message }}</a>
                                     @elseif ($item->request_id)
-                                    <a href="{{ route('requests.edit', ['id' => $item->request_id]) }}">{{ $item->message }}</a>
+                                    <a href="{{ route('requests.edit', ['id' => $item->request_id]) }}" data-toggle="tooltip" title="Редактировать обращение">{{ $item->message }}</a>
                                     @else
-                                    <a href="{{ route('notes.edit', ['id' => $item->note_id]) }}">{{ $item->message }}</a>
+                                    <a href="{{ route('notes.edit', ['id' => $item->note_id]) }}" data-toggle="tooltip" title="Редактировать заметку">{{ $item->message }}</a>
                                     @endif
                                 @else
                                 <div>{{ $item->message }}</div>

@@ -49,14 +49,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/tasks/store/{id}', 'TSupport\TasksController@tsk_store')->name('tasks.store');
 
+    Route::get('/tasks/edit/{id}', 'TSupport\TasksController@tsk_edit')->name('tasks.edit');
+
+    Route::post('/tasks/update/{id}', 'TSupport\TasksController@tsk_update')->name('tasks.update');
     
     Route::get('calls/edit/{id}', function ($id) {
         return 'call ' . $id;
     })->name('calls.edit');
-
-    Route::get('tasks/edit/{id}', function ($id) {
-        return 'task ' . $id;
-    })->name('tasks.edit');
 
     Route::get('requests/edit/{id}', function ($id) {
         return 'request ' . $id;

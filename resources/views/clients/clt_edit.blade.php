@@ -452,7 +452,7 @@ if ($addresses!=='') {
                 <li role="presentation" id="id_clt_edit_nav_dop"><a href="#">Дополнительно</a></li>   
             </ul>
             <ul class="nav nav-pills nav-stacked" style="margin-top:50px">
-                <li role="presentation"><a href="{{ url('/clients') }}">Вернуться назад</a></li>   
+                <li role="presentation"><a href="{{ url()->previous() }}">Вернуться назад</a></li>   
             </ul>
         </div>
     </div>
@@ -524,6 +524,108 @@ var FlagClearAddress;
 //        btn_del.click(function () {
 //            $(this).parent().parent().parent().remove();
 //        });
+    }
+
+    function addcontacts() {
+        var n = $("#id_clt_contacts_container").children('.ContactsBlock').length;
+        //alert(n);
+        var raw = $('<div/>', {
+            'class': 'ContactsBlock',
+            style: 'margin-top:5px'
+        }).appendTo($('#id_clt_contacts_container'));
+//                                        var raw = $('<div/>', {
+//                                                'class' : 'row',
+//                                                style : 'margin:5px 1px 0 0;'
+//                                        }).appendTo(div);
+        var div_sm3e = $('<div/>', {
+            'class': 'col-sm-3'
+        }).appendTo(raw);
+        var div_sm4 = $('<div/>', {
+            'class': 'col-sm-4'
+        }).appendTo(raw);
+        var input1 = $('<input/>', {
+            value: $('#id_clt_edit_contacts_tel').val(),
+            type: 'text',
+            name: 'v_clt_edit_contacts_tel'+n,
+            'class': 'form-control'
+        }).appendTo(div_sm4);
+
+        var div_sm3 = $('<div/>', {
+            'class': 'col-sm-3'
+        }).appendTo(raw);
+        var input2 = $('<input/>', {
+            value: $('#id_clt_edit_contacts_name').val(),
+            type: 'text',
+            name: 'v_clt_edit_contacts_name'+n,
+            'class': 'form-control'
+        }).appendTo(div_sm3);
+
+        var div_sm1 = $('<div/>', {
+            'class': 'col-sm-1'
+        }).appendTo(raw);
+        var div_span_sm1 = $('<span/>', {
+            'class': 'input-group-btn'
+        }).appendTo(div_sm1);
+        var btn_del = $('<button/>', {
+            //value : '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>',
+            type: 'button',
+            'class': 'btn btn-default'
+        }).appendTo(div_span_sm1);
+        var span_img = $('<span/>', {
+            'class': 'glyphicon glyphicon-minus',
+            'aria-hidden': 'true'
+        }).appendTo(btn_del);
+        btn_del.click(function () {
+            $(this).parent().parent().parent().remove();
+        });
+    }
+
+    function addgroups(id=null) {
+        //var n = $("#id_clt_dop_grps_container").children('.DopBlock').length;
+        var raw = $('<div/>', {
+            'class': 'DopBlock',
+            style: 'margin-top:5px'
+        }).appendTo($('#id_clt_dop_grps_container'));
+//                                        var raw = $('<div/>', {
+//                                                'class' : 'row',
+//                                                style : 'margin:5px 1px 0 0;'
+//                                        }).appendTo(div);
+        var div_sm3e = $('<div/>', {
+            'class': 'col-sm-3'
+        }).appendTo(raw);
+        var div_sm6 = $('<div/>', {
+            'class': 'col-sm-6'
+        }).appendTo(raw);
+        var label = $('<label/>', {
+            text: $('#id_clt_edit_dop_gr option:selected').text(),
+            //value: '1',
+            //type: 'text',
+            'class': 'control-label'
+        }).appendTo(div_sm6);
+        var gr_id = $('<input/>', {
+            value: id,
+            name: 'v_clt_edit_dop_grs'+id,
+            type: 'hidden',
+            'class': 'form-control'
+        }).appendTo(div_sm6);        
+        var div_sm1 = $('<div/>', {
+            'class': 'col-sm-1'
+        }).appendTo(raw);
+        var div_span_sm1 = $('<span/>', {
+            'class': 'input-group-btn'
+        }).appendTo(div_sm1);
+        var btn_del = $('<button/>', {
+            type: 'button',
+            'class': 'btn btn-default',
+            style: 'margin-left:-6px'
+        }).appendTo(div_span_sm1);
+        var span_img = $('<span/>', {
+            'class': 'glyphicon glyphicon-minus',
+            'aria-hidden': 'true'
+        }).appendTo(btn_del);
+        btn_del.click(function () {
+            $(this).parent().parent().parent().remove();
+        });
     }
 
 
@@ -814,59 +916,6 @@ $(document).ready(function () {
         }
         return false;
     });
-    function addcontacts() {
-        var n = $("#id_clt_contacts_container").children('.ContactsBlock').length;
-        //alert(n);
-        var raw = $('<div/>', {
-            'class': 'ContactsBlock',
-            style: 'margin-top:5px'
-        }).appendTo($('#id_clt_contacts_container'));
-//                                        var raw = $('<div/>', {
-//                                                'class' : 'row',
-//                                                style : 'margin:5px 1px 0 0;'
-//                                        }).appendTo(div);
-        var div_sm3e = $('<div/>', {
-            'class': 'col-sm-3'
-        }).appendTo(raw);
-        var div_sm4 = $('<div/>', {
-            'class': 'col-sm-4'
-        }).appendTo(raw);
-        var input1 = $('<input/>', {
-            value: $('#id_clt_edit_contacts_tel').val(),
-            type: 'text',
-            name: 'v_clt_edit_contacts_tel'+n,
-            'class': 'form-control'
-        }).appendTo(div_sm4);
-
-        var div_sm3 = $('<div/>', {
-            'class': 'col-sm-3'
-        }).appendTo(raw);
-        var input2 = $('<input/>', {
-            value: $('#id_clt_edit_contacts_name').val(),
-            type: 'text',
-            name: 'v_clt_edit_contacts_name'+n,
-            'class': 'form-control'
-        }).appendTo(div_sm3);
-
-        var div_sm1 = $('<div/>', {
-            'class': 'col-sm-1'
-        }).appendTo(raw);
-        var div_span_sm1 = $('<span/>', {
-            'class': 'input-group-btn'
-        }).appendTo(div_sm1);
-        var btn_del = $('<button/>', {
-            //value : '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>',
-            type: 'button',
-            'class': 'btn btn-default'
-        }).appendTo(div_span_sm1);
-        var span_img = $('<span/>', {
-            'class': 'glyphicon glyphicon-minus',
-            'aria-hidden': 'true'
-        }).appendTo(btn_del);
-        btn_del.click(function () {
-            $(this).parent().parent().parent().remove();
-        });
-    }
     ////////////////////////////////////////////////////////////////////////////
     $('#id_clt_edit_inet_btnadd').click(function () {
         if ($('#id_clt_edit_inet_ip').val() !== '') {
@@ -893,57 +942,6 @@ $(document).ready(function () {
         }
         return false;
     });
-
-    function addgroups(id=null) {
-        //var n = $("#id_clt_dop_grps_container").children('.DopBlock').length;
-        var raw = $('<div/>', {
-            'class': 'DopBlock',
-            style: 'margin-top:5px'
-        }).appendTo($('#id_clt_dop_grps_container'));
-//                                        var raw = $('<div/>', {
-//                                                'class' : 'row',
-//                                                style : 'margin:5px 1px 0 0;'
-//                                        }).appendTo(div);
-        var div_sm3e = $('<div/>', {
-            'class': 'col-sm-3'
-        }).appendTo(raw);
-        var div_sm6 = $('<div/>', {
-            'class': 'col-sm-6'
-        }).appendTo(raw);
-        var label = $('<label/>', {
-            text: $('#id_clt_edit_dop_gr option:selected').text(),
-            //value: '1',
-            //type: 'text',
-            'class': 'control-label'
-        }).appendTo(div_sm6);
-        var gr_id = $('<input/>', {
-            value: id,
-            name: 'v_clt_edit_dop_grs'+id,
-            type: 'hidden',
-            'class': 'form-control'
-        }).appendTo(div_sm6);        
-        var div_sm1 = $('<div/>', {
-            'class': 'col-sm-1'
-        }).appendTo(raw);
-        var div_span_sm1 = $('<span/>', {
-            'class': 'input-group-btn'
-        }).appendTo(div_sm1);
-        var btn_del = $('<button/>', {
-            type: 'button',
-            'class': 'btn btn-default',
-            style: 'margin-left:-6px'
-        }).appendTo(div_span_sm1);
-        var span_img = $('<span/>', {
-            'class': 'glyphicon glyphicon-minus',
-            'aria-hidden': 'true'
-        }).appendTo(btn_del);
-        btn_del.click(function () {
-            $(this).parent().parent().parent().remove();
-        });
-    }
-
-
-
 
 });
 

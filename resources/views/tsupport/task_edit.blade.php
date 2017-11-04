@@ -1,24 +1,26 @@
 @extends('layouts.app')
+@section('head')
 
+@endsection
 @section('content')
-@if (count($clients) > 0)
-<div class="container-fluid" style="margin:0 30px 45px 30px">
-    @foreach ($clients as $client)
+<div class="container-fluid" style="margin:0 30px 40px 30px">
+    <form method="POST" action="{{ route('tasks.update', ['id' => $task->id]) }}">
+    {{ csrf_field() }}
     <div class="row">
-        <h3 style="margin-top:-10px">{{ $client->clt_name }}</h3>
+        <div class="col-md-3"><h3 style="margin-top:-10px">Изменить задачу</h3></div>
     </div>
-    <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="row">
-                        <a href="{{ route('clients.edit', ['id' => $client->id]) }}" style="margin-left:20px"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать</a>    
-                    </div>
-                    <div class="row">
-                        <h4 style="margin-left:18px">Сведения о пользователе</h4>
-                    </div>
-                    <div class="row">
                         <table class="table table-hover">
+                            <tr>
+                                <th class="table-text">
+                                    <div class="pull-right">Пользователь</div>
+                                </th>
+                                <th class="table-text">
+                                    {{ $client->clt_name }}
+                                </th>
+                            </tr>
                             @if($client->problematic == 1)
                             <tr>
                                 <td class="table-text">
@@ -125,7 +127,7 @@
                                     @endfor
                                 </td>
                             </tr>                                
-                            @endif
+                            @endif  
                             @if ($client->diagnose)
                             <tr>
                                 <td class="table-text">
@@ -196,192 +198,189 @@
                             </tr>
                             
                         </table>
-                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <div class="form-group">
                     <div class="row">
                         <div class="col-md-3">
-                            <a href="#" style="margin-left:8px"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</a>    
+                            <div class="pull-right">Ответственный</div>
                         </div>
-                        <div class="col-md-3">
-                            <a href="{{ route('tasks.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</a>    
-                        </div>
-                        <div class="col-md-3">
-                            <a href="#"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
-                        </div>
-                    </div>
-                    @if (count($chains_opened) > 0)
-                    <div class="row">
-                        <h4 style="margin-left:18px">Открытые протоколы</h4>
-                    </div>
-                    <div class="row">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr class="active">
-                                    <th>Автор</th>
-                                    <th></th>
-                                    <th>Последний комментарий</th>
-                                    <th>Оператор</th>
-                                    <th></th>
-                                    <th>Открыт</th>
-                                    <th>Изменен</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($chains_opened as $chain_op)
-                                <tr>
-                                    <td class="table-text">
-                                        {{ $chain_op->avtor }}
-                                    </td>
-                                    <td class="table-text">
-                                        @if (App\ChainItems::find($chain_op->last_item_id)->task_id)
-                                            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-                                        @elseif (App\ChainItems::find($chain_op->last_item_id)->request_id)   
-                                            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                                        @elseif (App\ChainItems::find($chain_op->last_item_id)->call_id)   
-                                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-                                        @elseif (App\ChainItems::find($chain_op->last_item_id)->note_id)   
-                                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                        @else
-                                            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                        @endif                                        
-                                    </td>
-                                    <td class="table-text">
-                                        <div><a href="{{ route('chains.view', ['id' => $chain_op->id]) }}">{{ $chain_op->last_comment }}</a></div>
-                                    </td>
-                                    <td class="table-text">
-                                        {{ App\User::find(App\ChainItems::find($chain_op->last_item_id)->user_id)->name }}
-                                    </td>
-                                    <td class="table-text">
-                                        @if ($chain_op->progress)
-                                            {{ $chain_op->progress.'%' }}
-                                        @endif
-                                    </td>
-                                    <td class="table-text">{{date('d.m.y H:i',$chain_op->opening_time)}}</td>
-                                    <td class="table-text">{{date('d.m.y H:i',$chain_op->update_time)}}</td>
-                                </tr>
-                                @endforeach                
-                            </tbody>                            
-                        </table>
-                    </div>
-                    @else
-                    <div class="row">
-                        <h4 style="margin-left:18px">Нет открытых протоколов</h4>    
-                    </div>
-                    @endif    
-                    @if (count($tasks) > 0)
-                    <div class="row">
-                        <h4 style="margin-left:18px">Открытые задачи</h4>
-                    </div>
-                    <div class="row">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr class="active">
-                                    <th>Дата создания</th>
-                                    <th>Ответственный</th>
-                                    <th></th>
-                                    <th>Приоритет</th>
-                                    <th>Срок</th>
-                                    <th>Сообщение</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($tasks as $task)
-                                <tr>
-                                    <td class="table-text">
-                                        {{ date('d.m.y H:i',$task->creation_time) }}
-                                    </td>
-                                    <td class="table-text">
-                                        {{ $task->otvetstv }}
-                                    </td>
-                                    <td class="table-text">
-                                        {{ $task->progress.'%' }}
-                                    </td>
-                                    <td class="table-text">
-                                        {{ $task->priority }}
-                                    </td>
-                                    <td class="table-text">
-                                        {{ date('d.m.y',$task->deadline_time) }}
-                                    </td>
-                                    <td class="table-text">{{ $task->message }}</td>
-                                    <td class="table-text"><a href="{{ route('chains.view', ['id' => $task->chain_id]) }}"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span></a></td>
-                                </tr>
-                                @endforeach                
-                            </tbody>                            
-                        </table>
-                    </div>
-                    @else
-                    <div class="row">
-                        <h4 style="margin-left:18px">Нет открытых задач</h4>    
-                    </div>
-                    @endif                  
-                    @if (count($chains_closed) > 0)
-                    <div class="row">
-                        <h4 style="margin-left:18px">Последние закрытые протоколы</h4>
-                    </div>
-                    <div class="row">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr class="active">
-                                    <th>Автор</th>
-                                    <th></th>
-                                    <th>Последний комментарий</th>
-                                    <th>Оператор</th>
-                                    <th></th>
-                                    <th>Закрыт</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($chains_closed as $chain_cl)
-                                <tr>
-                                    <td class="table-text">
-                                        {{ $chain_cl->avtor }}
-                                    </td>
-                                    <td class="table-text">
-                                        @if (App\ChainItems::find($chain_cl->last_item_id)->task_id)
-                                            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-                                        @elseif (App\ChainItems::find($chain_cl->last_item_id)->request_id)   
-                                            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                                        @elseif (App\ChainItems::find($chain_cl->last_item_id)->call_id)   
-                                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-                                        @elseif (App\ChainItems::find($chain_cl->last_item_id)->note_id)   
-                                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                        @else
-                                            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                                        @endif                                        
-                                    </td>
-                                    <td class="table-text">
-                                        <div><a href="{{ route('chains.view', ['id' => $chain_cl->id]) }}">{{ $chain_cl->last_comment }}</a></div>
-                                    </td>
-                                    <td class="table-text">
-                                        {{ App\User::find(App\ChainItems::find($chain_cl->last_item_id)->user_id)->name }}
-                                    </td>
-                                    <td class="table-text">
-                                        @if ($chain_cl->progress)
-                                            {{ $chain_cl->progress.'%' }}
-                                        @endif
-                                    </td>
-                                    <td class="table-text">{{date('d.m.y H:i',$chain_cl->closing_time)}}</td>
-                                </tr>
+                        <div class="col-md-9">
+                            <select class="form-control" id="id_task_edit_otvetstv" name="v_task_edit_otvetstv" required >
+                                <option ></option>
+                                @foreach ($users as $user) 
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach
-                            </tbody>                            
-                        </table>
-                        <button style="margin-left:18px" type="button" class="btn btn-info"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Все протоколы пользователя</button>
+                            </select>                             
+                        </div>
                     </div>
-                    @endif                  
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="pull-right">Статус</div>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="id_task_edit_status" name="v_task_edit_status" required >
+                                <option ></option>
+                                @foreach ($tsk_status as $item => $value) 
+                                <option value="{{ $item }}">{{ $value }}</option>
+                                @endforeach
+                            </select>                             
+                        </div>
+                        <div class="col-md-2 col-md-offset-1">
+                            <div class="pull-right">Приоритет</div>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control" id="id_task_edit_priority" name="v_task_edit_priority" required >
+                                <option ></option>
+                                @foreach ($tsk_priority as $item => $value) 
+                                <option value="{{ $item }}">{{ $value }}</option>
+                                @endforeach
+                            </select>                             
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="pull-right">Старт задачи</div>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" class="form-control" id="id_task_edit_start_d" name="v_task_edit_start_d" value="{{date('Y-m-d',$task->start_time)}}">
+                            <input type="hidden" class="form-control" id="id_task_edit_start_t" name="v_task_edit_start_t" value="{{date('H:i',$task->start_time)}}">
+                        </div>
+                        <div class="col-md-2 col-md-offset-1">
+                            <div class="pull-right">Срок</div>
+                        </div>
+                        <div class="col-md-3">
+                           <input type="date" class="form-control" id="id_task_edit_srok_d" name="v_task_edit_srok_d" value="{{date('Y-m-d',$task->deadline_time)}}" required >                          
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="pull-right">Прогресс</div>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="id_task_edit_tsk_progress" name="v_task_edit_tsk_progress">
+                                <option value="0" selected> 0% </option>
+                                <option value="10"> 10% </option>
+                                <option value="20"> 20% </option>
+                                <option value="30"> 30% </option>
+                                <option value="40"> 40% </option>
+                                <option value="50"> 50% </option>
+                                <option value="60"> 60% </option>
+                                <option value="70"> 70% </option>
+                                <option value="80"> 80% </option>
+                                <option value="90"> 90% </option>
+                                <option value="100"> 100% </option>
+                            </select>                             
+                        </div>
+                        <div class="col-md-7">
+<!--                            <div id="sliderProgress" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                                <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 70%;"></div>
+                                <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 70%;"></span>
+                            </div>                            -->
+                            <input type="range" name="v_task_edit_tsk_progress_range" id="id_task_edit_tsk_progress_range" step="10" value="0" min="0" max="100">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-3">
+                            <div class="checkbox">
+                                <label>
+                                    @if ($task->departure)
+                                    <input type="checkbox" name="v_task_edit_tsk_dep" id="id_task_edit_tsk_dep" checked>
+                                    @else
+                                    <input type="checkbox" name="v_task_edit_tsk_dep" id="id_task_edit_tsk_dep">
+                                    @endif
+                                    Выезд
+                                </label>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="pull-right">Сообщение</div>
+                        </div>
+                        <div class="col-md-9"> 
+                            <textarea rows="6" cols="50" class="form-control" id="id_task_edit_msg" name="v_task_edit_msg" required ></textarea>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 col-md-offset-8">
+                    <button type="submit" class="btn btn-primary" id="id_task_edit_btn_save">Сохранить</button>
+                </div>
+                <div class="col-md-2">
+                    <a class="btn btn-default" href="{{ url()->previous() }}" role="button" id="id_task_edit_btn_cancel">Отмена</a>
                 </div>
             </div>
         </div>
-    </div>
-    @endforeach
+    </form>
 </div>
-@else
-<h3>Запись отсутствует!</h3>
-@endif    
 
+@endsection
+
+@section('footer')
+<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+    $('#id_task_edit_tsk_progress_range').change(function () {
+        $('#id_task_edit_tsk_progress').val($('#id_task_edit_tsk_progress_range').val());
+        if ( $('#id_task_edit_tsk_progress_range').val() > 0 && $('#id_task_edit_tsk_progress_range').val() < 100 )
+            $('#id_task_edit_status').val('PROCESSED');
+        else if ( $('#id_task_edit_tsk_progress_range').val() === "100" )
+            $('#id_task_edit_status').val('SOLVED');
+        else if ( $('#id_task_edit_tsk_progress_range').val() === "0" )
+            $('#id_task_edit_status').val('PROCESSED');
+        //alert($('#id_task_edit_tsk_progress_range').val());
+    });
+
+    $('#id_task_edit_tsk_progress').change(function () {
+        $('#id_task_edit_tsk_progress_range').val($(this).val());
+        if ( $('#id_task_edit_tsk_progress').val() > 0 && $('#id_task_edit_tsk_progress').val() < 100 )
+            $('#id_task_edit_status').val('PROCESSED');
+        else if ( $('#id_task_edit_tsk_progress').val() === "100" )
+            $('#id_task_edit_status').val('SOLVED');
+        else if ( $('#id_task_edit_tsk_progress').val() === "0" )
+            $('#id_task_edit_status').val('PROCESSED');
+    });
+
+    $('#id_task_edit_start_d').change(function () {
+        var now = new Date();
+        now.setHours(now.getHours() + 9);
+        var ddd = now.toISOString();
+        var strt = ddd.substr(11, 5);
+        
+        $('#id_task_edit_start_t').val(strt);
+    });
+
+});
+
+window.onload = function () {
+    @if (count($task)>0)
+        $('#id_task_edit_otvetstv').val('{{$task->responsible_id}}');
+        $('#id_task_edit_status').val('{{$task->status}}');
+        $('#id_task_edit_priority').val('{{$task->priority}}');
+        //$('#id_task_edit_start_d').val('{{$task->start_time}}');
+        //$('#id_task_edit_start_t').val('{{$task->start_time.substr(11, 5)}}');
+        $('#id_task_edit_tsk_progress').val('{{$task->progress}}');
+        $('#id_task_edit_tsk_progress_range').val('{{$task->progress}}');
+        $('#id_task_edit_tsk_dep').val('{{$task->departure}}');
+        $('#id_task_edit_msg').val('{{$task->message}}');
+    @endif
+};
+</script>
 @endsection

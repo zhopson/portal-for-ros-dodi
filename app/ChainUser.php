@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ChainCategory extends Model
+class ChainUser extends Model
 {
     protected $fillable = [
-        'category_id',
+        'user_id',
         'chain_id',
     ]; 
     
     public $timestamps = false; 
     
-    protected $table = 'chains_categories';
+    protected $table = 'chains_users';
 }

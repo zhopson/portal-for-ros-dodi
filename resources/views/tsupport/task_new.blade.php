@@ -204,7 +204,7 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    
+                    <div id="id_task_new_category_section">
                     <div class="form-group">
                     <div class="row">
                         <div class="col-md-3">
@@ -218,6 +218,7 @@
                                 @endforeach
                             </select>                             
                         </div>
+                    </div>
                     </div>
                     </div>
 <!--                    <div class="row"><br></div>-->
@@ -269,6 +270,7 @@
                         </div>
                         <div class="col-md-3">
                             <input type="date" class="form-control" id="id_task_new_start_d" name="v_task_new_start_d">
+                            <input type="hidden" class="form-control" id="id_task_new_start_t" name="v_task_new_start_t">
                         </div>
                         <div class="col-md-2 col-md-offset-1">
                             <div class="pull-right">Срок</div>
@@ -338,8 +340,10 @@
                                 <option value="0" selected>- Новый протокол -</option>
                                 @foreach ($chains_opened as $chain) 
                                 @php 
-                                    $date = date('d.m.y',$chain->creation_time);
-                                    $time = date('H:i',$chain->creation_time);
+                                    //$date = date('d.m.y',$chain->creation_time);
+                                    //$time = date('H:i',$chain->creation_time);
+                                    $date = substr($chain->creation_time,0,10);
+                                    $time = substr($chain->creation_time,11,5);;
                                 @endphp
                                 <option value="{{ $chain->id }}">{{ '#'.$chain->id.' '.$chain->last_comment.' // '.$date.' в '.$time.' ('.$chain->user->name.')' }}</option>
                                 @endforeach
@@ -356,7 +360,7 @@
                     <button type="submit" class="btn btn-primary" id="id_task_new_btn_save">Сохранить</button>
                 </div>
                 <div class="col-md-2">
-                    <a class="btn btn-default" href="#" role="button" id="id_task_new_btn_cancel">Отмена</a>
+                    <a class="btn btn-default" href="{{ url()->previous() }}" role="button" id="id_task_new_btn_cancel">Отмена</a>
                 </div>
             </div>
         </div>
@@ -370,6 +374,18 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+
+    $('#id_task_new_open_chains').change(function () {
+        if ( $('#id_task_new_open_chains').val() === "0" ) {
+            $('#id_task_new_category_section').css('display', 'inline');
+            $("#id_task_new_category").prop("required", true);
+        }
+        else {
+            $('#id_task_new_category_section').css('display', 'none');
+            $("#id_task_new_category").prop("required", false);
+        }
+    });
+
 
     $('#id_task_new_tsk_progress_range').change(function () {
         $('#id_task_new_tsk_progress').val($('#id_task_new_tsk_progress_range').val());
@@ -398,12 +414,13 @@ window.onload = function () {
     
         var now = new Date();
         now.setHours(now.getHours() + 9);
-        var strd = now.toISOString();
-        strd = strd.substr(0, 10);
+        var ddd = now.toISOString();
+        strd = ddd.substr(0, 10);
+        var strt = ddd.substr(11, 5);
     
         $('#id_task_new_start_d').val(strd);
         //sdtField_dhcpo.value = strd;
-
+        $('#id_task_new_start_t').val(strt);
 };
 </script>
 @endsection
