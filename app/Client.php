@@ -35,6 +35,11 @@ class Client extends Model
     return $this->HasMany('App\Task');
   }
 
+  public function requests()
+  {
+    return $this->HasMany('App\Request_');
+  }
+
   public function groups()
   {
     return $this->belongsToMany('App\Group','groups_clients', 'clients_id', 'groups_id');

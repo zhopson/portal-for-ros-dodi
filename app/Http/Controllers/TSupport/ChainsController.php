@@ -4,9 +4,12 @@ namespace App\Http\Controllers\TSupport;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-//use App\Chain;
-use App\User;
 use Illuminate\Support\Facades\DB;
+
+use App\Chain;
+use App\Category;
+use App\ChainCategory;
+use App\User;
 
 class ChainsController extends Controller
 {
@@ -119,4 +122,34 @@ class ChainsController extends Controller
 //        ]);
     }
 
+    public function chain_edit($id) {
+        $chain_categories = ChainCategory::select('category_id', 'chain_id')->where('chain_id', '=', $id)->get();
+        $categories = Category::all();
+        return view('tsupport.chain_edit', compact('id','chain_categories','categories'));
+    }
+
+    public function chain_update(Request $request, $id) {
+        $n = 1;
+        $cat_len = Category::all()->count();
+        $chain_categories = ChainCategory::where('chain_id', '=', $id)->delete();
+        while ( $n <= $cat_len ) {
+            if ( $request->input('v_ch_edit_cat' . $n) ) {
+                //var_dump($request->input('v_ch_edit_cat' . $n));
+                $cat_id = $request->input('v_ch_edit_cat' . $n);
+                
+                //$grp_clt = GroupClient::where([['clients_id', '=', $id],['groups_id', '=', $gr_id]])->first();
+                //$grp_clt = GroupClient::updateOrCreate(['clients_id' => $id], ['groups_id' => $gr_id]);
+                ChainCategory::Create(['category_id' => $cat_id,'chain_id' => $id]);
+                
+//                $new_ch_cat = new ChainCategory;
+//                $new_ch_cat->clients_id = $id;
+//                $new_ch_cat->groups_id = $gr_id;
+//                $new_ch_cat->save();
+            }
+            $n++; 
+        }
+        return redirect()->route('chains.view', ['id' => $id]);
+    }
+    
 }
+

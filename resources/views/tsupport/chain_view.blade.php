@@ -89,22 +89,22 @@
                         <a href="#"><h6><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Заметка</h6></a>
                     </div>
                     <div class="col-md-1">
-                        <a href="#"><h6><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</h6></a>
+                        <a href="{{ route('tasks.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</h6></a>
                     </div>
                     <div class="col-md-1">
                         <a href="#"><h6><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</h6></a>
                     </div>
                     <div class="col-md-2">
-                        <a href="#"><h6><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</h6></a>
+                        <a href="{{ route('requests.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</h6></a>
                     </div>
                     <div class="col-md-1 col-md-offset-5">
 <!--                        <a href="#"><h5>Обновить</h5></a>-->
-                        <a href="#" class="dropdown-toggle">Обновить</a>
+                        <a href="{{ route('chains.view', ['id' => $id]) }}" class="dropdown-toggle">Обновить</a>
                     </div>
                     <div class="col-md-1">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Управление<span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Редактировать</a></li>
+                                <li><a href="{{ route('chains.edit', ['id' => $id]) }}">Редактировать</a></li>
                                 <li><a href="#">Удалить</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Закрыть</a></li>

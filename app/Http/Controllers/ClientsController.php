@@ -101,7 +101,7 @@ class ClientsController extends Controller
         $tasks = DB::table('tasks')
             ->leftJoin('users', 'tasks.responsible_id', '=', 'users.id')
             ->select('tasks.creation_time','users.name as otvetstv','tasks.progress','tasks.priority','tasks.deadline_time','tasks.message','tasks.chain_id')
-            ->where([['tasks.client_id', '=', $id],['status', '<>', 'SOLVED'],['status', '<>', 'CLOSED']])->get();
+            ->where([['tasks.client_id', '=', $id],['status', '<>', 'SOLVED'],['status', '<>', 'CLOSED']])->orderBy('creation_time', 'desc')->get();
         
         return view('clients.clt_view', [
             'clients' => $client,

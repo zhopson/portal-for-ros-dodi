@@ -211,7 +211,7 @@
                             <a href="{{ route('tasks.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</a>    
                         </div>
                         <div class="col-md-3">
-                            <a href="#"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
+                            <a href="{{ route('requests.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
                         </div>
                     </div>
                     @if (count($chains_opened) > 0)
