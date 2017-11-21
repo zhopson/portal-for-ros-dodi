@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head')
+<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"></script>
+@endsection
+
 @section('content')
 @if (count($clients) > 0)
 <div class="container-fluid" style="margin:0 30px 45px 30px">
@@ -186,10 +190,11 @@
                                     @php    
                                         $nums_str = '';
                                         $num_arr = (explode(":",$number));
-                                        $nums_str = $nums_str.$num_arr[0];
+                                        $clt_name_clear =  str_replace('"', '', $client->clt_name);
+                                        $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
                                         if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
                                             { $nums_str = $nums_str.'('.$num_arr[1].')'; }
-                                        echo e($nums_str).'<br>';
+                                        echo $nums_str.'<br>';
                                     @endphp
                                     @endforeach
                                 </td>
@@ -384,4 +389,57 @@
 <h3>Запись отсутствует!</h3>
 @endif    
 
+@endsection
+@section('footer')
+<!--<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
+<script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+<!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
+<script src="{{ asset('js/modal.js') }}"></script>
+<script src="{{ asset('js/sip.js?svn=2') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    
+function call_client(pname,ptel){
+    
+    $('#id_CallModal').on('show.bs.modal', function () {
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        modal.find('.class_clt_name').text(g_name);
+        $('#id_call_phone').val(g_tel);
+    });
+
+    g_name = pname;
+    g_tel = ptel;
+    $('#id_CallModal').modal('show');
+    //alert(phost+" "+pnet);
+}    
+
+        $(document).ready(function () {
+        //on page load do init
+            $('#id_call_btn').click(function () {
+                //alert('call');
+                makeCall($('#id_call_phone').val());
+            });
+            $('#id_call_hang_btn').click(function () {
+                sipHangUp();
+            });
+        });
+
+        window.onload = function () {
+            
+            SetVar1('{{Auth::user()->sip_number}}');
+            SetVar2('{{Auth::user()->sip_secret}}');
+            //alert('{{Auth::user()->sip_number}}');
+        //init sip stack
+            SIPml.init(readyCallback, errorCallback);
+
+        //start stip stack
+            sipStack.start();
+
+        //do login
+        login();
+
+        };
+    
+</script>
 @endsection

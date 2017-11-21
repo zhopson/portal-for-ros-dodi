@@ -13,7 +13,7 @@
                         Статус
                     </div>
                     <div class="col-md-1">
-                        {{ $chain->status }}
+                        {{ $ch_status[$chain->status] }}
                     </div>
                 </div>
             </div>
@@ -105,9 +105,9 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Управление<span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="{{ route('chains.edit', ['id' => $id]) }}">Редактировать</a></li>
-                                <li><a href="#">Удалить</a></li>
+                                <li><a href="{{ route('chains.remove', ['id' => $id]) }}">Удалить</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Закрыть</a></li>
+                                <li><a href="{{ route('chains.close', ['id' => $id]) }}">Закрыть</a></li>
                             </ul>
 <!--                        <a href="#"><h6>Управление</h6></a>-->
                     </div>
@@ -212,7 +212,11 @@
                                     @if ($item->call_id) 
                                     <a href="{{ route('calls.edit', ['id' => $item->call_id]) }}" data-toggle="tooltip" title="Редактировать звонок">{{ $item->message }}</a>
                                     @elseif ($item->task_id)
-                                    <a href="{{ route('tasks.edit', ['id' => $item->task_id]) }}" data-toggle="tooltip" title="Редактировать задачу">{{ $item->message }}</a>
+                                        @if ($item->task_status == 'PROCESSED' || $item->task_status == 'NEW')
+                                            <a href="{{ route('tasks.edit', ['id' => $item->task_id]) }}" data-toggle="tooltip" title="Редактировать задачу">{{ $item->message }}</a>
+                                        @else    
+                                            <div>{{ $item->message }}</div>
+                                        @endif
                                     @elseif ($item->request_id)
                                     <a href="{{ route('requests.edit', ['id' => $item->request_id]) }}" data-toggle="tooltip" title="Редактировать обращение">{{ $item->message }}</a>
                                     @else

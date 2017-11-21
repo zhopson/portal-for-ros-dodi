@@ -17,7 +17,10 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <audio id='audio_remote' autoplay='autoplay'></audio>
+        <audio id='ringbacktone' loop src='/sounds/ringbacktone.wav'></audio>
+        
+        <nav class="navbar navbar-default navbar-static-top" style="background-color: #BEE9EA; height: 8vh">
             <div class="container">
                 <div class="navbar-header">
 
@@ -60,7 +63,7 @@
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Тех.поддержка<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu"  style="background-color: #BEE9EA">
                                 <li><a href="{{ url('/chains') }}">Протоколы</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Звонки</a></li>
@@ -77,7 +80,7 @@
                         @if (Auth::user()->is_admin)
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Администрирование <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu"  style="background-color: #BEE9EA">
                                 <li><a href="{{ route('register') }}">Юзеры и группы</a></li>
                                 <li><a href="#">Something else here</a></li>
                                 <li role="separator" class="divider"></li>
@@ -105,7 +108,7 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu" role="menu"  style="background-color: #BEE9EA">
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -124,25 +127,59 @@
                 </div>
             </div>
         </nav>
+        
+<!--модальные диалоги-->
+
+<div class="modal fade " id="id_CallModal" tabindex="-1" role="dialog" aria-labelledby="CallModalLabel">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="CallModalLabel">Позвонить клиенту</h4>
+                <h4 id="CallModalLabel"><mark class="class_clt_name"></mark></h4>
+            </div>        
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="id_call_phone" class="control-label">Телефон:</label>
+                            <input type="text" class="form-control" id="id_call_phone" readonly="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="id_call_btn" class="btn btn-primary">Позвонить</button>
+                <button type="button" id="id_call_hang_btn" class="btn btn-default">Положить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--модальные диалоги-->        
 
         @yield('content')
     </div>
     <div id="footer">
-        <nav class="navbar navbar-default navbar-fixed-bottom">
-            	<div class="container">
+        <nav class="navbar navbar-nav navbar-static-bottom" style="background-color: #efffff; width:100%; height: 6vh">
+            <div class="container">
                 <div class="navbar-header">
                     <p class="navbar-text"><strong>Copyright © <mark>m.a.n.</mark> 2017. All Rights Reserved.</strong></p>
-		</div>
-		</div>
+                </div>
+                <div class="collapse navbar-collapse" id="footer-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                    </ul>                    
+                    <ul class="nav navbar-nav navbar-right">
+                    </ul>
+                </div>
+            </div>
         </nav>
     </div>
 
     <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
+        
     @yield('footer')
-        
-        
 
-    
 </body>
 </html>

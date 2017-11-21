@@ -29,8 +29,8 @@
                     <button id="id_tel_hangup" class="btn btn-default">Положить</button>
                     <!--                    </form>-->
 
-                    <audio id='audio_remote' autoplay='autoplay'></audio>
-                    <audio id='ringbacktone' loop src='sounds/ringbacktone.wav'></audio>
+<!--                    <audio id='audio_remote' autoplay='autoplay'></audio>
+                    <audio id='ringbacktone' loop src='sounds/ringbacktone.wav'></audio>-->
 
                 </div>
             </div>
@@ -42,14 +42,14 @@
 
 @section('footer')
         <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
-        <script src="{{ asset('js/sip.js?svn=1') }}" type="text/javascript"> </script>
+        <script src="{{ asset('js/sip.js?svn=2') }}" type="text/javascript"> </script>
         
         <script type="text/javascript">
         $(document).ready(function () {
         //on page load do init
             $('#id_tel_call').click(function () {
                 //alert('call');
-                makeCall();
+                makeCall($('#id_tel_phone').val());
             });
             $('#id_tel_hangup').click(function () {
                 sipHangUp();
@@ -57,15 +57,17 @@
         });
 
         window.onload = function () {
-            
+            //base64_encode ( Auth::user()->sip_number )
+            //base64_encode ( Auth::user()->sip_secret )
             SetVar1('{{Auth::user()->sip_number}}');
             SetVar2('{{Auth::user()->sip_secret}}');
-            //alert('{{Auth::user()->sip_number}}');
+            //var p = '{{ base64_encode ( 'sip:109@sip.viasakha.ru' ) }}';
+            //alert(Decode_des3(p));
         //init sip stack
-        SIPml.init(readyCallback, errorCallback);
+            SIPml.init(readyCallback, errorCallback);
 
         //start stip stack
-        sipStack.start();
+            sipStack.start();
 
         //do login
         login();

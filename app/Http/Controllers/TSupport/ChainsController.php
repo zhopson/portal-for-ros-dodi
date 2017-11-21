@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 use App\Chain;
+use App\ChainItems;
 use App\Category;
 use App\ChainCategory;
 use App\User;
+use App\ChainUser;
 
 class ChainsController extends Controller
 {
@@ -41,7 +43,12 @@ class ChainsController extends Controller
 //                    )
 //            ->orderBy('update_time', 'desc')
 //            ->paginate(100);        
-        
+
+        $ch_status = array(
+            'OPENED' => 'Открыт',
+            'CLOSED' => 'Закрыт',
+        );        
+
   
         $users = User::select('id','name')->get();//::all();
 
@@ -51,10 +58,16 @@ class ChainsController extends Controller
         return view('tsupport.chains', [
             'chains' => $chains,
             'users' => $users,
+            'ch_status' =>  $ch_status,
         ]);
     }
     
     public function chain_view($id) {
+        
+        $ch_status = array(
+            'OPENED' => 'Открыт',
+            'CLOSED' => 'Закрыт',
+        );        
 
     $chain = DB::table('chains')
             ->leftJoin('users', 'chains.user_id', '=', 'users.id')
@@ -114,7 +127,7 @@ class ChainsController extends Controller
     
     $users = User::select('id','name')->get();
     
-        return view('tsupport.chain_view', compact('chain','chains_items','users','id','address'));
+        return view('tsupport.chain_view', compact('chain','chains_items','users','id','address','ch_status'));
 //        return view('tsupport.chain_view', [
 //            'chains_items' => $chains_items,
 //            'users' => $users,
@@ -150,6 +163,85 @@ class ChainsController extends Controller
         }
         return redirect()->route('chains.view', ['id' => $id]);
     }
+    
+    public function chain_close($id) {
+        $open_tasks = DB::select("select id from tasks where chain_id = ? and status != 'SOLVED' and status != 'CLOSED'", [$id]);
+        
+        if (count($open_tasks)>0) 
+            $errors = ["Есть открытые задачи"];
+        //$categories = Category::all();
+        return view('tsupport.chain_close', compact('id','errors'));
+    }    
+
+    public function chain_closing(Request $request, $id) {
+        
+        $last_comment = $request->input('v_ch_close_msg');
+        if (!$last_comment) $last_comment = '(закрыт)';
+
+        //var_dump($last_comment); exit;
+        
+        $chain = Chain::find($id);
+        
+        $user_id =  $request->user()->id;
+        $chain_id = $id;
+        
+        $message = $last_comment;
+        $type = 'NOTICE';
+        
+        $new_chain_items = ChainItems::Create(compact('chain_id','user_id','type','message'));
+        
+        $chain->status = 'CLOSED';
+        $today = strtotime(date("Y-m-d H:i"));
+        $chain->who_closed = $user_id;
+        $chain->closing_time = $today;
+        $chain->last_comment = $last_comment;
+        $chain->last_item_id = $new_chain_items->id;
+        $chain->save();
+        
+        $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
+        
+        return redirect()->route('chains.view', ['id' => $chain_id]);    
+        
+    }    
+
+    public function chain_remove($id) {
+        $chain = Chain::find($id);
+        $client = $chain->client;
+        $fio = '';
+        
+        if ($client->clients_type_id == 3) $fio = $client->name;
+        else $fio = $client->surname.' '.$client->name.' '.$client->patronymic;
+        
+        //var_dump($fio); exit;
+        return view('tsupport.chain_remove', compact('id','fio'));  
+        
+    }
+
+    public function chain_removing(Request $request, $id) {
+        
+        $last_comment = $request->input('v_ch_remove_msg');
+        
+        $chain = Chain::find($id);
+        
+        $user_id =  $request->user()->id;
+        $chain_id = $id;
+        
+        $message = $last_comment;
+        $type = 'DELETED';
+        
+        $new_chain_items = ChainItems::Create(compact('chain_id','user_id','type','message'));
+        
+        $chain->last_comment = $last_comment;
+        $chain->last_item_id = $new_chain_items->id;
+        $chain->deleted = 1;
+        $chain->save();
+        
+        $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
+        
+        return redirect()->route('clients.view', ['id' => $chain->client_id]);
+        
+    }    
+    
     
 }
 

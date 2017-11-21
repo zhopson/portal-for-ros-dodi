@@ -37,7 +37,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/chains/remove/{id}', 'TSupport\ChainsController@chain_remove')->name('chains.remove');
 
+    Route::post('/chains/removing/{id}', 'TSupport\ChainsController@chain_removing')->name('chains.removing');
+
     Route::get('/chains/close/{id}', 'TSupport\ChainsController@chain_close')->name('chains.close');
+
+    Route::post('/chains/closing/{id}', 'TSupport\ChainsController@chain_closing')->name('chains.closing');
     
     Route::get('/clients', 'ClientsController@index')->name('clients');
 

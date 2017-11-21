@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('head')
+<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"> </script>
+@endsection
 
 @section('content')
 <div class="panel panel-default" style="margin: -15px 5px 25px 5px">
@@ -84,19 +87,18 @@
                             <td class="table-text">
                                 @php
                                     $nums_str = '';
-                                @endphp
-                                @foreach (explode("\n",$client->numbers) as $number)
-                                    @php    
+                                foreach (explode("\n",$client->numbers) as $number) {
                                         $num_arr = (explode(":",$number));
-                                        $nums_str = $nums_str.$num_arr[0];
+                                        $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$client->clt_name."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
                                         if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
                                             { $nums_str = $nums_str.'('.$num_arr[1].'), '; }
                                         else 
                                             { $nums_str = $nums_str.','; }
                                             
-                                    @endphp
-                                @endforeach
-                                {{ rtrim($nums_str, ", ") }}
+                                }
+                                echo rtrim($nums_str, ", "); 
+                                @endphp
+                                
                             </td>
                             <td class="table-text">
                                 <div>{{ $client->comment }}</div>
@@ -120,3 +122,62 @@
     </div>
 </div>
 @endsection
+
+@section('footer')
+        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+<!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
+        <script src="{{ asset('js/modal.js') }}"></script>
+        <script src="{{ asset('js/sip.js?svn=2') }}" type="text/javascript"> </script>
+        <script type="text/javascript">
+            
+        window.onload = function () {
+            //base64_encode ( Auth::user()->sip_number )
+            //base64_encode ( Auth::user()->sip_secret )
+            SetVar1('{{Auth::user()->sip_number}}');
+            SetVar2('{{Auth::user()->sip_secret}}');
+            //var p = '{{ base64_encode ( 'sip:109@sip.viasakha.ru' ) }}';
+            //alert(Decode_des3(p));
+        //init sip stack
+            SIPml.init(readyCallback, errorCallback);
+
+        //start stip stack
+            sipStack.start();
+
+        //do login
+        login();
+
+        };
+
+function call_client(pname,ptel){
+    
+    $('#id_CallModal').on('show.bs.modal', function () {
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        modal.find('.class_clt_name').text(g_name);
+        $('#id_call_phone').val(g_tel);
+    });
+
+    g_name = pname;
+    g_tel = ptel;
+    $('#id_CallModal').modal('show');
+    //alert(phost+" "+pnet);
+}
+
+        $(document).ready(function () {
+        //on page load do init
+            $('#id_call_btn').click(function () {
+                //alert('call');
+                makeCall($('#id_call_phone').val());
+            });
+            $('#id_call_hang_btn').click(function () {
+                sipHangUp();
+            });
+        });
+
+
+
+        </script>
+        
+@endsection            
