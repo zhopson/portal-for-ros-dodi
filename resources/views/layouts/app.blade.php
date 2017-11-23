@@ -13,6 +13,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<!--    <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">-->
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
     @yield('head')
 </head>
 <body>

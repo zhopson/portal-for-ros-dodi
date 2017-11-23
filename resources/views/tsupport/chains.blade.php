@@ -23,8 +23,8 @@
                     </div>
                 </div>
             </div>-->
-                @if (count($chains) > 0)
-                <table class="table table-hover table-bordered">
+                <table class="display" id="id_chains_td"  cellspacing="0" width="100%">
+<!--                <table class="table table-hover table-bordered table-condensed table-responsive" id="id_chains_td">-->
                     <thead>
                         <tr class="active">
                             <th>№</th>
@@ -39,59 +39,69 @@
                             <th>Категория</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($chains as $chain)
-                        @if($chain->status == 'OPENED')
-                          <tr class="warning">
-                        @else 
-                          <tr>
-                        @endif
-                            <td class="table-text">
-                                <div>{{ $chain->id }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ date('d.m.y H:i',$chain->update_time) }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div><a href="{{ route('clients.view', ['id' => $chain->client_id]) }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a></div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $chain->address }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $chain->u_name }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $users->find($chain->operator_id)->name }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $ch_status[$chain->status] }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ date('d.m.y H:i',$chain->opening_time) }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div><a href="{{ route('chains.view', ['id' => $chain->id]) }}">{{ $chain->last_comment }}</a></div>
-                            </td>
-                            <td class="table-text">
-                                @foreach (explode(",",$chain->cat_names) as $cat_name)
-                                    @if($cat_name != 'NULL')
-                                        <li>{{ rtrim($cat_name, ", ") }}</li>
-                                    @endif    
-                                @endforeach                                
-                            </td>
+                    <tfoot>
+                        <tr>
+                            <th>№</th>
+                            <th>Изменен</th>
+                            <th>Пользователь</th>
+                            <th>Нас.Пункт</th>
+                            <th>Автор</th>
+                            <th>Оператор</th>
+                            <th>Статус</th>
+                            <th>Открыт</th>
+                            <th>Последний комментарий</th>
+                            <th>Категория</th>
                         </tr>
-                        @endforeach
-                        {{ $chains->links() }}
-                <!--        <tr>
-                            <td></td>
-                        </tr>-->
+                    </tfoot>
+                    <tbody>
                     </tbody>
                 </table> 
-                @else
-                <h3>Нет Протоколов!!!!!</h3>
-                @endif
     </div>
 </div>
 </div>
+@endsection
+
+@section('footer')
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<!--<script src="{{ asset('js/jquery-1.12.4.js') }}"></script>-->
+<script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+<!--<script src="{{ asset('js/datatables.min.js') }}"></script>-->
+
+<script type="text/javascript">
+$(document).ready(function() {
+    
+        $('#id_chains_td').DataTable({
+            "language": {
+                //"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }                
+            },            
+            "ajax": "/chains/json", 
+            "deferRender": true            
+        });
+     
+    // Event listener to the two range filtering inputs to redraw on input
+//    $('#min, #max').keyup( function() {
+//        table.draw();
+//    } );
+} );
+</script>    
 @endsection

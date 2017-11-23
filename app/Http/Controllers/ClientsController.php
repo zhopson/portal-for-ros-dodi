@@ -20,17 +20,90 @@ class ClientsController extends Controller
 {
     public function index() {
         
-    $clients = DB::table('clients_view')
-            ->orderBy('clients_view.clt_name', 'asc')
-            ->paginate(100);        
+//    $clients = DB::table('clients_view')
+//            ->orderBy('clients_view.clt_name', 'asc')
+//            ->paginate(100);        
 //        
 //  
 //        $users = User::select('id','name')->get();//::all();
 //
-        return view('clients.clients', [
-            'clients' => $clients,
-        ]);
+//        return view('clients.clients', [
+//            'clients' => $clients,
+//        ]);
+        return view('clients.clients');
+        
     }
+    
+    public function Get_json_clients() {
+
+    $clients = DB::table('clients_view')->orderBy('clients_view.clt_name', 'asc')->get();//->paginate(100); 
+    //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
+
+        $data = [];
+        foreach ($clients as $row=>$client){
+            
+            $categories = '';
+            $active = '';
+            $groups = '';
+            $pol = '';
+            $adr = '';
+            
+            if ($client->gr_name) {
+                foreach (explode(",",$client->gr_name) as $group) 
+                      $groups = $groups.'<li>'.$group.'</li>';
+            }
+            
+            if ($client->active == 1)
+                $active = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
+            else 
+                $active = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
+
+            if($client->sex == '1')
+                $pol =  'М';
+            else if($client->sex == '0')
+                $pol =  'Ж';
+            
+            if ($client->address_number)
+                $adr = $adr.", д. ".$client->address_number;
+            if ($client->address_building)
+                $adr = $adr."/".$client->address_building;
+            if ($client->address_apartment)
+                $adr = $adr.", кв. ".$client->address_apartment;
+
+            $nums_str = '';
+            foreach (explode("\n",$client->numbers) as $number) {
+                $num_arr = (explode(":",$number));
+                $clt_name_clear =  str_replace('"', '', $client->clt_name);
+                $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                if ( isset($num_arr[1]) &&  $num_arr[1]!='' )
+                    { $nums_str = $nums_str.'('.$num_arr[1].'), '; }
+                else 
+                    { $nums_str = $nums_str.','; }
+                                            
+            }
+            $nums_str = rtrim($nums_str, ", "); 
+
+                                
+            array_push($data, 
+              array(
+                $client->id,
+                $active,
+                '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>'.$groups,
+                $client->type_name,
+                $pol,
+                $client->address.$adr,
+                $client->prd_name,
+                $nums_str,
+                $client->comment,
+                '<a href="'.route('clients.edit', ['id' => $client->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>',
+                //'<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>',
+              )
+            );
+        }
+        return ['data'=>$data];
+        
+//    return response()->json($chains->toJson());
+    }    
 
     public function clt_view($id) {
 

@@ -17,7 +17,7 @@ class ChainsController extends Controller
 {
     public function index() {
 
-    $chains = DB::table('chains_view')->paginate(100); 
+//    $chains = DB::table('chains_view')->get();//->paginate(100); 
     
 //    $chains = DB::table('chains')
 //            ->leftJoin('clients', 'chains.client_id', '=', 'clients.id')
@@ -44,22 +44,67 @@ class ChainsController extends Controller
 //            ->orderBy('update_time', 'desc')
 //            ->paginate(100);        
 
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
+//
+//  
+//        $users = User::select('id','name')->get();//::all();
+
+//        $chains = Chain::paginate(100);//all();
+        //$chains = DB::table('chains')->get();
+        
+//        return view('tsupport.chains', [
+//            'chains' => $chains,
+//            'users' => $users,
+//            'ch_status' =>  $ch_status,
+//        ]);
+        return view('tsupport.chains');
+        
+    }
+
+    public function Get_json_chains() {
+
+    $chains = DB::table('chains_view')->get();//->paginate(100); 
+    //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
+    
+
         $ch_status = array(
             'OPENED' => 'Открыт',
             'CLOSED' => 'Закрыт',
         );        
-
   
         $users = User::select('id','name')->get();//::all();
 
 //        $chains = Chain::paginate(100);//all();
         //$chains = DB::table('chains')->get();
+        $data = [];
+        foreach ($chains as $row=>$chain){
+            $categories = '';
+            foreach (explode(",",$chain->cat_names) as $cat_name) {
+                if($cat_name != 'NULL')
+                    $categories = $categories.'<li>'.rtrim($cat_name, ", ").'</li>';
+            }
+            
+            array_push($data, 
+              array(
+                $chain->id,
+                date('d.m.y H:i',$chain->update_time),
+                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
+                $chain->address,
+                $chain->u_name,
+                $users->find($chain->operator_id)->name,
+                $ch_status[$chain->status],
+                date('d.m.y H:i',$chain->opening_time),
+                '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',
+                $categories
+              )
+            );
+        }
+        return ['data'=>$data];
         
-        return view('tsupport.chains', [
-            'chains' => $chains,
-            'users' => $users,
-            'ch_status' =>  $ch_status,
-        ]);
+//    return response()->json($chains->toJson());
     }
     
     public function chain_view($id) {

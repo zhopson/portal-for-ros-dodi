@@ -395,7 +395,7 @@
 <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
 <!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
 <script src="{{ asset('js/modal.js') }}"></script>
-<script src="{{ asset('js/sip.js?svn=2') }}" type="text/javascript"></script>
+<script src="{{ asset('js/sip.js?svn=3') }}" type="text/javascript"></script>
 <script type="text/javascript">
     
 function call_client(pname,ptel){
@@ -427,9 +427,9 @@ function call_client(pname,ptel){
 
         window.onload = function () {
             
-            SetVar1('{{Auth::user()->sip_number}}');
-            SetVar2('{{Auth::user()->sip_secret}}');
-            //alert('{{Auth::user()->sip_number}}');
+            SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
+            SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
+            
         //init sip stack
             SIPml.init(readyCallback, errorCallback);
 

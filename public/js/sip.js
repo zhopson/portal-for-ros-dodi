@@ -82,6 +82,9 @@ function sipHangUp() {
 
 
   function createSipStack(){
+              v1 = Decode_des3(v1);
+              v2 = Decode_des3(v2);
+
                 sipStack = new SIPml.Stack({
                         realm: 'sip.viasakha.ru', // mandatory: domain name
                         //impi: '109', // mandatory: authorization name (IMS Private Identity)
@@ -136,11 +139,13 @@ function sipHangUp() {
                 callSession.call(pid_tel_phone);
             }
         
-   function sipHangUp() {
-            if (callSession) {
-                callSession.hangup({ events_listener: { events: '*', listener: eventsListener } });
+            function sipHangUp() {
+                if (callSession) {
+                    callSession.hangup({ events_listener: { events: '*', listener: eventsListener } });
+                }
             }
-        }
 
-
+            var acceptCall = function(e){
+                e.newSession.accept(); // e.newSession.reject() to reject the call
+            }
 

@@ -42,7 +42,7 @@
 
 @section('footer')
         <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
-        <script src="{{ asset('js/sip.js?svn=2') }}" type="text/javascript"> </script>
+        <script src="{{ asset('js/sip.js?svn=3') }}" type="text/javascript"> </script>
         
         <script type="text/javascript">
         $(document).ready(function () {
@@ -57,12 +57,11 @@
         });
 
         window.onload = function () {
-            //base64_encode ( Auth::user()->sip_number )
-            //base64_encode ( Auth::user()->sip_secret )
-            SetVar1('{{Auth::user()->sip_number}}');
-            SetVar2('{{Auth::user()->sip_secret}}');
-            //var p = '{{ base64_encode ( 'sip:109@sip.viasakha.ru' ) }}';
-            //alert(Decode_des3(p));
+            //
+            //
+            SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
+            SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
+            
         //init sip stack
             SIPml.init(readyCallback, errorCallback);
 
@@ -70,7 +69,7 @@
             sipStack.start();
 
         //do login
-        login();
+            login();
 
         };
 

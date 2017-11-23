@@ -18,8 +18,8 @@
                 </div>
             </div>
             <div class="row">
-                @if (count($clients) > 0)
-                <table class="table table-hover table-bordered">
+<!--                <table class="table table-hover table-bordered">-->
+                <table class="display" id="id_clients_td"  cellspacing="0" width="100%">
                     <thead>
                         <tr class="active">
                             <th>№</th>
@@ -34,89 +34,23 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                        @foreach ($clients as $client)
-                            <td class="table-text">
-                                <div>{{ $client->id }}</div>
-                            </td>
-                            <td class="table-text">
-                            @if($client->active == 1)
-                                <div><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
-                            @else 
-                                <div><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
-                            @endif
-                            </td>
-                            <td class="table-text">
-                                <div><a href="{{ route('clients.view', ['id' => $client->id]) }}">{{ $client->clt_name }}</a></div>
-                                @if ($client->gr_name) 
-                                @foreach (explode(",",$client->gr_name) as $group)
-                                <li>{{ $group }}</li>
-                                @endforeach
-                                @endif
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $client->type_name }}</div>
-                            </td>
-                            <td class="table-text">
-                                @if($client->sex == '1')
-                                <div>М</div>
-                                @elseif($client->sex == '0')
-                                <div>Ж</div>
-                                @else
-                                <div></div>
-                                @endif
-                            </td>
-                            <td class="table-text">
-                                <div>
-                                    {{ $client->address }}
-                                    @if ($client->address_number)
-                                        {{ ", д. ".$client->address_number }}
-                                    @endif
-                                    @if ($client->address_building)
-                                        {{ "/".$client->address_building }}
-                                    @endif
-                                    @if ($client->address_apartment)
-                                        {{ ", кв. ".$client->address_apartment }} 
-                                    @endif                                    
-                                </div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $client->prd_name }}</div>
-                            </td>
-                            <td class="table-text">
-                                @php
-                                    $nums_str = '';
-                                foreach (explode("\n",$client->numbers) as $number) {
-                                        $num_arr = (explode(":",$number));
-                                        $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$client->clt_name."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
-                                        if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
-                                            { $nums_str = $nums_str.'('.$num_arr[1].'), '; }
-                                        else 
-                                            { $nums_str = $nums_str.','; }
-                                            
-                                }
-                                echo rtrim($nums_str, ", "); 
-                                @endphp
-                                
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $client->comment }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div><a href="{{ route('clients.edit', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></div>
-                            </td>
+                    <tfoot>
+                        <tr class="active">
+                            <th>№</th>
+                            <th></th>
+                            <th style="width: 280px">ФИО/Наименование</th>
+                            <th>Тип</th>
+                            <th></th>
+                            <th>Адрес</th>
+                            <th>Провайдер</th>
+                            <th>Контактные данные</th>
+                            <th>Комментарий</th>
+                            <th></th>
                         </tr>
-                        @endforeach
-                        {{ $clients->links() }}
-                <!--        <tr>
-                            <td></td>
-                        </tr>-->
+                    </tfoot>
+                    <tbody>
                     </tbody>
                 </table> 
-                @else
-                <h3>Нет Клиентов!!!!!</h3>
-                @endif
             </div>        
         </div>
     </div>
@@ -124,20 +58,19 @@
 @endsection
 
 @section('footer')
-        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+<!--        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
         <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
 <!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
         <script src="{{ asset('js/modal.js') }}"></script>
-        <script src="{{ asset('js/sip.js?svn=2') }}" type="text/javascript"> </script>
+        <script src="{{ asset('js/sip.js?svn=3') }}" type="text/javascript"> </script>
         <script type="text/javascript">
             
         window.onload = function () {
-            //base64_encode ( Auth::user()->sip_number )
-            //base64_encode ( Auth::user()->sip_secret )
-            SetVar1('{{Auth::user()->sip_number}}');
-            SetVar2('{{Auth::user()->sip_secret}}');
-            //var p = '{{ base64_encode ( 'sip:109@sip.viasakha.ru' ) }}';
-            //alert(Decode_des3(p));
+            
+            SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
+            SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
+            
         //init sip stack
             SIPml.init(readyCallback, errorCallback);
 
@@ -174,6 +107,36 @@ function call_client(pname,ptel){
             $('#id_call_hang_btn').click(function () {
                 sipHangUp();
             });
+            
+        $('#id_clients_td').DataTable({
+            "language": {
+                //"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }                
+            },            
+            "ajax": "/clients/json", 
+            "deferRender": true            
+        });            
+            
+            
         });
 
 

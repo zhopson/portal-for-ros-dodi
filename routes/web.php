@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
-
+    
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::get('lc', function () {
@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/telephony', 'TelephonyController@index')->name('telephony');
 
     Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
+
+    Route::get('/chains/json', 'TSupport\ChainsController@Get_json_chains');
 
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
 
@@ -45,6 +47,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/clients', 'ClientsController@index')->name('clients');
 
+    Route::get('/clients/json', 'ClientsController@Get_json_clients');
+    
     Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
 
     Route::get('/clients/new', 'ClientsController@clt_new')->name('clients.new');
