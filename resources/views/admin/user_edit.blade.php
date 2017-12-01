@@ -65,6 +65,8 @@
                                 @endif
                             </div>
                         </div>
+                    
+                        <input type="hidden" class="form-control" id="password_old" name="password_old" value="{{ $user->password }}">                    
 
                         <div class="form-group">
                             <label for="password-confirm" class="col-md-4 control-label">Подтверждение пароля</label>

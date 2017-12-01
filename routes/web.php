@@ -25,8 +25,10 @@ Route::middleware('auth')->group(function () {
         return redirect('/home');
     });
 
-    Route::get('/telephony', 'TelephonyController@index')->name('telephony');
-
+    Route::middleware('role:Учителя')->group(function () {
+        Route::get('/telephony', 'TelephonyController@index')->name('telephony');    
+    });
+    
     Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
 
     Route::get('/chains/json', 'TSupport\ChainsController@Get_json_chains');
@@ -97,6 +99,11 @@ Route::middleware('auth')->group(function () {
     });
     
     Route::get('/forbidden', function () {
+//        $ttt = App\User::find(1)->roles;
+//        $ddd = $ttt->where('role', '=' ,'Сотрудники ТП ИНТ')->first();
+//        if ($ddd==null) var_dump('Нет роли');
+//        else var_dump('Роль найдена');
+//        exit;
         return view('deny_info');
     })->name('forbidden');
 });

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use Hash;
 
 use App\User;
 use App\Role;
@@ -145,7 +146,13 @@ class UsersGroupsController extends Controller
         
         $user = User::find($id);
         $user->name = $request->input('name');
-        $user->password = bcrypt($request->input('password'));
+
+        //if (!Hash::check($request->input('password'), $user->password, [])) {
+        if ( $request->input('password') !== $request->input('password_old') ) {
+            $user->password = bcrypt($request->input('password'));
+            $user->remember_token = null;
+        }
+
         $user->is_admin = $is_adm;
         $user->sip_number = $sip_name;
         $user->sip_secret = $request->input('sip_password');

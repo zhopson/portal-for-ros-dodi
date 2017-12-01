@@ -39,6 +39,15 @@ class User extends Authenticatable
     return $this->belongsToMany('App\Role','users_roles', 'user_id', 'role_id');
   }
 
+  public function hasRole($role)
+  {
+      
+      $r = $this->roles;
+      $rr = $r->where('role', '=' ,$role)->first();
+      if ($rr == null) return false;
+      else return true;
+  }
+  
   public function client()
   {
     return $this->HasOne('App\Client');
