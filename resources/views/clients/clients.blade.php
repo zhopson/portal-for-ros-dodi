@@ -19,6 +19,7 @@
             </div>
             <div class="row">
 <!--                <table class="table table-hover table-bordered">-->
+                <div class="table-responsive">
                 <table class="display" id="id_clients_td"  cellspacing="0" width="100%">
                     <thead>
                         <tr class="active">
@@ -50,7 +51,8 @@
                     </tfoot>
                     <tbody>
                     </tbody>
-                </table> 
+                </table>
+                </div>
             </div>        
         </div>
     </div>

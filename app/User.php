@@ -21,6 +21,8 @@ class User extends Authenticatable
         'is_admin',
         'status_id',
         'password',
+        'sip_number',
+        'sip_secret',
     ];
 
     /**
@@ -29,7 +31,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','sip_secret',
     ];
     
   public function roles()

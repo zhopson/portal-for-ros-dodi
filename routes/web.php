@@ -77,11 +77,26 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/requests/update/{id}', 'TSupport\RequestsController@req_update')->name('requests.update');
     
-    Route::get('calls/edit/{id}', function ($id) {
-        return 'call ' . $id;
-    })->name('calls.edit');
+    Route::get('/notes/new/{id}/{ch_id?}', 'TSupport\NotesController@note_new')->name('notes.new');
 
-    Route::get('notes/edit/{id}', function ($id) {
-        return 'note ' . $id;
-    })->name('notes.edit');
+    Route::post('/notes/store/{id}', 'TSupport\NotesController@note_store')->name('notes.store');
+    
+    Route::get('/notes/edit/{id}', 'TSupport\NotesController@note_edit')->name('notes.edit');
+
+    Route::post('/notes/update/{id}', 'TSupport\NotesController@note_update')->name('notes.update');
+
+    Route::middleware('admin')->group(function () {
+    
+        Route::get('/admin/users', 'admin\UsersGroupsController@index')->name('admin.users');
+        Route::get('/users/json/{id?}', 'admin\UsersGroupsController@Get_json_users')->name('users.get');
+    
+        Route::get('/admin/users/new', 'admin\UsersGroupsController@new_usr')->name('admin.users.new');
+        Route::post('/admin/users/store', 'admin\UsersGroupsController@store_usr')->name('admin.users.store');
+        Route::get('/admin/users/edit/{id}', 'admin\UsersGroupsController@edit_usr')->name('admin.users.edit');
+        Route::post('/admin/users/update/{id}', 'admin\UsersGroupsController@update_usr')->name('admin.users.update');
+    });
+    
+    Route::get('/forbidden', function () {
+        return view('deny_info');
+    })->name('forbidden');
 });

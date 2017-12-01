@@ -83,7 +83,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Администрирование <span class="caret"></span></a>
                             <ul class="dropdown-menu"  style="background-color: #BEE9EA">
-                                <li><a href="{{ route('register') }}">Юзеры и группы</a></li>
+                                <li><a href="{{ route('admin.users') }}">Юзеры и группы</a></li>
                                 <li><a href="#">Something else here</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Separated link</a></li>

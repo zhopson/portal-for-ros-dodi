@@ -23,6 +23,7 @@
                     </div>
                 </div>
             </div>-->
+            <div class="table-responsive">
                 <table class="display" id="id_chains_td"  cellspacing="0" width="100%">
 <!--                <table class="table table-hover table-bordered table-condensed table-responsive" id="id_chains_td">-->
                     <thead>
@@ -56,6 +57,7 @@
                     <tbody>
                     </tbody>
                 </table> 
+            </div>
     </div>
 </div>
 </div>

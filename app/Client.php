@@ -53,5 +53,12 @@ class Client extends Model
   public function contract()
   {
     return $this->belongsTo('App\Contract');
-  }  
+  }
+  
+  public function notes()
+  {
+    return $this->HasMany('App\Note');
+  }
+
+  
 }
