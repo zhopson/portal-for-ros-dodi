@@ -60,8 +60,9 @@ if ($addresses!=='') {
                 <div class="panel-body">
                     <form class="form-horizontal"  method="POST" action="{{ route('clients.update', ['id' => $new_clt->id]) }}">
                         {{ csrf_field() }}
+                        <input type="hidden" class="form-control" id="id_clt_edit_src" name="v_clt_edit_src" value="{{$src}}">                        
                         <div id='id_clt_user_view'>
-                            @if ($new_clt->clients_type_id==1 || $new_clt->clients_type_id==2 )
+                            @if ( $new_clt->clients_type_id!==3 )
                             <div id='id_clt_fio_section'>
                                 <div class="page-header" style="margin: 20px 0 0 10px">
                                     <h4 style="margin-bottom:-3px">Личные данные</h4>
@@ -315,6 +316,42 @@ if ($addresses!=='') {
                                     <input type="text" class="form-control" id="id_clt_edit_contacts_skype" name="v_clt_edit_contacts_skype" value="{{ $new_clt->skype }}">
                                 </div>
                             </div>
+                            <div id='id_clt_user_align_section'>
+                                <div class="page-header" style="margin: 30px 0 0 10px">
+                                    <h4 style="margin-bottom:-3px">Привязка к учетной записи</h4>
+                                </div>
+                                @if ( $align_user )
+                                <div class="form-group" style="margin-top:10px">
+                                    <label for="id_clt_edit_user_aligned" class="col-sm-3 control-label">Привязан логин</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="id_clt_edit_user_aligned" name="v_clt_edit_user_aligned" value="{{ $align_user->email }}" readonly>
+                                    </div>
+                                </div>
+                                @else
+                                <div class="form-group" style="margin-top:10px">
+                                    <label for="id_clt_edit_user_align" class="col-sm-3 control-label">Выберите логин</label>
+                                    <div class="col-sm-8">
+                                    <select class="form-control" id="id_clt_edit_user_align" name="v_clt_edit_user_align">
+                                        <option value="0"></option>
+                                        @foreach (App\User::orderBy('email','asc')->get() as $usr) 
+                                            <option value="{{ $usr->id }}">{{ $usr->email .' ---- '. $usr->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    </div>
+                                </div>
+                                @endif
+                                <div class="form-group" style="margin-top:10px">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                    <p class="bg-warning">
+                                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                        Привязка к логину необходима, чтобы связать личные данные пользователя 
+                                        с логином входа в портал, в целях возможности создания заявок в техподдержку 
+                                        из личного кабинета (Для ролей <mark>'ученик'</mark> и <mark>'учитель'</mark>)
+                                    </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                         <div id='id_clt_inet_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
@@ -447,8 +484,10 @@ if ($addresses!=='') {
                 <li role="presentation" id="id_clt_edit_nav_health"><a href="#">Здоровье</a></li>
                 @endif
                 <li role="presentation" id="id_clt_edit_nav_addr"><a href="#">Адрес</a></li>   
-                <li role="presentation" id="id_clt_edit_nav_contacts"><a href="#">Контактные данные</a></li>   
+                <li role="presentation" id="id_clt_edit_nav_contacts"><a href="#">Контактные данные</a></li>
+                @if ($new_clt->clients_type_id!=4)
                 <li role="presentation" id="id_clt_edit_nav_inet"><a href="#">Интернет</a></li>   
+                @endif
                 <li role="presentation" id="id_clt_edit_nav_dop"><a href="#">Дополнительно</a></li>   
             </ul>
             <ul class="nav nav-pills nav-stacked" style="margin-top:50px">

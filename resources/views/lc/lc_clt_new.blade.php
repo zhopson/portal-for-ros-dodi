@@ -12,7 +12,7 @@
         <div class="col-md-6">
             <div class="panel panel-default" style="margin-bottom:55px">
                 <div class="panel-body">
-                    <form class="form-horizontal"  method="POST" action="{{ route('clients.store') }}">
+                    <form class="form-horizontal"  method="POST" action="{{ route('lc.personal.store') }}">
                     {{ csrf_field() }}
                     <div id='id_clt_common_section'>
                         <div class="page-header" style="margin: 0 0 0 10px">
@@ -111,7 +111,7 @@
                                 <button type="submit" class="btn btn-primary">Далее</button>
                             </div>
                             <div class="col-sm-1">
-                                <a class="btn btn-default" href="{{ url('/clients') }}">Отмена</a>
+                                <a class="btn btn-default" href="{{ route('lc.personal') }}">Отмена</a>
                             </div>
                         </div>
 
@@ -186,5 +186,9 @@ $('#id_clt_type').change(function(){
   }
 });
 });
+window.onload = function () {
+    $('#id_clt_type').val('4').change();
+    //$('#id_clt_type').prop("readonly", true);
+}
 </script>
 @endsection

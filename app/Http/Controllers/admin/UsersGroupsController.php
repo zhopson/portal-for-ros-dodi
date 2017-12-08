@@ -87,6 +87,17 @@ class UsersGroupsController extends Controller
         
         $is_adm = false;
         if ($request->input('admin')==='on') $is_adm  = true; 
+        
+        if ($is_adm === true) {
+            $flag = false;
+            foreach ($request->input('v_usr_roles') as $role_id) { 
+                if ($role_id == 4 or $role_id == 5 or $role_id == 6) { $flag = true; break;}
+            }
+            if ($flag === false) {
+                $errors = ["Ошибка", "Администраторами могут быть только сотрудники Техподдержки!"];
+                return \Redirect::back()->withInput()->withErrors($errors);                
+            }
+        }
 
         $sip_name = '0';
         if ($request->input('sip_name')) $sip_name = $request->input('sip_name');        
@@ -140,6 +151,17 @@ class UsersGroupsController extends Controller
         
         $is_adm = false;
         if ($request->input('admin')==='on') $is_adm  = true; 
+
+        if ($is_adm === true) {
+            $flag = false;
+            foreach ($request->input('v_usr_roles') as $role_id) { 
+                if ($role_id == 4 or $role_id == 5 or $role_id == 6) { $flag = true; break;}
+            }
+            if ($flag === false) {
+                $errors = ["Ошибка", "Администраторами могут быть только сотрудники Техподдержки!"];
+                return \Redirect::back()->withInput()->withErrors($errors);                
+            }
+        }
         
         $sip_name = '0';
         if ($request->input('sip_name')) $sip_name = $request->input('sip_name');

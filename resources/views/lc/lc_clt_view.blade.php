@@ -1,18 +1,27 @@
 @extends('layouts.app')
 
 @section('head')
-<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"></script>
 @endsection
 
 @section('content')
-@if (count($clients) > 0)
+
+<div class="container-fluid" style="margin:0 30px 45px 30px">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="page-header" style="margin-top:-18px">
+                <h2>Личный кабинет</h2>
+            </div>            
+        </div>
+    </div>
+    
+    @if ($clt_id)
+    
+    @foreach ($clients as $client)
 @if (session('status'))
   <div class="alert alert-success">
         {{ session('status') }}
   </div>
-@endif
-<div class="container-fluid" style="margin:0 30px 45px 30px">
-    @foreach ($clients as $client)
+@endif    
     <div class="row">
         <h3 style="margin-top:-10px">{{ $client->clt_name }}</h3>
     </div>
@@ -22,7 +31,7 @@
                 <div class="panel-body">
                     @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
                     <div class="row">
-                        <a href="{{ route('clients.edit', ['id' => $client->id]) }}" style="margin-left:20px"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать</a>    
+                        <a href="{{ route('clients.edit', ['id' => $client->id,'src' => 'lc']) }}" style="margin-left:20px"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Редактировать</a>    
                     </div>
                     @endif
                     <div class="row">
@@ -58,18 +67,7 @@
                                     @endif
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="table-text">
-                                    <div class="pull-right">Привязка к логину</div>
-                                </td>
-                                <td class="table-text">
-                                    @if (App\User::where('client_id',$client->id)->first())
-                                    E-Mail:<mark>{{ App\User::where('client_id',$client->id)->first()->email }}</mark>
-                                    {{ ';    ' }}
-                                    имя:<mark>{{ App\User::where('client_id',$client->id)->first()->name }}</mark>
-                                    @endif
-                                </td>
-                            </tr>
+                            @if ($client->contract_name)
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Контракт</div>
@@ -78,6 +76,7 @@
                                     <ins>{{$client->contract_name}}</ins>
                                 </td>
                             </tr>
+                            @endif
                             @if ($client->father)
                             <tr>
                                 <td class="table-text">
@@ -167,6 +166,7 @@
                                     {{$client->comment}}
                                 </td>
                             </tr>
+                            @if ($client->prd_name)
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Провайдер</div>
@@ -175,6 +175,7 @@
                                     {{$client->prd_name}}
                                 </td>
                             </tr>
+                            @endif
                             @if($client->ip_addresses != '{NULL}')
                             <tr>
                                 <td class="table-text">
@@ -189,6 +190,7 @@
                                 </td>
                             </tr>
                             @endif
+                            @if( count(App\Client::find($client->id)->groups()->get())!==0 )
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Группы</div>
@@ -199,6 +201,7 @@
                                     @endforeach
                                 </td>
                             </tr>                            
+                            @endif
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Телефоны</div>
@@ -210,10 +213,7 @@
                                         $nums_str = '';
                                         $num_arr = (explode(":",$number));
                                         $clt_name_clear =  str_replace('"', '', $client->clt_name);
-                                        if (Auth::user()->hasRole('Учителя'))
-                                            $nums_str = $nums_str.$num_arr[0];
-                                        else
-                                            $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                                        $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
                                         if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
                                             { $nums_str = $nums_str.'('.$num_arr[1].')'; }
                                         echo $nums_str.'<br>';
@@ -227,18 +227,17 @@
                 </div>
             </div>
         </div>
+        @if ( Auth::user()->hasRole('Учителя') || Auth::user()->hasRole('Ученики') )
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
-                        @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
-                        <div class="col-md-3">
+<!--                        <div class="col-md-3">
                             <a href="#" style="margin-left:8px"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</a>    
                         </div>
                         <div class="col-md-3">
                             <a href="{{ route('tasks.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</a>    
-                        </div>
-                        @endif
+                        </div>-->
                         <div class="col-md-3">
                             <a href="{{ route('requests.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
                         </div>
@@ -406,64 +405,36 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
     @endforeach
-</div>
+    
 @else
-<h3>Запись отсутствует!</h3>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Персональные данные</div>
+  <div class="panel-body">
+
+    <div class="row">
+        <h3 style="margin:20px 0 20px 30px">Персональные данные отсутствуют</h3>
+    </div>
+    <div class="row">
+        <a style="margin:20px 0 60px 30px"  href="{{ route('lc.personal.new') }}" role="button" class="btn btn-info"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>  Добавить информацию</a>
+    </div>
+  </div>
+</div>                    
+
 @endif    
+
+
+</div>
 
 @endsection
 @section('footer')
 <!--<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
 <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
 <!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
-<script src="{{ asset('js/modal.js') }}"></script>
-<script src="{{ asset('js/sip.js?svn=3') }}" type="text/javascript"></script>
 <script type="text/javascript">
-    
-function call_client(pname,ptel){
-    
-    $('#id_CallModal').on('show.bs.modal', function () {
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this);
-        modal.find('.class_clt_name').text(g_name);
-        $('#id_call_phone').val(g_tel);
-    });
-
-    g_name = pname;
-    g_tel = ptel;
-    $('#id_CallModal').modal('show');
-    //alert(phost+" "+pnet);
-}    
-
-        $(document).ready(function () {
-        //on page load do init
-            $('#id_call_btn').click(function () {
-                //alert('call');
-                makeCall($('#id_call_phone').val());
-            });
-            $('#id_call_hang_btn').click(function () {
-                sipHangUp();
-            });
-        });
-
-        window.onload = function () {
-            
-            SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
-            SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
-            
-        //init sip stack
-            SIPml.init(readyCallback, errorCallback);
-
-        //start stip stack
-            sipStack.start();
-
-        //do login
-        login();
-
-        };
     
 </script>
 @endsection

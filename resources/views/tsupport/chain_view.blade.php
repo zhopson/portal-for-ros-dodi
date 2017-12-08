@@ -55,7 +55,11 @@
                         Пользователь
                     </div>
                     <div class="col-md-3">
+                        @if ( (Auth::user()->hasRole('Учителя') && Auth::user()->client_id==$chain->client_id) || Auth::user()->hasRole('Ученики') )
+                        <a href="{{ route('lc.personal') }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a>
+                        @else
                         <a href="{{ route('clients.view', ['id' => $chain->client_id]) }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -82,18 +86,20 @@
                 <div>
                 @if ($chain->status == 'CLOSED')
                     <div class="col-md-1 col-md-offset-11">
-                        <a href="#"><h5>Обновить</h5></a>
+                        <a href="{{ route('chains.view', ['id' => $id]) }}"><h5>Обновить</h5></a>
                     </div>
                 @else
                     <div class="col-md-1">
                         <a href="{{ route('notes.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Заметка</h6></a>
                     </div>
+                    @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
                     <div class="col-md-1">
                         <a href="{{ route('tasks.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</h6></a>
                     </div>
                     <div class="col-md-1">
                         <a href="#"><h6><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</h6></a>
                     </div>
+                    @endif
                     <div class="col-md-2">
                         <a href="{{ route('requests.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</h6></a>
                     </div>
@@ -101,6 +107,7 @@
 <!--                        <a href="#"><h5>Обновить</h5></a>-->
                         <a href="{{ route('chains.view', ['id' => $id]) }}" class="dropdown-toggle">Обновить</a>
                     </div>
+                    @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
                     <div class="col-md-1">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Управление<span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right">
@@ -111,6 +118,7 @@
                             </ul>
 <!--                        <a href="#"><h6>Управление</h6></a>-->
                     </div>
+                    @endif
                 @endif
                 </div>
             </div>            

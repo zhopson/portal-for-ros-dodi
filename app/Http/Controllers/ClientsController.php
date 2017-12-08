@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Client;
+use App\User;
 use App\Provider;
 use App\Group;
 use App\Contract;
@@ -18,7 +19,12 @@ use Illuminate\Support\Facades\Input;
 
 class ClientsController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
+            return redirect('forbidden');
+        }  
+
         
 //    $clients = DB::table('clients_view')
 //            ->orderBy('clients_view.clt_name', 'asc')
@@ -34,7 +40,7 @@ class ClientsController extends Controller
         
     }
     
-    public function Get_json_clients() {
+    public function Get_json_clients(Request $request) {
 
     $clients = DB::table('clients_view')->orderBy('clients_view.clt_name', 'asc')->get();//->paginate(100); 
     //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
@@ -74,7 +80,10 @@ class ClientsController extends Controller
             foreach (explode("\n",$client->numbers) as $number) {
                 $num_arr = (explode(":",$number));
                 $clt_name_clear =  str_replace('"', '', $client->clt_name);
-                $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                if ($request->user()->hasRole('Учителя')) 
+                    $nums_str = $nums_str.$num_arr[0];
+                else
+                    $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
                 if ( isset($num_arr[1]) &&  $num_arr[1]!='' )
                     { $nums_str = $nums_str.'('.$num_arr[1].'), '; }
                 else 
@@ -83,6 +92,10 @@ class ClientsController extends Controller
             }
             $nums_str = rtrim($nums_str, ", "); 
 
+            $clt_edit_tag = '';
+            
+            if (!$request->user()->hasRole('Учителя')) 
+                $clt_edit_tag = '<a href="'.route('clients.edit', ['id' => $client->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>';
                                 
             array_push($data, 
               array(
@@ -95,7 +108,7 @@ class ClientsController extends Controller
                 $client->prd_name,
                 $nums_str,
                 $client->comment,
-                '<a href="'.route('clients.edit', ['id' => $client->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>',
+                $clt_edit_tag,
                 //'<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>',
               )
             );
@@ -105,7 +118,12 @@ class ClientsController extends Controller
 //    return response()->json($chains->toJson());
     }    
 
-    public function clt_view($id) {
+    public function clt_view(Request $request,$id) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
+            $clt_id = $request->user()->client_id;
+            if ($clt_id != $id) { return redirect('forbidden');}
+        }  
 
     $client = DB::select("select
 				CASE WHEN clients.surname = '' THEN  clients.name	else clients.surname || ' ' || clients.name  || ' ' || clients.patronymic END AS clt_name,
@@ -202,7 +220,7 @@ class ClientsController extends Controller
 
         $clients_type_id = $request->input('v_clt_type');
 
-        if ($clients_type_id == 1 || $clients_type_id == 2) {
+        if ($clients_type_id == 1 || $clients_type_id == 2 || $clients_type_id == 4) {
             $name = $request->input('v_clt_name');
             $surname = $request->input('v_clt_surname');
             $patronymic = $request->input('v_clt_otch');
@@ -225,7 +243,7 @@ class ClientsController extends Controller
         $new_clt = '';
         if ($clients_type_id == 1) {
             $new_clt = Client::create(compact('clients_type_id', 'surname', 'name', 'patronymic', 'sex', 'mother', 'father', 'language'));
-        } elseif ($clients_type_id == 2) {
+        } elseif ($clients_type_id == 2 || $clients_type_id == 4) {
             $new_clt = Client::create(compact('clients_type_id', 'surname', 'name', 'patronymic', 'sex', 'language'));
         } else {
             $new_clt = Client::create([
@@ -233,18 +251,7 @@ class ClientsController extends Controller
                 'name' => $org,
             ]);
         }
-        //$id = $new_clt->id;
-        //var_dump(explode(",",$new_clt->language));
-//            [
-//        'type' => $type,
-//        'surname' => $request->input('name'),
-//        'name' => $request->input('name'),
-//        'patronymic' => $request->input('name'),
-//        'sex' => $request->input('name'),
-//        'mother' => $request->input('name'),
-//        'father' => $request->input('name'),
-//        'language' => $request->input('name'),
-//    ]);
+
         //return redirect()->route('clients.edit', [$new_clt])->with( 'new_clt', $new_clt );
         
         //return redirect()->route('clients.edit', compact('id','new_clt','providers','clt_groups','clt_contracts','regions'));
@@ -253,7 +260,14 @@ class ClientsController extends Controller
         //return redirect('clients.edit');  
  }
  
- public function clt_edit($id) {
+ public function clt_edit(Request $request,$id,$src = null) {
+     
+//        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') ) { 
+////            $clt_id = $request->user()->client_id;
+////            if ($clt_id != $id) { return redirect('forbidden');}
+//            return redirect('forbidden');
+//        }  
+
         
         $new_clt = Client::find($id);
         
@@ -293,8 +307,9 @@ class ClientsController extends Controller
 //                ->get();
         //$new_clt =  session('new_clt');
 //        var_dump($new_clt);
+        $align_user = User::where('client_id',$new_clt->id)->first();
         
-        return view('clients.clt_edit',compact('new_clt','providers','clt_groups','clt_contracts','regions','address_components','addresses'));
+        return view('clients.clt_edit',compact('new_clt','providers','clt_groups','clt_contracts','regions','address_components','addresses','align_user','src'));
  }
  
     public function clt_update(Request $request,$id ) {
@@ -483,7 +498,24 @@ class ClientsController extends Controller
         //exit;
         $clt->save();
         
-        return redirect()->route('clients.edit', ['id' => $id])->with('status', 'Изменения сохранены!');   
+        $align_user = User::where('client_id',$clt->id)->first();
+        if ( ! $align_user ) {
+            $usr_id = $request->input('v_clt_edit_user_align');
+            if ($usr_id!='0') {
+                $usr_clt = User::find($usr_id);
+                $usr_clt->client_id = $clt->id;
+                $usr_clt->save();
+            }
+        }
+        
+        $who_call = $request->input('v_clt_edit_src');
+        
+        if ( $who_call === 'lc' ) {
+            //var_dump('Вызывается из clients/view - любой протокол');
+            return redirect()->route('lc.personal')->with('status', 'Изменения сохранены!');
+        }        
+        else return redirect()->route('clients.view', ['id' => $id])->with('status', 'Изменения сохранены!');
+        //return redirect()->route('clients.edit', ['id' => $id])->with('status', 'Изменения сохранены!');   
     } 
 }
 

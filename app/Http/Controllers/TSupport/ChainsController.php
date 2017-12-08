@@ -15,7 +15,12 @@ use App\ChainUser;
 
 class ChainsController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
+            return redirect('forbidden');
+        }  
+        
 
 //    $chains = DB::table('chains_view')->get();//->paginate(100); 
     

@@ -24,53 +24,74 @@ Route::middleware('auth')->group(function () {
     Route::get('lc', function () {
         return redirect('/home');
     });
+    
+    Route::get('/lc/personal', 'HomeController@personal_view')->name('lc.personal');
+    Route::get('/lc/personal/new', 'HomeController@personal_new')->name('lc.personal.new');
+    Route::post('/lc/personal/store', 'HomeController@personal_store')->name('lc.personal.store');    
 
-    Route::middleware('role:Учителя')->group(function () {
+//    Route::middleware('role:Учителя')->group(function () {
+//        Route::get('/telephony', 'TelephonyController@index')->name('telephony');    
+//    });
+    
+//    Route::get('/telephony', 'TelephonyController@index')->name('telephony')
+//            ->middleware('role:Сотрудники ТП ИНТ','role:Сотрудники ТП РОС','role:Сотрудники ТП ГБУ РЦИТ');
+
+    //Route::middleware(['role:Сотрудники ТП ИНТ','role:Сотрудники ТП РОС','role:Сотрудники ТП ГБУ РЦИТ'])->group(function () {
+//    Route::group(['middleware' => ['role:Сотрудники ТП ИНТ','role:Сотрудники ТП РОС','role:Сотрудники ТП ГБУ РЦИТ']],function () {
+    //Route::middleware('role:Сотрудники ТП ИНТ,Сотрудники ТП РОС,Сотрудники ТП ГБУ РЦИТ')->group(function () {        
+    //Route::group(['middleware' => ['TP_users']],function () {
+    Route::middleware('role_tp')->group(function () {
         Route::get('/telephony', 'TelephonyController@index')->name('telephony');    
+        
+        Route::get('/tasks/new/{id}/{ch_id?}', 'TSupport\TasksController@tsk_new')->name('tasks.new');
+        Route::post('/tasks/store/{id}', 'TSupport\TasksController@tsk_store')->name('tasks.store');
+        Route::get('/tasks/edit/{id}', 'TSupport\TasksController@tsk_edit')->name('tasks.edit');
+        Route::post('/tasks/update/{id}', 'TSupport\TasksController@tsk_update')->name('tasks.update');
+        
+        Route::get('/clients/edit/{id}/{src?}', 'ClientsController@clt_edit')->name('clients.edit');        
+        Route::get('/clients/new', 'ClientsController@clt_new')->name('clients.new');
+        Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
+        Route::post('/clients/update/{id}', 'ClientsController@clt_update')->name('clients.update');
+        
+        Route::get('/chains/edit/{id}', 'TSupport\ChainsController@chain_edit')->name('chains.edit');
+        Route::post('/chains/update/{id}', 'TSupport\ChainsController@chain_update')->name('chains.update');
+        Route::get('/chains/remove/{id}', 'TSupport\ChainsController@chain_remove')->name('chains.remove');
+        Route::post('/chains/removing/{id}', 'TSupport\ChainsController@chain_removing')->name('chains.removing');
+        Route::get('/chains/close/{id}', 'TSupport\ChainsController@chain_close')->name('chains.close');
+        Route::post('/chains/closing/{id}', 'TSupport\ChainsController@chain_closing')->name('chains.closing');
+
+//        Route::middleware('role:Учителя')->group(function () {
+//
+//            Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
+//            Route::get('/chains/json', 'TSupport\ChainsController@Get_json_chains');
+//    
+//            Route::get('/clients', 'ClientsController@index')->name('clients');
+//            Route::get('/clients/json', 'ClientsController@Get_json_clients');
+//            Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
+//        
+//        });
+        
     });
     
-    Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
+//    Route::get('/telephony', 'TelephonyController@index')->name('telephony')
+//            ->middleware('role:Сотрудники ТП ИНТ','role:Сотрудники ТП РОС','role:Сотрудники ТП ГБУ РЦИТ');
 
-    Route::get('/chains/json', 'TSupport\ChainsController@Get_json_chains');
-
+    Route::middleware('role_tp_tch')->group(function () {
+        
+            Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
+            Route::get('/chains/json', 'TSupport\ChainsController@Get_json_chains');
+    
+            Route::get('/clients', 'ClientsController@index')->name('clients');
+            Route::get('/clients/json', 'ClientsController@Get_json_clients');
+            Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
+    
+    });
+    
+    
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
-
-    Route::get('/chains/edit/{id}', 'TSupport\ChainsController@chain_edit')->name('chains.edit');
-
-    Route::post('/chains/update/{id}', 'TSupport\ChainsController@chain_update')->name('chains.update');
-
-    Route::get('/chains/remove/{id}', 'TSupport\ChainsController@chain_remove')->name('chains.remove');
-
-    Route::post('/chains/removing/{id}', 'TSupport\ChainsController@chain_removing')->name('chains.removing');
-
-    Route::get('/chains/close/{id}', 'TSupport\ChainsController@chain_close')->name('chains.close');
-
-    Route::post('/chains/closing/{id}', 'TSupport\ChainsController@chain_closing')->name('chains.closing');
-    
-    Route::get('/clients', 'ClientsController@index')->name('clients');
-
-    Route::get('/clients/json', 'ClientsController@Get_json_clients');
-    
-    Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
-
-    Route::get('/clients/new', 'ClientsController@clt_new')->name('clients.new');
-    
-    Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
-
-    Route::get('/clients/edit/{id}', 'ClientsController@clt_edit')->name('clients.edit');
-
-    Route::post('/clients/update/{id}', 'ClientsController@clt_update')->name('clients.update');
-    
+  
     Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');
     
-    Route::get('/tasks/new/{id}/{ch_id?}', 'TSupport\TasksController@tsk_new')->name('tasks.new');
-
-    Route::post('/tasks/store/{id}', 'TSupport\TasksController@tsk_store')->name('tasks.store');
-
-    Route::get('/tasks/edit/{id}', 'TSupport\TasksController@tsk_edit')->name('tasks.edit');
-
-    Route::post('/tasks/update/{id}', 'TSupport\TasksController@tsk_update')->name('tasks.update');
-
     Route::get('/requests/new/{id}/{ch_id?}', 'TSupport\RequestsController@req_new')->name('requests.new');
 
     Route::post('/requests/store/{id}', 'TSupport\RequestsController@req_store')->name('requests.store');

@@ -64,7 +64,7 @@ class RequestsController extends Controller
         $addresses = DB::select("select address_aoid,get_address_by_aoid(address_aoid) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
         
         $add2exist_chain_id = '';
-        if (strpos(url()->previous(), 'clients/view')) {
+        if (strpos(url()->previous(), 'clients/view') || strpos(url()->previous(), 'lc/personal')) {
             //var_dump('Вызывается из clients/view - любой протокол');
             $add2exist_chain_id = '';
         }
@@ -142,8 +142,12 @@ class RequestsController extends Controller
         
         $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
         //var_dump('cAT:'. $category.'; otv:'.$otvetstv.'; st:'.$status.'; prior:'.$priority.'; start:'.$start_d.'; srok:'.$srok_d.'; progr'.$progress.'; dep:'.$departure.'; msg:'.$msg.'; op_ch:'.$open_chains);
-        if ($chain_id_exist == null) 
-            return redirect()->route('clients.view', ['id' => $id]);
+        if ($chain_id_exist == null) {
+            if (  ( $request->user()->hasRole('Учителя') && $request->user()->client_id==$client_id  ) || $request->user()->hasRole('Ученики')  )
+                return redirect()->route('lc.personal');
+            else 
+                return redirect()->route('clients.view', ['id' => $id]);
+        }
         else 
             return redirect()->route('chains.view', ['id' => $chain_id]);
     }
