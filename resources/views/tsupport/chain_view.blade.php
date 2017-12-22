@@ -97,7 +97,7 @@
                         <a href="{{ route('tasks.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</h6></a>
                     </div>
                     <div class="col-md-1">
-                        <a href="#"><h6><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</h6></a>
+                        <a href="{{ route('calls.new', ['id' => $chain->client_id, 'chain_id' => $id]) }}"><h6><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Звонок</h6></a>
                     </div>
                     @endif
                     <div class="col-md-2">
@@ -218,7 +218,7 @@
                             <td class="table-text">
                                 @if ($chain->status == 'OPENED')
                                     @if ($item->call_id)  <!--route('calls.edit', ['id' => $item->call_id])-->
-                                    <a href="" data-toggle="tooltip" title="Редактировать звонок">{{ $item->message }}</a>
+                                    <a href="{{ route('calls.edit', ['id' => $item->call_id]) }}" data-toggle="tooltip" title="Редактировать звонок">{{ $item->message }}</a>
                                     @elseif ($item->task_id)
                                         @if ($item->task_status == 'PROCESSED' || $item->task_status == 'NEW')
                                             <a href="{{ route('tasks.edit', ['id' => $item->task_id]) }}" data-toggle="tooltip" title="Редактировать задачу">{{ $item->message }}</a>

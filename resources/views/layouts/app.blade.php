@@ -40,7 +40,6 @@
                         <a href="{{ url('/home') }}">Home</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
                     @endauth
                 </div>
             @endif-->
@@ -114,7 +113,6 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a href="{{ route('login') }}">Войти</a></li>
-<!--                            <li><a href="{{ route('register') }}">Зарегистрироваться</a></li>-->
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -143,31 +141,7 @@
         
 <!--модальные диалоги-->
 
-<div class="modal fade " id="id_CallModal" tabindex="-1" role="dialog" aria-labelledby="CallModalLabel">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="CallModalLabel">Позвонить клиенту</h4>
-                <h4 id="CallModalLabel"><mark class="class_clt_name"></mark></h4>
-            </div>        
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label for="id_call_phone" class="control-label">Телефон:</label>
-                            <input type="text" class="form-control" id="id_call_phone" readonly="true">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="id_call_btn" class="btn btn-primary">Позвонить</button>
-                <button type="button" id="id_call_hang_btn" class="btn btn-default">Положить</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <!--модальные диалоги-->        
 

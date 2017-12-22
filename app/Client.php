@@ -40,6 +40,11 @@ class Client extends Model
     return $this->HasMany('App\Request_');
   }
 
+  public function calls()
+  {
+    return $this->HasMany('App\Call');
+  }
+
   public function groups()
   {
     return $this->belongsToMany('App\Group','groups_clients', 'clients_id', 'groups_id');

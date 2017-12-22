@@ -11,45 +11,27 @@ use App\Category;
 use App\User;
 use App\Chain;
 use App\Client;
-use App\Task;
+use App\Call;
 use App\ChainItems;
 use App\ChainCategory;
 use App\ChainUser;
 
-class TasksController extends Controller {
-    
-//    protected $user;
-//    protected $signedIn;
-//
-//    
-//    public function __construct() {
-//
-//        $this->middleware(function ($request, $next) {
-//
-//            $this->user = $this->signedIn = Auth::user();
-//
-//            return $next($request);
-//        });
-//    }
-    
-    public function tsk_new($id, $ch_id = null) {
+
+class CallsController extends Controller
+{
+    public function call_new($id, $ch_id = null) {
 
         $chain_categories = Category::all();
-        $users = User::select('id', 'name')->get();
+        //$users = User::select('id', 'name')->get();
         $chains_opened = Chain::select('id', 'last_comment', 'creation_time', 'user_id')->where([['status', '=', 'OPENED'],['client_id', '=', $id],['deleted', '=', 0]])->get();
 
-        $tsk_status = array(
-            'NEW' => 'Новый',
-            'PROCESSED' => 'В работе',
-            'SOLVED' => 'Выполнен',
-            'CLOSED' => 'Закрыт',
-        );
-        $tsk_priority = array(
-            'LOW' => 'Низкий',
-            'MEDIUM' => 'Средний',
-            'HIGH' => 'Высокий',
-            'CRITICAL' => 'Неотложный',
-        );
+//        $req_sources  = array(
+//            1 => 'Клиент',
+//            2 => 'ЦДО',
+//            3 => 'РЦИТ',
+//            4 => 'Обзвон',
+//        );
+        
         $clients = DB::select("select
 				CASE WHEN clients.surname = '' THEN  clients.name	else clients.surname || ' ' || clients.name  || ' ' || clients.patronymic END AS clt_name,
 				clients_type.name as clt_type,
@@ -84,7 +66,7 @@ class TasksController extends Controller {
         //$addresses = DB::select("select address_aoid,get_address_by_aoid(address_aoid) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
         
         $add2exist_chain_id = '';
-        if (strpos(url()->previous(), 'clients/view')) {
+        if (strpos(url()->previous(), 'clients/view') || strpos(url()->previous(), 'lc/personal')) {
             //var_dump('Вызывается из clients/view - любой протокол');
             $add2exist_chain_id = '';
         }
@@ -92,48 +74,41 @@ class TasksController extends Controller {
             $chains_opened = null;
             $add2exist_chain_id = $ch_id;
             //var_dump($ch_id);
-        }        
-        return view('tsupport.task_new', compact('chain_categories','chains_opened','tsk_status','tsk_priority','users','client','addresses','add2exist_chain_id'));
+        }
+        
+        return view('tsupport.call_new', compact('chain_categories','chains_opened','client','addresses','add2exist_chain_id'));
     }
 
-    public function tsk_store(Request $request,$id) {
+    public function call_store(Request $request,$id) {
         
-        $category = $request->input('v_task_new_category');
-        $responsible_id = $request->input('v_task_new_otvetstv');
-        $status = $request->input('v_task_new_tsk_status');
-        $priority = $request->input('v_task_new_tsk_priority');
-        $start_d = $request->input('v_task_new_start_d');
-        $start_t = $request->input('v_task_new_start_t');
-        $deadline_time = strtotime($request->input('v_task_new_srok_d'));
-        $progress = $request->input('v_task_new_tsk_progress');
-        $departure = $request->input('v_task_new_tsk_dep');
-        $message = $request->input('v_task_new_msg');
-        $open_chain_id = $request->input('v_task_new_open_chains');
-        $chain_id_exist = $request->input('v_task_new_exist_chain');
-        
-        if (!$status) $status = 'NEW';
-        if (!$priority) $priority = 'MEDIUM';
-        if (!$departure) $departure = '0';
-        else $departure = '1';
-        
-        $start_d = $start_d.' '.$start_t;
-        $start_date = strtotime($start_d);
-        
+        $category = $request->input('v_call_new_category');
+        $call_status = $request->input('v_call_new_status');
+        $interlocutor = $request->input('v_call_new_abon');
+        $comment = $request->input('v_call_new_comment');
+        $open_chain_id = $request->input('v_call_new_open_chains');
+        $chain_id_exist = $request->input('v_call_new_exist_chain');
+       
         $user_id =  $request->user()->id;
         $contract_id = Client::find($id)->contract_id;
         $client_id = $id;
         $chain_id = 0;
-        //var_dump($contract_id);
-        $new_tsk = Task::Create(compact('priority','status','user_id','responsible_id','client_id','chain_id','message','start_time','deadline_time','progress','departure','contract_id'));
+        if ($call_status == 'on') $status = 'SUCCESS';
+        else $status = 'FAIL';
         
-        $last_comment = $message;
+        //var_dump($today); exit;
+        $new_call = Call::Create(compact('chain_id','user_id','client_id','comment','interlocutor','contract_id','status'));
+        
+        $last_comment = $comment;
         $status = 'OPENED';
-        $opening_time = $start_date;
+        $today = strtotime(date("Y-m-d H:i"));
+        $opening_time = $today;
         $has_request = 0;
+        //$on_request = $new_req->id;
         $new_chain = '';
+        $last_call_id = $new_call->id;
         
         if (($open_chain_id === '0' || $open_chain_id == null) && $chain_id_exist == null)
-            $new_chain = Chain::Create(compact('client_id', 'user_id', 'last_comment', 'status', 'opening_time', 'contract_id', 'has_request'));
+            $new_chain = Chain::Create(compact('client_id', 'user_id', 'last_comment', 'status', 'opening_time','last_call_id','has_request', 'contract_id'));
             //var_dump('new protocol ----  add to selected open chain:'.$open_chain_id.' ;  add to const one chain '.$chain_id_exist);
         else if ($open_chain_id != null || $chain_id_exist != null) {
             $ch_id = '';
@@ -144,22 +119,19 @@ class TasksController extends Controller {
             
             //var_dump('existing protocol --- add 2 selected open chain:'.$open_chain_id.' ;  add 2 const one chain '.$chain_id_exist);
         }
-        
-//        if ($open_chain_id == '0') {
-//            $new_chain = Chain::Create(compact('client_id', 'user_id', 'last_comment', 'status', 'opening_time', 'contract_id', 'has_request'));
-//        } else {
-//            $new_chain = Chain::find($open_chain_id);
-//        }
-
+            
         $chain_id = $new_chain->id;
-        $task_id = $new_tsk->id;
-        $new_chain_items = ChainItems::Create(compact('chain_id','user_id','task_id','message'));
+        $call_id = $new_call->id;
+        $message = $comment;
         
-        $new_tsk->chain_id = $chain_id;
-        $new_tsk->save();
+        $new_chain_items = ChainItems::Create(compact('chain_id','user_id','call_id','message'));
+        
+        $new_call->chain_id = $chain_id;
+        $new_call->save();
         
         $new_chain->last_item_id = $new_chain_items->id;
         $new_chain->last_comment = $last_comment;
+        $new_chain->last_call_id = $last_call_id;
         $new_chain->save();
         
         if ($category!=null) {
@@ -168,37 +140,30 @@ class TasksController extends Controller {
         }
         
         $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
-        $user_id = $responsible_id;
-        $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
         //var_dump('cAT:'. $category.'; otv:'.$otvetstv.'; st:'.$status.'; prior:'.$priority.'; start:'.$start_d.'; srok:'.$srok_d.'; progr'.$progress.'; dep:'.$departure.'; msg:'.$msg.'; op_ch:'.$open_chains);
-
-        if ($chain_id_exist == null) 
-            return redirect()->route('clients.view', ['id' => $id]);
+        if ($chain_id_exist == null) {
+//            if (  ( $request->user()->hasRole('Учителя') && $request->user()->client_id==$client_id  ) || $request->user()->hasRole('Ученики')  )
+//                return redirect()->route('lc.personal');
+//            else 
+                return redirect()->route('clients.view', ['id' => $id]);
+        }
         else 
-            return redirect()->route('chains.view', ['id' => $chain_id]);        
-        
+            return redirect()->route('chains.view', ['id' => $chain_id]);
     }
     
-    public function tsk_edit($id) {
+    public function call_edit($id) {
 
-        $task= Task::find($id);
-        $client_id = $task->client_id;
-        $chain_categories = Category::all();
-        $users = User::select('id', 'name')->get();
-        $chains_opened = Chain::select('id', 'last_comment', 'creation_time', 'user_id')->where([['status', '=', 'OPENED'],['client_id', '=', $client_id],['deleted', '=', 0]])->get();
+        $cal = Call::find($id);
+        $client_id = $cal->client_id;
+        //$chains_opened = Chain::select('id', 'last_comment', 'creation_time', 'user_id')->where([['status', '=', 'OPENED'],['client_id', '=', $client_id],['deleted', '=', 0]])->get();
 
-        $tsk_status = array(
-            'NEW' => 'Новый',
-            'PROCESSED' => 'В работе',
-            'SOLVED' => 'Выполнен',
-            'CLOSED' => 'Закрыт',
-        );
-        $tsk_priority = array(
-            'LOW' => 'Низкий',
-            'MEDIUM' => 'Средний',
-            'HIGH' => 'Высокий',
-            'CRITICAL' => 'Неотложный',
-        );
+//        $req_sources  = array(
+//            1 => 'Клиент',
+//            2 => 'ЦДО',
+//            3 => 'РЦИТ',
+//            4 => 'Обзвон',
+//        );
+        
         $clients = DB::select("select
 				CASE WHEN clients.surname = '' THEN  clients.name	else clients.surname || ' ' || clients.name  || ' ' || clients.patronymic END AS clt_name,
 				clients_type.name as clt_type,
@@ -235,69 +200,58 @@ class TasksController extends Controller {
         //$chains = DB::table('chains_view')->paginate(100);
         //$chains = DB::table('chains')->get();
         //var_dump(count($chains_opened));
-        return view('tsupport.task_edit', compact('chain_categories','chains_opened','tsk_status','tsk_priority','users','client','addresses','task'));
+        return view('tsupport.call_edit', compact('client','addresses','cal'));
     }
     
-    public function tsk_update(Request $request,$id) {
+    public function call_update(Request $request,$id) {
         
-        $task= Task::find($id);
-        $client_id = $task->client_id;
+        $cal = Call::find($id);
+        //$client_id = $req->client_id;
         
-        $responsible_id = $request->input('v_task_edit_otvetstv');
-        $status = $request->input('v_task_edit_status');
-        $priority = $request->input('v_task_edit_priority');
-        $start_d = $request->input('v_task_edit_start_d');
-        $start_t = $request->input('v_task_edit_start_t');
-        $deadline_time = strtotime($request->input('v_task_edit_srok_d'));
-        $progress = $request->input('v_task_edit_tsk_progress');
-        $departure = $request->input('v_task_edit_tsk_dep');
-        $message = $request->input('v_task_edit_msg');
+        $call_status = $request->input('v_call_edit_status');
+        $comment = $request->input('v_call_edit_comment');
+        $interlocutor = $request->input('v_call_edit_abon');
         
-        if (!$status) $status = 'NEW';
-        if (!$priority) $priority = 'MEDIUM';
-        if ($departure==null) $departure = '0';
-        else $departure = '1';
-        
-        $start_d = $start_d.' '.$start_t;
-        $start_date = strtotime($start_d);
+//        $start_d = $start_d.' '.$start_t;
+//        $start_date = strtotime($start_d);
         
         $user_id =  $request->user()->id;
-        $contract_id = Client::find($client_id)->contract_id;
+        //$contract_id = Client::find($client_id)->contract_id;
         
         //var_dump(' otv:'.$responsible_id.'; st:'.$status.'; prior:'.$priority.'; start:'.$start_date.'; srok:'.$deadline_time.'; progr'.$progress.'; dep:'.$departure.'; msg:'.$message);
         //exit;
+
+        if ($call_status == 'on') $status = 'SUCCESS';
+        else $status = 'FAIL';
         
-        $task->responsible_id = $responsible_id;
-        $task->status = $status;
-        $task->priority = $priority;
-        $task->start_time = $start_date;
-        $task->deadline_time = $deadline_time;
-        $task->progress = $progress;
-        $task->departure = $departure;
-        $task->message = $message;
-        $task->save();
+        //$req->contract_id = $contract_id;
+        //$cal->provider_id = $provider_id;
+        $cal->comment = $comment;
+        $cal->status = $status;
+        $cal->interlocutor = $interlocutor;
+        $cal->save();
+        
+        $last_call_id = $cal->id;
         
         //$new_tsk = Task::Create(compact('priority','status','user_id','responsible_id','client_id','chain_id','message','start_time','deadline_time','progress','departure','contract_id'));
         
-        $last_comment = $message;
+        $last_comment = $comment;
         
-        $chain = Chain::find($task->chain_id);
+        $chain = Chain::find($cal->chain_id);
         $chain->last_comment = $last_comment;
-        $chain_items_id = ChainItems::select('id')->where([['task_id', '=', $task->id],['chain_id', '=', $task->chain_id]])->get();
+        $chain_items_id = ChainItems::select('id')->where([['call_id', '=', $cal->id],['chain_id', '=', $cal->chain_id]])->get();
         $chain->last_item_id = $chain_items_id[0]->id;
+        $chain->last_call_id = $last_call_id;
         $chain->save();
         
         $chain_items = ChainItems::find($chain_items_id[0]->id);
-        $chain_items->message = $message;
+        $chain_items->message = $comment;
         $chain_items->save();
 
-        $chain_id = $task->chain_id;
-        $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
-        $user_id = $responsible_id;
+        $chain_id = $cal->chain_id;
         $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
         //var_dump('cAT:'. $category.'; otv:'.$otvetstv.'; st:'.$status.'; prior:'.$priority.'; start:'.$start_d.'; srok:'.$srok_d.'; progr'.$progress.'; dep:'.$departure.'; msg:'.$msg.'; op_ch:'.$open_chains);
         return redirect()->route('chains.view', ['id' => $chain_id]);
     }    
-    
-}
 
+}

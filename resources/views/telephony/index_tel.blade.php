@@ -10,11 +10,14 @@
     </div>
     <div class="row">
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Позвонить</h3>
+            </div>            
             <div class="panel-body">
                 <div class="col-md-2">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation" class="active"><a href="{{ url('/telephony') }}">Позвонить</a></li>                        
-                        <li role="presentation"><a href="#">Статистика</a></li>
+                        <li role="presentation"><a href="{{ url('/telephony') }}">Позвонить</a></li>                        
+                        <li role="presentation"><a href="{{ url('/telephony/stat') }}">Статистика</a></li>
                         <li role="presentation"><a href="#">Отчеты</a></li>
                         <li role="presentation"><a href="#">Обзвон</a></li>                        
                     </ul>

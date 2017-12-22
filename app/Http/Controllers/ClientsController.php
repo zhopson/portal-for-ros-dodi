@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Client;
+//use App\Chain;
 use App\User;
 use App\Provider;
 use App\Group;
@@ -33,10 +34,15 @@ class ClientsController extends Controller
 //  
 //        $users = User::select('id','name')->get();//::all();
 //
-//        return view('clients.clients', [
-//            'clients' => $clients,
-//        ]);
-        return view('clients.clients');
+          $add2exist_chain_id = '';
+          //Chain::select('id', 'last_comment', 'creation_time', 'user_id')->where([['status', '=', 'OPENED'],['client_id', '=', $id],['deleted', '=', 0]])->get();
+          //$chains_opened = [];
+        return view('clients.clients', [
+            'add2exist_chain_id' => $add2exist_chain_id,
+            //'chains_opened' => $chains_opened,
+        ]);
+        
+//        return view('clients.clients');
         
     }
     
@@ -83,7 +89,7 @@ class ClientsController extends Controller
                 if ($request->user()->hasRole('Учителя')) 
                     $nums_str = $nums_str.$num_arr[0];
                 else
-                    $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                    $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$client->id."','".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
                 if ( isset($num_arr[1]) &&  $num_arr[1]!='' )
                     { $nums_str = $nums_str.'('.$num_arr[1].'), '; }
                 else 
@@ -117,7 +123,7 @@ class ClientsController extends Controller
         
 //    return response()->json($chains->toJson());
     }    
-
+    
     public function clt_view(Request $request,$id) {
         
         if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
@@ -157,9 +163,10 @@ class ClientsController extends Controller
     
 
     $addresses = DB::select("select get_address_by_code(address_id) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
-
+        
         $chains_opened = DB::select("select  users.name as avtor ,
                      chains.id ,
+                     chains.creation_time ,
                      chains.opening_time ,
                      chains.update_time ,
                      chains.last_comment ,
@@ -194,13 +201,25 @@ class ClientsController extends Controller
             ->Join('chains', 'tasks.chain_id', '=', 'chains.id')
             ->select('tasks.creation_time','users.name as otvetstv','tasks.progress','tasks.priority','tasks.deadline_time','tasks.message','tasks.chain_id')
             ->where([['tasks.client_id', '=', $id],['tasks.status', '<>', 'SOLVED'],['tasks.status', '<>', 'CLOSED'],['chains.deleted', '=', 0]])->orderBy('tasks.creation_time', 'desc')->get();
-        
+
+        $add2exist_chain_id = '';
+//        if (strpos(url(), 'clients/view') || strpos(url()->previous(), 'lc/personal')) {
+//            //var_dump('Вызывается из clients/view - любой протокол');
+//            $add2exist_chain_id = '';
+//        }
+//        else {
+//            $chains_opened = null;
+//            $add2exist_chain_id = $ch_id;
+//            //var_dump($ch_id);
+//        }
+
         return view('clients.clt_view', [
             'clients' => $client,
             'addresses' => $addresses,
             'chains_opened' => $chains_opened,
             'chains_closed' => $chains_closed,
             'tasks' => $tasks,
+            'add2exist_chain_id' => $add2exist_chain_id,
         ]);
     }
 //var_dump($client);

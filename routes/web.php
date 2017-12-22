@@ -15,9 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+//Auth::routes();
+
+        Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+        Route::post('login', 'Auth\LoginController@login');
 
 Route::middleware('auth')->group(function () {
+
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -42,11 +47,18 @@ Route::middleware('auth')->group(function () {
     //Route::group(['middleware' => ['TP_users']],function () {
     Route::middleware('role_tp')->group(function () {
         Route::get('/telephony', 'TelephonyController@index')->name('telephony');    
+        Route::get('/telephony/stat', 'TelephonyController@stat_index')->name('telephony.stat');
+        Route::get('/telephony/calls_list/json', 'TelephonyController@Get_json_calls_list');
         
         Route::get('/tasks/new/{id}/{ch_id?}', 'TSupport\TasksController@tsk_new')->name('tasks.new');
         Route::post('/tasks/store/{id}', 'TSupport\TasksController@tsk_store')->name('tasks.store');
         Route::get('/tasks/edit/{id}', 'TSupport\TasksController@tsk_edit')->name('tasks.edit');
         Route::post('/tasks/update/{id}', 'TSupport\TasksController@tsk_update')->name('tasks.update');
+
+        Route::get('/calls/new/{id}/{ch_id?}', 'TSupport\CallsController@call_new')->name('calls.new');
+        Route::post('/calls/store/{id}', 'TSupport\CallsController@call_store')->name('calls.store');
+        Route::get('/calls/edit/{id}', 'TSupport\CallsController@call_edit')->name('calls.edit');
+        Route::post('/calls/update/{id}', 'TSupport\CallsController@call_update')->name('calls.update');
         
         Route::get('/clients/edit/{id}/{src?}', 'ClientsController@clt_edit')->name('clients.edit');        
         Route::get('/clients/new', 'ClientsController@clt_new')->name('clients.new');
@@ -59,6 +71,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/chains/removing/{id}', 'TSupport\ChainsController@chain_removing')->name('chains.removing');
         Route::get('/chains/close/{id}', 'TSupport\ChainsController@chain_close')->name('chains.close');
         Route::post('/chains/closing/{id}', 'TSupport\ChainsController@chain_closing')->name('chains.closing');
+        
+        Route::post('/clients/ajax_get_chains_opened', 'TSupport\AjaxController@Get_json_chains_opened');
+        Route::post('/clients/ajax_create_chain_by_call', 'TSupport\AjaxController@do_create_chain_by_call');
+        Route::post('/clients/ajax_update_call_status_by_tel', 'TSupport\AjaxController@do_update_call_by_tel');
+        Route::post('/clients/ajax_update_cdr_user', 'TSupport\AjaxController@do_update_cdr_user');
 
 //        Route::middleware('role:Учителя')->group(function () {
 //
@@ -84,7 +101,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/clients', 'ClientsController@index')->name('clients');
             Route::get('/clients/json', 'ClientsController@Get_json_clients');
             Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
-    
+            //Route::post('/clients/ajax_get_chains_opened', 'TSupport\AjaxController@Get_json_chains_opened');
+
     });
     
     
