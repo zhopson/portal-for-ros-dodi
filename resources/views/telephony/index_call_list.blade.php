@@ -11,7 +11,7 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Позвонить</h3>
+                <h3 class="panel-title">Списки обзвона</h3>
             </div>            
             <div class="panel-body">
                 <div class="col-md-2">
@@ -22,18 +22,23 @@
                         <li role="presentation"><a href="{{ url('/telephony/call_list') }}">Обзвон</a></li>                        
                     </ul>
                 </div>
-                <div class="col-md-2 col-md-offset-1">
-                    <!--                    <form class="form-inline">-->
-                    <div class="form-group">
-                        <label for="id_tel_phone">Номер телефона</label>
-                        <input type="text" class="form-control" id="id_tel_phone" placeholder="81112223333">
+                <div class="col-md-10">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <ul class="nav nav-tabs">
+                                <li role="presentation" class="active"><a href="#">Вкладка</a></li>
+<!--                                <li role="presentation"><a href="#">Profile</a></li>
+                                <li role="presentation"><a href="#">Messages</a></li>-->
+                            </ul>
+                            <div class="row">
+                            </div>
+                        </div>
                     </div>
-                    <button id="id_tel_call" class="btn btn-default">Позвонить</button>
-                    <button id="id_tel_hangup" class="btn btn-default">Положить</button>
+                    <!--                    <form class="form-inline">-->
                     <!--                    </form>-->
 
-<!--                    <audio id='audio_remote' autoplay='autoplay'></audio>
-                    <audio id='ringbacktone' loop src='sounds/ringbacktone.wav'></audio>-->
+                    <!--                    <audio id='audio_remote' autoplay='autoplay'></audio>
+                                        <audio id='ringbacktone' loop src='sounds/ringbacktone.wav'></audio>-->
 
                 </div>
             </div>
@@ -45,34 +50,17 @@
 
 @section('footer')
         <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('js/sip.js?svn=3') }}" type="text/javascript"> </script>
         
         <script type="text/javascript">
+
         $(document).ready(function () {
         //on page load do init
-            $('#id_tel_call').click(function () {
-                //alert('call');
-                makeCall($('#id_tel_phone').val());
-            });
-            $('#id_tel_hangup').click(function () {
-                sipHangUp();
-            });
+            
         });
 
         window.onload = function () {
-            //
-            //
-            SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
-            SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
-            
-        //init sip stack
-            SIPml.init(readyCallback, errorCallback);
-
-        //start stip stack
-            sipStack.start();
-
-        //do login
-            login();
 
         };
 
