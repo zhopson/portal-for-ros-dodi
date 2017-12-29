@@ -39,6 +39,7 @@ return [
             'prefix' => '',
         ],
 
+        // asterisk voip server
         'mysql' => [
             'driver' => 'mysql',
             'host' => '178.170.180.23',
