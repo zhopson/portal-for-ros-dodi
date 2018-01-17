@@ -85,8 +85,15 @@
                                 <li><a href="{{ url('/clients') }}">Пользователи</a></li>
                             </ul>
                         </li>
-                        
-                        <li><a href="{{ url('/') }}">Мониторинг</a></li>
+                        @endif
+                        @if ( Auth::user()->hasRole('Сотрудники ТП РОС') )
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Мониторинг <span class="caret"></span></a>
+                            <ul class="dropdown-menu"  style="background-color: #BEE9EA">
+                                <li><a href="{{ route('netflow.clients.graph',[ 'id' => '0','ip' => '0' ]) }}">Трафик Клиентов</a></li>
+                            </ul>
+                        </li>
+<!--                        <li><a href="{{ url('/') }}">Мониторинг</a></li>-->
                         @endif
                         <li><a href="{{ url('/') }}">WiKi</a></li>
                         @if (Auth::user()->is_admin)

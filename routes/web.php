@@ -45,7 +45,8 @@ Route::middleware('auth')->group(function () {
 //    Route::group(['middleware' => ['role:Сотрудники ТП ИНТ','role:Сотрудники ТП РОС','role:Сотрудники ТП ГБУ РЦИТ']],function () {
     //Route::middleware('role:Сотрудники ТП ИНТ,Сотрудники ТП РОС,Сотрудники ТП ГБУ РЦИТ')->group(function () {        
     //Route::group(['middleware' => ['TP_users']],function () {
-    Route::middleware('role_tp')->group(function () {
+    
+    Route::middleware('role:Сотрудники ТП РОС')->group(function () {    
         
         Route::get('/telephony', 'TelephonyController@index')->name('telephony');    
         Route::get('/telephony/stat', 'TelephonyController@stat_index')->name('telephony.stat');
@@ -53,6 +54,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/telephony/call_list', 'TelephonyController@call_list_index')->name('telephony.call_list');
         Route::get('/telephony/calls_list/json', 'TelephonyController@Get_json_calls_list');
         Route::post('/telephony/reports/ajax', 'TelephonyController@Get_ajax_reports');
+        Route::get('/telephony/reports/ajax_rep_table', 'TelephonyController@Get_ajax_reports_table');
+        
+    });
+    
+    Route::middleware('role_tp')->group(function () {
         
         Route::get('/tasks/new/{id}/{ch_id?}', 'TSupport\TasksController@tsk_new')->name('tasks.new');
         Route::post('/tasks/store/{id}', 'TSupport\TasksController@tsk_store')->name('tasks.store');
@@ -110,6 +116,9 @@ Route::middleware('auth')->group(function () {
     });
     
     
+    Route::get('/netflow/clients/graph/{id?}/{ip?}', 'NetFlowController@clt_traf_gr')->name('netflow.clients.graph');
+    Route::any('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
+
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
   
     Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');

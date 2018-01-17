@@ -83,6 +83,20 @@ return [
             'sslmode' => 'prefer',
         ],
         
+        'pgsql_netflow' => [
+            'driver' => 'pgsql',
+            'host' => '178.170.180.17',
+            'port' => env('DB_PORT', '5432'),
+            'database' => 'netflow',
+            'username' => 'www_portal',
+            'password' => 'Nikond5100',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+        
+        
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),

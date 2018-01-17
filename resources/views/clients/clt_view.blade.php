@@ -308,10 +308,14 @@
                                 </td>
                                 <td class="table-text">
                                     @foreach (explode(",",$client->ip_addresses) as $ip_address)
-                                        <a href="#">{{ trim($ip_address,'{}"') }}</a>  
-                                            <br>
+                                        @if (strpos(trim($ip_address,'/{}"'), '/'))
+                                        <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}">{{ trim($ip_address,'{}"') }}</a>  
+                                        @else
+                                        <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}">{{ trim($ip_address,'{}"') }}</a>  
+                                        @endif
+                                        <br>
                                     @endforeach                                      
-                                    <a href="#"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Статистика по пользователю</a>
+                                    <a href="{{ route( 'netflow.clients.graph', [ 'id' => $client->id,'ip' => '0' ] ) }}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Статистика по пользователю</a>
                                 </td>
                             </tr>
                             @endif
