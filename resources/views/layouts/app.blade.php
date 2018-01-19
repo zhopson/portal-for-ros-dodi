@@ -91,6 +91,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Мониторинг <span class="caret"></span></a>
                             <ul class="dropdown-menu"  style="background-color: #BEE9EA">
                                 <li><a href="{{ route('netflow.clients.graph',[ 'id' => '0','ip' => '0' ]) }}">Трафик Клиентов</a></li>
+                                <li><a href="{{ route('netflow.common.graph') }}">Трафик Общий</a></li>
                             </ul>
                         </li>
 <!--                        <li><a href="{{ url('/') }}">Мониторинг</a></li>-->
@@ -148,6 +149,20 @@
         
 <!--модальные диалоги-->
 
+<div class="modal fade" id="id_DBReqModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Информация</h4>
+      </div>
+      <div class="modal-body">
+          <h3 style="padding-left:15px;"><img src="{{ asset('images/wait.gif') }}" alt="">&nbsp;&nbsp; Идет запрос в БД&hellip;</h3>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> 
 
 
 <!--модальные диалоги-->        

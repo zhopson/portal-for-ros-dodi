@@ -212,6 +212,22 @@ class ClientsController extends Controller
 //            $add2exist_chain_id = $ch_id;
 //            //var_dump($ch_id);
 //        }
+        
+        $ip_last_active = [];
+        if ($client[0]->ip_addresses != '{NULL}') {
+            foreach (explode(",", $client[0]->ip_addresses) as $ip_address) {
+                if (strpos(trim($ip_address, '/{}"'), '/'))
+                    $ip = trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/')));
+                else
+                    $ip = trim($ip_address,'{}"\n');
+                $dates = DB::connection('pgsql_netflow')->select("select date_ from public.fn_activeipaddress(?)",[$ip]);
+                //var_dump($dates[0]->date_);
+                if ($dates) 
+                    $ip_last_active[$ip] = substr($dates[0]->date_,0,16);
+            }
+        }
+        
+        //var_dump($ip_last_active);exit;
 
         return view('clients.clt_view', [
             'clients' => $client,
@@ -220,6 +236,7 @@ class ClientsController extends Controller
             'chains_closed' => $chains_closed,
             'tasks' => $tasks,
             'add2exist_chain_id' => $add2exist_chain_id,
+            'ip_last_active' => $ip_last_active,
         ]);
     }
 //var_dump($client);

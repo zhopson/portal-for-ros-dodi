@@ -27,7 +27,6 @@
                         <div class="panel-body">
                             <ul class="nav nav-tabs">
                                 <li role="presentation"><a href="{{ url('/telephony/stat') }}">Общие отчеты</a></li>
-                                <li role="presentation"><a href="#">Отчеты по оператору</a></li>
                                 <li role="presentation" class="active"><a href="{{ url('/telephony/common_call_list') }}">Список всех вызовов</a></li>
 <!--                                <li role="presentation"><a href="#">Profile</a></li>
                                 <li role="presentation"><a href="#">Messages</a></li>-->

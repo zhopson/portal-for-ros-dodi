@@ -85,6 +85,7 @@
 @section('footer')
 <!--<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
         <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+        <script src="{{ asset('js/modal.js') }}"></script>        
         <script src="{{ asset('js/echarts/echarts.common.min.js') }}"></script>
         <script src="{{ asset('js/echarts/ecStat.min.js') }}"></script>
         <script src="{{ asset('js/echarts/dataTool.min.js') }}"></script>
@@ -114,7 +115,7 @@ $(document).ready(function () {
             
             if (ip === '0') { $('#id_clt_traf_user').val('Все пользователи');}
             //alert('ip:'+ip);
-
+            $('#id_DBReqModal').modal('show');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -129,12 +130,13 @@ $(document).ready(function () {
                         //call_id = result.new_call_id;
                         
 //                        $('#id_stat_error_panel').css('display', 'none');
-                        
+                        $('#id_DBReqModal').modal('hide');
                         GraphReport('Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
                     }
                 },
                 // Что-то пошло не так
                 error: function (result) {
+                    $('#id_DBReqModal').modal('hide');
                     //$('#id_call_error').css('display', 'inline');
                 }
             }); 
@@ -145,7 +147,7 @@ $(document).ready(function () {
 });
 
         window.onload = function () {
-            
+            $('#id_DBReqModal').modal('show');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -161,11 +163,13 @@ $(document).ready(function () {
                         
 //                        $('#id_stat_error_panel').css('display', 'none');
                         
+                        $('#id_DBReqModal').modal('hide');
                         GraphReport('Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
                     }
                 },
                 // Что-то пошло не так
                 error: function (result) {
+                        $('#id_DBReqModal').modal('hide');
                     //$('#id_call_error').css('display', 'inline');
                 }
             }); 

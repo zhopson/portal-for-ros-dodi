@@ -7,7 +7,6 @@
 @section('content')
 @if (count($clients) > 0)
 
-
 <div class="modal fade " id="id_CallModal" tabindex="-1" role="dialog" aria-labelledby="CallModalLabel" data-backdrop="static">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
@@ -309,9 +308,17 @@
                                 <td class="table-text">
                                     @foreach (explode(",",$client->ip_addresses) as $ip_address)
                                         @if (strpos(trim($ip_address,'/{}"'), '/'))
-                                        <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}">{{ trim($ip_address,'{}"') }}</a>  
+                                           @if (isset($ip_last_active[trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/')))]))
+                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}" data-toggle="tooltip" title="{{ 'Время последней активности:'.$ip_last_active[trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/')))] }}">{{ trim($ip_address,'{}"') }}</a>  
+                                           @else
+                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}" data-toggle="tooltip" title="Время последней активности не установлено">{{ trim($ip_address,'{}"') }}</a>  
+                                           @endif
                                         @else
-                                        <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}">{{ trim($ip_address,'{}"') }}</a>  
+                                           @if (isset($ip_last_active[trim($ip_address,'{}"')]))
+                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}" data-toggle="tooltip" title="{{ 'Время последней активности:'.$ip_last_active[trim($ip_address,'{}"')] }}">{{ trim($ip_address,'{}"') }}</a>  
+                                           @else
+                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}" data-toggle="tooltip" title="Время последней активности не установлено">{{ trim($ip_address,'{}"') }}</a>  
+                                           @endif
                                         @endif
                                         <br>
                                     @endforeach                                      
@@ -530,7 +537,7 @@
                                 @endforeach
                             </tbody>                            
                         </table>
-                        <button style="margin-left:18px" type="button" class="btn btn-info"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Все протоколы пользователя</button>
+                        <a style="margin-left:18px" class="btn btn-info" href="{{ route('chains_clt',[ 'clt_id' => $client->id ]) }}" role="button"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Все протоколы пользователя</a>
                     </div>
                     @endif                  
                 </div>

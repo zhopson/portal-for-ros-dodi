@@ -95,8 +95,12 @@ $(document).ready(function() {
                     "sortAscending": ": активировать для сортировки столбца по возрастанию",
                     "sortDescending": ": активировать для сортировки столбца по убыванию"
                 }                
-            },            
+            },
+            @if ($clt_id)
+            "ajax": "/chains/json4clt/"+'{{ $clt_id }}', 
+            @else
             "ajax": "/chains/json", 
+            @endif
             "deferRender": true            
         });
      

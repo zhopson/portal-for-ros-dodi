@@ -73,4 +73,10 @@ class NetFlowController extends Controller
 //    return response()->json($chains->toJson());
     }
     
+    public function cmn_traf_gr() {
+
+        return view('tsupport.cmn_traf_gr');
+    }
+    
+    
 }

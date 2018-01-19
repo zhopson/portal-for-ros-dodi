@@ -107,7 +107,10 @@ Route::middleware('auth')->group(function () {
         
             Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
             Route::get('/chains/json', 'TSupport\ChainsController@Get_json_chains');
-    
+
+            Route::get('/chains_clt/{clt_id}', 'TSupport\ChainsController@index4clt')->name('chains_clt');
+            Route::get('/chains/json4clt/{clt_id}', 'TSupport\ChainsController@Get_json_chains4clt');
+
             Route::get('/clients', 'ClientsController@index')->name('clients');
             Route::get('/clients/json', 'ClientsController@Get_json_clients');
             Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
@@ -118,6 +121,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/netflow/clients/graph/{id?}/{ip?}', 'NetFlowController@clt_traf_gr')->name('netflow.clients.graph');
     Route::any('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
+    Route::get('/netflow/common/graph', 'NetFlowController@cmn_traf_gr')->name('netflow.common.graph');
 
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
   

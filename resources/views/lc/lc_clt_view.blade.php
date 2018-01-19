@@ -183,10 +183,10 @@
                                 </td>
                                 <td class="table-text">
                                     @foreach (explode(",",$client->ip_addresses) as $ip_address)
-                                        <a href="#">{{ trim($ip_address,'{}"') }}</a>  
+                                        {{ trim($ip_address,'{}"') }}
                                             <br>
                                     @endforeach                                      
-                                    <a href="#"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Статистика по пользователю</a>
+<!--                                    <a href="#"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Статистика по пользователю</a>-->
                                 </td>
                             </tr>
                             @endif
@@ -207,13 +207,13 @@
                                     <div class="pull-right">Телефоны</div>
                                 </td>
                                 <td class="table-text">
-                                    <a href="#"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Внештатные помощники</a><br>
+<!--                                    <a href="#"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Внештатные помощники</a><br>-->
                                     @foreach (explode("\n",$client->numbers) as $number)
                                     @php    
                                         $nums_str = '';
                                         $num_arr = (explode(":",$number));
                                         $clt_name_clear =  str_replace('"', '', $client->clt_name);
-                                        $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                                        $nums_str = $nums_str.$num_arr[0];
                                         if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
                                             { $nums_str = $nums_str.'('.$num_arr[1].')'; }
                                         echo $nums_str.'<br>';
