@@ -298,6 +298,99 @@ class TasksController extends Controller {
         //var_dump('cAT:'. $category.'; otv:'.$otvetstv.'; st:'.$status.'; prior:'.$priority.'; start:'.$start_d.'; srok:'.$srok_d.'; progr'.$progress.'; dep:'.$departure.'; msg:'.$msg.'; op_ch:'.$open_chains);
         return redirect()->route('chains.view', ['id' => $chain_id]);
     }    
+ 
+    public function index(Request $request) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
+            return redirect('forbidden');
+        }  
+
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
+//
+//  
+        //$clt_id = '';
+        return view('tsupport.tasks');
+    }
+
+    public function Get_json_tasks() {
+
+    //$calls = Call::all();//->paginate(100); 
+    
+        $tasks = DB::select("select
+				tasks.id,
+				tasks.creation_time,
+				CASE WHEN clients.surname = '' THEN  clients.name	else clients.surname || ' ' || clients.name  || ' ' || clients.patronymic END AS clt_name,
+                                users.name as avtor,
+                                tasks.responsible_id,
+                                tasks.progress,
+                                tasks.priority,
+                                tasks.status as tsk_status,
+                                tasks.start_time,
+                                tasks.deadline_time,
+                                tasks.message,
+                                tasks.chain_id,
+                                tasks.client_id,
+                                chains.status as chn_status
+            from tasks 
+            left Join users on users.id   =   tasks.user_id 
+            left Join clients on  clients.id = tasks.client_id 
+            left Join chains on  chains.id = tasks.chain_id 
+		group by tasks.id,tasks.creation_time,clients.surname,clients.name,clients.patronymic,
+                     users.name,tasks.responsible_id,tasks.progress,tasks.priority,tasks.status,tasks.start_time,tasks.deadline_time,tasks.message,tasks.client_id, chains.status, tasks.chain_id              
+             ");
+    
+        $chain_status = array(
+            '' => 'Неизвестен',
+            'OPENED' => 'Открыт',
+            'CLOSED' => 'Закрыт',
+        );
+  
+        $tsk_status = array(
+            'NEW' => 'Новый',
+            'PROCESSED' => 'В работе',
+            'SOLVED' => 'Выполнен',
+            'CLOSED' => 'Закрыт',
+        );
+        
+        $tsk_priority = array(
+            'LOW' => 'Низкий',
+            'MEDIUM' => 'Средний',
+            'HIGH' => 'Высокий',
+            'CRITICAL' => 'Неотложный',
+        );       
+        
+        $users = User::select('id','name')->get();
+        //$clients = Client::select('id','surname','name','patronymic')->get();
+
+        $data = [];
+        foreach ($tasks as $row=>$task) {
+            
+            array_push($data, 
+              array(
+                date('d.m.y H:i',$task->creation_time),
+                '<a href="'.route('clients.view', ['id' => $task->client_id]).'">'.$task->clt_name.'</a>',
+                $task->avtor,
+                $users->find($task->responsible_id)->name,
+                $task->progress,  
+                $task->message,
+                $tsk_priority[$task->priority],
+                $tsk_status[$task->tsk_status],
+                date('d.m.y H:i',$task->start_time),
+                date('d.m.y H:i',$task->deadline_time),
+                $chain_status[$task->chn_status],
+                '<a href="'.route('chains.view', ['id' => $task->chain_id]).'"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a>',
+                '<a href="'.route('tasks.edit', ['id' => $task->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>',
+              )
+            );
+        }
+        
+        return ['data'=>$data];
+        
+//    return response()->json($chains->toJson());
+    } 
     
 }
 

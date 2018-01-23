@@ -311,13 +311,13 @@
                                            @if (isset($ip_last_active[trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/')))]))
                                                 <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}" data-toggle="tooltip" title="{{ 'Время последней активности:'.$ip_last_active[trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/')))] }}">{{ trim($ip_address,'{}"') }}</a>  
                                            @else
-                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}" data-toggle="tooltip" title="Время последней активности не установлено">{{ trim($ip_address,'{}"') }}</a>  
+                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim(substr(trim($ip_address,'/{}"'),0,strpos(trim($ip_address,'/{}"'), '/'))) ] ) }}" data-toggle="tooltip" title="Время последней активности не найдено">{{ trim($ip_address,'{}"') }}</a>  
                                            @endif
                                         @else
                                            @if (isset($ip_last_active[trim($ip_address,'{}"')]))
                                                 <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}" data-toggle="tooltip" title="{{ 'Время последней активности:'.$ip_last_active[trim($ip_address,'{}"')] }}">{{ trim($ip_address,'{}"') }}</a>  
                                            @else
-                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}" data-toggle="tooltip" title="Время последней активности не установлено">{{ trim($ip_address,'{}"') }}</a>  
+                                                <a href="{{ route( 'netflow.clients.graph', [ 'id' => '0','ip' => trim($ip_address,'{}"') ] ) }}" data-toggle="tooltip" title="Время последней активности не найдено">{{ trim($ip_address,'{}"') }}</a>  
                                            @endif
                                         @endif
                                         <br>

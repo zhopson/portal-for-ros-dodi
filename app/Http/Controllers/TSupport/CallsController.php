@@ -254,4 +254,77 @@ class CallsController extends Controller
         return redirect()->route('chains.view', ['id' => $chain_id]);
     }    
 
+    public function index(Request $request) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
+            return redirect('forbidden');
+        }  
+        
+
+
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
+//
+//  
+        //$clt_id = '';
+        return view('tsupport.calls');
+    }
+
+    public function Get_json_calls() {
+
+    //$calls = Call::all();//->paginate(100); 
+    
+        $calls = DB::select("select
+				calls.id,
+				calls.creation_time,
+				CASE WHEN clients.surname = '' THEN  clients.name	else clients.surname || ' ' || clients.name  || ' ' || clients.patronymic END AS clt_name,
+                                calls.interlocutor,
+                                users.name,
+                                calls.comment,
+                                calls.status,
+                                calls.client_id,
+                                calls.chain_id
+            from calls 
+            left Join users on users.id   =   calls.user_id 
+            left Join clients on  clients.id = calls.client_id 
+		group by calls.id,calls.creation_time,clients.surname,clients.name,clients.patronymic,
+                     calls.interlocutor,users.name,  calls.comment,  calls.status, calls.chain_id              
+             ");
+    
+        $call_status = array(
+            'SUCCESS' => 'Успешный',
+            'ANSWERED' => 'Успешный',
+            'NO ANSWER' => 'Нет ответа',
+            'FAILED' => 'Недоступен',
+            'FAIL' => 'Недоступен',
+            'UNSET' => 'Неустановлен',
+        );        
+  
+        //$users = User::select('id','name')->get();
+        //$clients = Client::select('id','surname','name','patronymic')->get();
+
+        $data = [];
+        foreach ($calls as $row=>$call) {
+            
+            array_push($data, 
+              array(
+                date('d.m.y H:i',$call->creation_time),
+                '<a href="'.route('clients.view', ['id' => $call->client_id]).'">'.$call->clt_name.'</a>',
+                $call->interlocutor,
+                $call->name,
+                $call->comment,
+                $call_status[$call->status],
+                '<a href="'.route('chains.view', ['id' => $call->chain_id]).'"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a>',
+                '<a href="'.route('calls.edit', ['id' => $call->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>',
+              )
+            );
+        }
+        
+        return ['data'=>$data];
+        
+//    return response()->json($chains->toJson());
+    }    
+    
 }

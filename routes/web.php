@@ -56,6 +56,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/telephony/reports/ajax', 'TelephonyController@Get_ajax_reports');
         Route::get('/telephony/reports/ajax_rep_table', 'TelephonyController@Get_ajax_reports_table');
         
+        Route::get('/netflow/clients/graph/{id?}/{ip?}', 'NetFlowController@clt_traf_gr')->name('netflow.clients.graph');
+        Route::any('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
+        Route::get('/netflow/common/graph', 'NetFlowController@cmn_traf_gr')->name('netflow.common.graph');
+        
+        
     });
     
     Route::middleware('role_tp')->group(function () {
@@ -115,14 +120,21 @@ Route::middleware('auth')->group(function () {
             Route::get('/clients/json', 'ClientsController@Get_json_clients');
             Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
             //Route::post('/clients/ajax_get_chains_opened', 'TSupport\AjaxController@Get_json_chains_opened');
+            
+            Route::get('/calls', 'TSupport\CallsController@index')->name('calls');
+            Route::get('/calls/json', 'TSupport\CallsController@Get_json_calls');
 
+            Route::get('/requests', 'TSupport\RequestsController@index')->name('requests');
+            Route::get('/requests/json', 'TSupport\RequestsController@Get_json_requests');
+            
+            Route::get('/tasks', 'TSupport\TasksController@index')->name('tasks');
+            Route::get('/tasks/json', 'TSupport\TasksController@Get_json_tasks');
+
+            Route::get('/notes', 'TSupport\NotesController@index')->name('notes');
+            Route::get('/notes/json', 'TSupport\NotesController@Get_json_notes');
+            
     });
     
-    
-    Route::get('/netflow/clients/graph/{id?}/{ip?}', 'NetFlowController@clt_traf_gr')->name('netflow.clients.graph');
-    Route::any('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
-    Route::get('/netflow/common/graph', 'NetFlowController@cmn_traf_gr')->name('netflow.common.graph');
-
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
   
     Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');

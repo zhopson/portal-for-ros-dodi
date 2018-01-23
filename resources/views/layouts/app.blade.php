@@ -77,10 +77,10 @@
                             <ul class="dropdown-menu"  style="background-color: #BEE9EA">
                                 <li><a href="{{ url('/chains') }}">Протоколы</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Звонки</a></li>
-                                <li><a href="#">Обращения</a></li>
-                                <li><a href="#">Задачи</a></li>
-                                <li><a href="#">Заметки</a></li>
+                                <li><a href="{{ url('/calls') }}">Звонки</a></li>
+                                <li><a href="{{ url('/requests') }}">Обращения</a></li>
+                                <li><a href="{{ url('/tasks') }}">Задачи</a></li>
+                                <li><a href="{{ url('/notes') }}">Заметки</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ url('/clients') }}">Пользователи</a></li>
                             </ul>

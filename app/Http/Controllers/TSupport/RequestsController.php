@@ -244,5 +244,85 @@ class RequestsController extends Controller
         $new_ch_usr = ChainUser::updateOrCreate(compact('chain_id','user_id'), compact('chain_id','user_id'));
         //var_dump('cAT:'. $category.'; otv:'.$otvetstv.'; st:'.$status.'; prior:'.$priority.'; start:'.$start_d.'; srok:'.$srok_d.'; progr'.$progress.'; dep:'.$departure.'; msg:'.$msg.'; op_ch:'.$open_chains);
         return redirect()->route('chains.view', ['id' => $chain_id]);
-    }    
+    } 
+    
+    public function index(Request $request) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Учителя') ) { 
+            return redirect('forbidden');
+        }  
+        
+
+
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
+//
+//  
+        //$clt_id = '';
+        return view('tsupport.requests');
+    }
+
+    public function Get_json_requests() {
+
+    //$calls = Call::all();//->paginate(100); 
+    
+        $requests = DB::select("select
+				requests.id,
+				requests.creation_time,
+				CASE WHEN clients.surname = '' THEN  clients.name	else clients.surname || ' ' || clients.name  || ' ' || clients.patronymic END AS clt_name,
+                                users.name,
+                                requests.comment,
+                                requests.provider_id,
+                                requests.client_id,
+                                requests.chain_id,
+                                chains.status
+            from requests 
+            left Join users on users.id   =   requests.user_id 
+            left Join clients on  clients.id = requests.client_id 
+            left Join chains on  chains.id = requests.chain_id 
+		group by requests.id,requests.creation_time,clients.surname,clients.name,clients.patronymic,
+                     users.name,requests.provider_id,requests.client_id,  requests.comment,  chains.status, requests.chain_id              
+             ");
+    
+        $chain_status = array(
+            '' => 'Неизвестен',
+            'OPENED' => 'Открыт',
+            'CLOSED' => 'Закрыт',
+        );
+  
+        $req_sources  = array(
+            1 => 'Клиент',
+            2 => 'ЦДО',
+            3 => 'РЦИТ',
+            4 => 'Обзвон',
+        );        
+        
+        //$users = User::select('id','name')->get();
+        //$clients = Client::select('id','surname','name','patronymic')->get();
+
+        $data = [];
+        foreach ($requests as $row=>$request) {
+            
+            array_push($data, 
+              array(
+                date('d.m.y H:i',$request->creation_time),
+                '<a href="'.route('clients.view', ['id' => $request->client_id]).'">'.$request->clt_name.'</a>',
+                $request->name,
+                $request->comment,
+                $req_sources[$request->provider_id],
+                $chain_status[$request->status],
+                '<a href="'.route('chains.view', ['id' => $request->chain_id]).'"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a>',
+                '<a href="'.route('requests.edit', ['id' => $request->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>',
+              )
+            );
+        }
+        
+        return ['data'=>$data];
+        
+//    return response()->json($chains->toJson());
+    }        
+    
+    
 }
