@@ -6,7 +6,6 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "barryvdh/laravel-debugbar": "~3.0.0",
         "barryvdh/laravel-ide-helper": "~2.4.1",
         "doctrine/dbal": "~2.6.2",
         "fideloper/proxy": "~3.3",

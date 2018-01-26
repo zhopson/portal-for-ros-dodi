@@ -31,6 +31,7 @@ if ($addresses!=='') {
 
 //Request::flash();
 
+$users = App\User::orderBy('email','asc')->get();
 
 @endphp
 
@@ -333,7 +334,7 @@ if ($addresses!=='') {
                                     <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_user_align" name="v_clt_edit_user_align">
                                         <option value="0"></option>
-                                        @foreach (App\User::orderBy('email','asc')->get() as $usr) 
+                                        @foreach ($users as $usr) 
                                             <option value="{{ $usr->id }}">{{ $usr->email .' ---- '. $usr->name }}</option>
                                         @endforeach
                                     </select>
@@ -981,6 +982,32 @@ $(document).ready(function () {
         }
         return false;
     });
+    
+    ////////////////////////////////////////////////////////////////////////////
+
+    $('#id_clt_edit_contacts_mail').on('input keyup', function(e) {
+        var finded = false;
+        @foreach ($users as $usr) 
+            id = '{{$usr->id}}';
+            email = '{{$usr->email}}';
+            if ( email.indexOf($('#id_clt_edit_contacts_mail').val(),0) !== -1 ) {
+                $('#id_clt_edit_user_align').val('{{$usr->id}}');
+                finded = true;
+            }
+            
+        @endforeach
+
+            if ( finded !== true ) 
+                $('#id_clt_edit_user_align').val('0');
+            
+            if ( $('#id_clt_edit_contacts_mail').val() === '' ) $('#id_clt_edit_user_align').val('0');
+
+        //alert($('#id_clt_edit_contacts_mail').val());
+    });
+
+//    $('#id_clt_edit_contacts_mail').onkeyup(function () {
+//    });        
+
 
 });
 
