@@ -582,6 +582,8 @@ tmedia_session_jsep01.onIceCandidate = function (o_event, _This) {
     var iceState = (This.o_pc.iceGatheringState || This.o_pc.iceState);
 
     tsk_utils_log_info("onIceCandidate = " + iceState);
+    if (document.getElementById("id_call_anytel_sip_log")!=null)
+        document.getElementById("id_call_anytel_sip_log").value = iceState;
 
     if (iceState === "complete" || (o_event && !o_event.candidate)) {
         tsk_utils_log_info("ICE GATHERING COMPLETED!");

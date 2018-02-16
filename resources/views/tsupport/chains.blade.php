@@ -96,11 +96,13 @@ $(document).ready(function() {
                     "sortDescending": ": активировать для сортировки столбца по убыванию"
                 }                
             },
+            "pageLength": 25,
             @if ($clt_id)
             "ajax": "/chains/json4clt/"+'{{ $clt_id }}', 
             @else
             "ajax": "/chains/json", 
             @endif
+            "paging": true,
             "deferRender": true            
         });
      

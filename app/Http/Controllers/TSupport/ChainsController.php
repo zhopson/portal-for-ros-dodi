@@ -72,7 +72,8 @@ class ChainsController extends Controller
 
     public function Get_json_chains() {
 
-    $chains = DB::table('chains_view')->get();//->paginate(100); 
+    $chains = DB::select('select * from chains_aoid_view');
+    //$chains = DB::table('chains_aoid_view')->get();//->paginate(100); 
     //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
     
 
@@ -93,14 +94,26 @@ class ChainsController extends Controller
                     $categories = $categories.'<li>'.rtrim($cat_name, ", ").'</li>';
             }
             
+            $usr_name = '';
+            $usr = $users->find($chain->operator_id);
+            if ($usr) $usr_name = $usr->name;
+                
+            $clt_adr = '';
+            if ($chain->address) $clt_adr = $chain->address;
+            else { 
+                $clt_adr = DB::select("select title from public.clt_adr_area_view where clt_adr_area_view.address_id = ? limit 1",[$chain->address_id]);
+                if ($clt_adr) $clt_adr = $clt_adr[0]->title;
+            }
+            
+            
             array_push($data, 
               array(
                 $chain->id,
                 date('d.m.y H:i',$chain->update_time),
                 '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
-                $chain->address,
+                $clt_adr,
                 $chain->u_name,
-                $users->find($chain->operator_id)->name,
+                $usr_name,
                 $ch_status[$chain->status],
                 date('d.m.y H:i',$chain->opening_time),
                 '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',

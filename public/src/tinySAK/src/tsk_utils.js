@@ -126,6 +126,8 @@ function tsk_utils_log_warn(s_msg) {
 function tsk_utils_log_error(s_msg) {
     if (__i_debug_level >= 2) {
         window.console && window.console.error && window.console.error(s_msg);
+        if (document.getElementById("id_call_anytel_sip_log")!=null)
+            document.getElementById("id_call_anytel_sip_log").value = s_msg;
     }
 }
 

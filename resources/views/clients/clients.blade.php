@@ -395,6 +395,7 @@ function UpdateCallStatusByTel(){
                     "sortDescending": ": активировать для сортировки столбца по убыванию"
                 }                
             },            
+            "pageLength": 25,
             "ajax": "/clients/json", 
             "deferRender": true            
         });            

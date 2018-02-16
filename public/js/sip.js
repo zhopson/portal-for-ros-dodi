@@ -127,6 +127,8 @@ function sipHangUp() {
 //call functions
  var callSession;
             var eventsListener = function(e){
+                if (document.getElementById("id_call_anytel_sip_log")!=null) 
+                    document.getElementById("id_call_anytel_sip_log").value = e.type;
                 console.info('session event = ' + e.type);
             }
 

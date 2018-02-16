@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('head')
-<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"> </script>
+<script src="{{ asset('SIPml-api.js?svn=252') }}" type="text/javascript"> </script>
 @endsection
 
 @section('content')
@@ -30,11 +30,19 @@
                     </div>
                     <button id="id_tel_call" class="btn btn-default">Позвонить</button>
                     <button id="id_tel_hangup" class="btn btn-default">Положить</button>
+                    <div class="form-group"></div>
+                    <div class="form-group has-warning">
+                        <label class="control-label" for="inputWarning1">Статус SIP</label>
+                        <input type="text" class="form-control" id="id_call_anytel_sip_log">
+                    </div>                
+
                     <!--                    </form>-->
 
 <!--                    <audio id='audio_remote' autoplay='autoplay'></audio>
                     <audio id='ringbacktone' loop src='sounds/ringbacktone.wav'></audio>-->
 
+                </div>
+                <div class="pull-right">
                 </div>
             </div>
         </div>

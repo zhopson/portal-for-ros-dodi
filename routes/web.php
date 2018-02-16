@@ -60,6 +60,14 @@ Route::middleware('auth')->group(function () {
         Route::any('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
         Route::get('/netflow/common/graph', 'NetFlowController@cmn_traf_gr')->name('netflow.common.graph');
         
+        Route::get('/documents', 'WikiController@index')->name('documents');
+        Route::get('/documents/json', 'WikiController@Get_json_docs_list');
+        Route::get('/documents/new', 'WikiController@doc_new')->name('documents.new');
+        Route::get('/documents/edit/{id}', 'WikiController@doc_edit')->name('documents.edit');
+        Route::post('/documents/store', 'WikiController@doc_store')->name('documents.store');
+        Route::get('/documents/remove/{id}', 'WikiController@doc_remove')->name('documents.remove');
+        
+        Route::post('/documents/ajax_upload_file', 'WikiController@do_ajax_upload_file');
         
     });
     
@@ -92,6 +100,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/clients/ajax_update_call_status_by_tel', 'TSupport\AjaxController@do_update_call_by_tel');
         Route::post('/clients/ajax_update_cdr_user', 'TSupport\AjaxController@do_update_cdr_user');
 
+        Route::get('/contacts', 'ContactsController@index')->name('contacts');
+        Route::get('/contacts/json', 'ContactsController@Get_json_contacts');
+        Route::get('/contacts/new', 'ContactsController@cnt_new')->name('contacts.new');
+        Route::post('/contacts/store', 'ContactsController@contacts_store')->name('contacts.store');
+        Route::get('/contacts/edit/{id}', 'ContactsController@contacts_edit')->name('contacts.edit');        
+        Route::post('/contacts/update/{id}', 'ContactsController@contacts_update')->name('contacts.update');
+        
+        
 //        Route::middleware('role:Учителя')->group(function () {
 //
 //            Route::get('/chains', 'TSupport\ChainsController@index')->name('chains');
@@ -138,6 +154,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/chains/view/{id}', 'TSupport\ChainsController@chain_view')->name('chains.view');
   
     Route::post('/adresses/adr_part_list', 'AddressController@list_adr_components');
+    
+    Route::post('/adresses/chg_adr_components', 'AddressController@do_chg_adr_components');
+    
+    
     
     Route::get('/requests/new/{id}/{ch_id?}', 'TSupport\RequestsController@req_new')->name('requests.new');
 

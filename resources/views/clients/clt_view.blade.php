@@ -351,8 +351,8 @@
                                             $nums_str = $nums_str.$num_arr[0];
                                         else
                                             $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
-                                        if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
-                                            { $nums_str = $nums_str.'('.$num_arr[1].')'; }
+                                        if (  isset($num_arr[1]) &&  trim($num_arr[1])!='' )
+                                            { $nums_str = $nums_str.'('.trim($num_arr[1]).')'; }
                                         echo $nums_str.'<br>';
                                     @endphp
                                     @endforeach

@@ -45,6 +45,25 @@ class AddressController extends Controller {
         return 'error';
     }
 
+    public function do_chg_adr_components() {
+        
+        if (Request::ajax()) {
+            $parent = Request::input('parent_aoguid');
+            
+            $raion_arr = '';
+            $city_arr = '';
+            $punkt_arr = '';
+            
+            $common = DB::connection('pgsql_adr')->select("SELECT formalname,shortname,aoguid,aoid,aolevel FROM fias_addressobjects where currstatus=0 and parentguid = ? order by formalname", [$parent]);
+
+            //return Response::json(array('atr' => 'Hello', 'status' => 1));
+            //return Response::json(['raion_arr' => $raion_arr, 'city_arr' => $city_arr, 'punkt_arr' => $punkt_arr, 'status' => 1]);
+            return Response::json(['common' => $common, 'status' => 1]);
+        }
+        return 'error';
+    }
+    
+    
 //    public function list_adr_component() {
 //        if (Request::ajax()) {
 //            $rname=Request::input('region');

@@ -51,6 +51,7 @@ class ClientsController extends Controller
     $clients = DB::table('clients_view')->orderBy('clients_view.clt_name', 'asc')->get();//->paginate(100); 
     //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
 
+        $isTeacher = $request->user()->hasRole('Учителя');
         $data = [];
         foreach ($clients as $row=>$client){
             
@@ -86,12 +87,13 @@ class ClientsController extends Controller
             foreach (explode("\n",$client->numbers) as $number) {
                 $num_arr = (explode(":",$number));
                 $clt_name_clear =  str_replace('"', '', $client->clt_name);
-                if ($request->user()->hasRole('Учителя')) 
+                if ($isTeacher) 
                     $nums_str = $nums_str.$num_arr[0];
                 else
                     $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$client->id."','".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
-                if ( isset($num_arr[1]) &&  $num_arr[1]!='' )
-                    { $nums_str = $nums_str.'('.$num_arr[1].'), '; }
+                
+                if ( isset($num_arr[1]) &&  trim($num_arr[1])!='' )
+                    { $nums_str = $nums_str.'('.trim($num_arr[1]).'), '; }
                 else 
                     { $nums_str = $nums_str.','; }
                                             
@@ -100,7 +102,7 @@ class ClientsController extends Controller
 
             $clt_edit_tag = '';
             
-            if (!$request->user()->hasRole('Учителя')) 
+            if (!$isTeacher) 
                 $clt_edit_tag = '<a href="'.route('clients.edit', ['id' => $client->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>';
                                 
             array_push($data, 
@@ -427,7 +429,7 @@ class ClientsController extends Controller
         $clt->language = $language;
         $clt->mother = $mother;
         $clt->father = $father;
-        if ($clt->clients_type_id == 3) $clt->name = $org;
+        if ($clt->clients_type_id == 3) {$clt->name = $org; $clt->surname = ''; $clt->patronymic = '';}
         $clt->diagnose = $diag;
 
         if (!$adr_ind) $adr_ind = '';
@@ -458,7 +460,7 @@ class ClientsController extends Controller
         
         $phone_book = '';
         $n = 1;
-        while ( $n <= 10 ) {
+        while ( $n <= 15 ) {
             if ($request->input('v_clt_edit_contacts_tel' . $n)) {
                 $phone_book = $phone_book . $request->input('v_clt_edit_contacts_tel' . $n) . ':';
                 if ($request->input('v_clt_edit_contacts_name' . $n))

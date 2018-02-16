@@ -504,7 +504,8 @@ $users = App\User::orderBy('email','asc')->get();
 <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
 
 <script type="text/javascript">
-var FlagClearAddress;    
+var FlagClearAddress; 
+var nn = 0;
 
     function addip(ip,mask,gw,id = null) {
         var n = $("#id_clt_edit_inet_table_tbody").children('.table-tr-ips').length+1;
@@ -567,7 +568,8 @@ var FlagClearAddress;
     }
 
     function addcontacts() {
-        var n = $("#id_clt_contacts_container").children('.ContactsBlock').length;
+        //var n = $("#id_clt_contacts_container").children('.ContactsBlock').length;
+        nn = nn + 1;
         //alert(n);
         var raw = $('<div/>', {
             'class': 'ContactsBlock',
@@ -586,7 +588,7 @@ var FlagClearAddress;
         var input1 = $('<input/>', {
             value: $('#id_clt_edit_contacts_tel').val(),
             type: 'text',
-            name: 'v_clt_edit_contacts_tel'+n,
+            name: 'v_clt_edit_contacts_tel'+nn,
             'class': 'form-control'
         }).appendTo(div_sm4);
 
@@ -596,7 +598,7 @@ var FlagClearAddress;
         var input2 = $('<input/>', {
             value: $('#id_clt_edit_contacts_name').val(),
             type: 'text',
-            name: 'v_clt_edit_contacts_name'+n,
+            name: 'v_clt_edit_contacts_name'+nn,
             'class': 'form-control'
         }).appendTo(div_sm3);
 
@@ -1024,8 +1026,9 @@ window.onload = function () {
                     $name = '';
                     $num_arr = (explode(":",$number));
                     $phone = $num_arr[0];
-                    if (  isset($num_arr[1]) &&  $num_arr[1]!='' )
-                        { $name = $num_arr[1]; }
+                    
+                    if ( isset($num_arr[1]) &&  $num_arr[1]!='' )
+                        { $name = trim($num_arr[1]); }
             @endphp
             $('#id_clt_edit_contacts_tel').val('{{$phone}}');
             $('#id_clt_edit_contacts_name').val('{{$name}}');
