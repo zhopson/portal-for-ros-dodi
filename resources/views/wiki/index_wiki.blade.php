@@ -1,9 +1,28 @@
 @extends('layouts.app')
 @section('head')
-<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"> </script>
+<!--<script src="{{ asset('SIPml-api.js?svn=251') }}" type="text/javascript"> </script>-->
 @endsection
 
 @section('content')
+
+<div class="modal fade" id="id_removeDocModal" tabindex="-1" role="dialog" aria-labelledby="DocModalLabel" data-backdrop="static">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3><mark class="class_clt_name">Действительно удалить документ?</mark></h3>
+                <span class="label label-warning">Предупреждение</span>
+                <h4>Также будут удалены все вложенные файлы</h4>
+            </div>
+            <div class="modal-body"  align="right">
+                <input type="hidden" class="form-control" id="id_removed_doc" name="v_removed_doc">
+                <button type="button" id="id_remove_doc_btn" onclick="Javascript:removeDoc($('#id_removed_doc').val())" class="btn btn-primary">Удалить</button>
+                <button type="button" data-dismiss="modal" class="btn btn-default">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="panel panel-default" style="margin: -15px 5px 25px 5px">
     <div class="panel-heading">
@@ -36,24 +55,27 @@
                                     <li class="active"><a href="{{ route('documents.new') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить документ <span class="sr-only">(current)</span></a></li>
 <!--                                    <li><a href="#">Link</a></li>-->
                                 </ul>
-                                
                                 <form class="navbar-form navbar-left">
+                                    <div id='id_label_find_doc' class="form-group">
+                                        <label>Результаты поиска по ключевым словам</label>
+                                    </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Поиск по ключевым словам, разделенных пробелами"  style="width: 500px">
+                                        <input type="text" class="form-control" id='id_keywords_find_doc' placeholder="Поиск по ключевым словам, разделенных пробелами"  style="width: 500px">
                                     </div>
 <!--                                    <button type="submit" class="btn btn-default">Submit</button>-->
                                 </form>
                                 <ul class="nav navbar-nav">
-<!--                                    <li><a href="#">Link</a></li>-->
-                                    <li class="dropdown">
+<!--                                    <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Поиск <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">Поиск в заголовке</a></li>
-                                            <li><a href="#">Поиск в описании</a></li>
+                                            <li><a href="Javascript:FindDoc(1)">Поиск в заголовке</a></li>
+                                            <li><a href="Javascript:FindDoc(2)">Поиск в описании</a></li>
                                             <li role="separator" class="divider"></li>
-                                            <li><a href="#">Поиск в заголовке и описании</a></li>
+                                            <li><a href="Javascript:FindDoc(3)">Поиск в заголовке и описании</a></li>
                                         </ul>
-                                    </li>
+                                    </li>-->
+                                    <li id = 'id_li_find' class="active"><a href="Javascript:FindDoc(3)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Поиск  <span class="sr-only">(current)</span></a></li>
+                                    <li id = 'id_li_show_all' class="active"><a href="Javascript:ShowAll()"> Очистить поиск  <span class="sr-only">(current)</span></a></li>
                                 </ul>
                                 
                             </div><!-- /.navbar-collapse -->
@@ -71,7 +93,7 @@
                 <table class="display" id="id_documents_td"  cellspacing="0" width="100%">
                     <thead>
                         <tr class="active">
-                            <th>Номер</th>
+                            <th style="width: 30px">Номер</th>
                             <th>Категория</th>
                             <th style="width: 480px">Заголовок</th>
                             <th>Дата изменения</th>
@@ -81,7 +103,7 @@
                     </thead>
                     <tfoot>
                         <tr class="active">
-                            <th>Номер</th>
+                            <th style="width: 30px">Номер</th>
                             <th>Категория</th>
                             <th style="width: 480px">Заголовок</th>
                             <th>Дата изменения</th>
@@ -102,14 +124,80 @@
 @section('footer')
 <!--        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
         <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+        <script src="{{ asset('js/modal.js') }}"></script>
         <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
 <!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
 <!--        <script src="{{ asset('js/modal.js') }}"></script>-->
         <script type="text/javascript">
-
-        window.onload = function () {
             
-        };
+var table;
+
+function AskRemoveDoc(id) {
+    $('#id_removeDocModal').on('show.bs.modal', function () {
+        $('#id_removed_doc').val(id);
+    });
+
+    $('#id_removeDocModal').modal('show');
+    //$('#id_td_files_edit_doc').find('tr#'+id).remove();
+}
+
+function removeDoc(id) {
+
+        // Создадим новый объект типа FormData
+        var data1 = new FormData();
+        // Добавим в новую форму значение
+        data1.append('doc_id', id);
+        $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            url: '/documents/ajax_remove_doc',
+            type: 'POST',
+            data: data1,
+			// Эта опция не разрешает jQuery изменять данные
+			processData: false,
+			// Эта опция не разрешает jQuery изменять типы данных
+			contentType: false,	            
+            dataType: 'json',
+            success: function (result) {
+//                console.log('8 ajax_start np_chg ' + (new Date().toISOString().slice(11, -1)));
+                if (result.status === 1) {
+                    table.ajax.url( '/documents/json' ).load();
+                    $('#id_removeDocModal').modal('hide');
+                }
+            },
+            // Что-то пошло не так
+            error: function (result) {
+//                $('#id_error_file_panel').css('display', 'inline');
+            }
+        });
+}
+
+    function FindDoc(mode) {
+        keywords = $('#id_keywords_find_doc').val();
+//        alert(keywords);
+        if (keywords!='') {
+            table.ajax.url( '/documents/json/'+keywords+'/'+ mode).load();
+        $('#id_label_find_doc').css('display', 'inline');
+            $('#id_li_show_all').css('display', 'inline');
+            $('#id_li_find').css('display', 'none');
+        }
+    }
+
+    function ShowAll() {
+        table.ajax.url( '/documents/json').load();
+        $('#id_label_find_doc').css('display', 'none');
+        $('#id_li_show_all').css('display', 'none');
+        $('#id_li_find').css('display', 'inline');
+        $('#id_keywords_find_doc').val('');
+    }
+
+    window.onload = function () {
+        $('#id_label_find_doc').css('display', 'none');
+        $('#id_li_show_all').css('display', 'none');
+        $('#id_li_find').css('display', 'inline');
+        $('#id_keywords_find_doc').css('display', 'inline');
+    };
 
     $(document).ready(function () {
         
@@ -119,7 +207,7 @@
 //        }
 //    });    
     
-        $('#id_documents_td').DataTable({
+        table = $('#id_documents_td').DataTable({
             "language": {
                 //"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
                 "processing": "Подождите...",

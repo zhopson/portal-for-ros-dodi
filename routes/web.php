@@ -61,13 +61,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/netflow/common/graph', 'NetFlowController@cmn_traf_gr')->name('netflow.common.graph');
         
         Route::get('/documents', 'WikiController@index')->name('documents');
-        Route::get('/documents/json', 'WikiController@Get_json_docs_list');
+        Route::get('/documents/json/{keywords?}/{mode?}', 'WikiController@Get_json_docs_list');
+        Route::get('/documents/view/{id}', 'WikiController@doc_view')->name('documents.view');
         Route::get('/documents/new', 'WikiController@doc_new')->name('documents.new');
         Route::get('/documents/edit/{id}', 'WikiController@doc_edit')->name('documents.edit');
         Route::post('/documents/store', 'WikiController@doc_store')->name('documents.store');
+        Route::post('/documents/update/{id}', 'WikiController@doc_update')->name('documents.update');
         Route::get('/documents/remove/{id}', 'WikiController@doc_remove')->name('documents.remove');
         
         Route::post('/documents/ajax_upload_file', 'WikiController@do_ajax_upload_file');
+        Route::post('/documents/ajax_remove_file', 'WikiController@do_ajax_remove_file');
+        Route::post('/documents/ajax_remove_doc', 'WikiController@do_ajax_remove_doc');
         
     });
     
