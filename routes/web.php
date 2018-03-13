@@ -110,6 +110,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/contacts/store', 'ContactsController@contacts_store')->name('contacts.store');
         Route::get('/contacts/edit/{id}', 'ContactsController@contacts_edit')->name('contacts.edit');        
         Route::post('/contacts/update/{id}', 'ContactsController@contacts_update')->name('contacts.update');
+
+        Route::get('/contracts', 'ContractsController@index')->name('contracts');
+        Route::get('/contracts/json', 'ContractsController@Get_json_contracts');
+        Route::post('/contracts/ajax_add', 'ContractsController@cntr_add');
+        Route::post('/contracts/ajax_edit', 'ContractsController@cntr_edit');
+        Route::post('/contracts/ajax_save', 'ContractsController@cntr_save');
+
+        Route::get('/providers', 'ProvidersController@index')->name('providers');
+        Route::get('/providers/json', 'ProvidersController@Get_json_providers');
+        Route::post('/providers/ajax_add', 'ProvidersController@prd_add');
+        Route::post('/providers/ajax_edit', 'ProvidersController@prd_edit');
+        Route::post('/providers/ajax_save', 'ProvidersController@prd_save');
         
         
 //        Route::middleware('role:Учителя')->group(function () {

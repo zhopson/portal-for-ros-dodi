@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-md-12"  style="margin: 5px 5px 0 5px">
                         <div class="pull-right" id="container_button">
-                            <a class="btn btn btn-info" href="javascript:window.location.reload()" role="button">Обновить</a>
+                            <a class="btn btn btn-info" href="javascript:window.location.reload(true)" role="button">Обновить</a>
                         </div>
                         <div class="pull-left" id="container_period">
                             <h4>Период</h4>
@@ -52,7 +52,7 @@
                             </div>                  
                         </div>
                         <div id="container_img">
-                            <img src="{{ asset('images/zabbix/zabbix_graph_1388.png') }}"  style="max-width: 100%" class="img-responsive center-block" alt="Responsive image">
+                            <img src="{{ asset('images/zabbix/zabbix_graph_1388_21600.png').'?ver='.date("YmdHis") }}"  style="max-width: 100%" class="img-responsive center-block" alt="Responsive image">
                         </div>
                     </div>
                 </div>
