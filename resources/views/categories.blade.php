@@ -6,16 +6,16 @@
 
 <div class="panel panel-default" style="margin: -15px 5px 25px 5px">
     <div class="panel-heading">
-        <h3 class="panel-title">Провайдеры </h3>
+        <h3 class="panel-title">Категории протоколов </h3>
     </div>
     
     <div class="panel-body">
         <div class="container-fluid">
-            <div class="row" id='id_msg_block_provider'>
+            <div class="row" id='id_msg_block_category'>
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" id ='id_btn_close_provider' class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<!--                    <button type="button" id ='id_btn_close_provider' class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                    <strong>Ошибка!</strong> <label id="id_error_msg_provider"></label>
+                    <button type="button" id ='id_btn_close_category' class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<!--                    <button type="button" id ='id_btn_close_category' class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <strong>Ошибка!</strong> <label id="id_error_msg_category"></label>
                 </div>
             </div>
             <div class="row">
@@ -40,25 +40,17 @@
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 
                                 <form class="navbar-form navbar-left">
-                                    <input type="hidden" class="form-control" id="id_id_provider">
+                                    <input type="hidden" class="form-control" id="id_id_category">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id='id_name_provider' placeholder="Наименование провайдера"  style="width: 300px">
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" id="id_watch_provider">
-                                                Отслеживать
-                                            </label>
-                                        </div>
+                                        <input type="text" class="form-control" id='id_name_category' placeholder="Наименование категории"  style="width: 300px">
                                     </div>
                                 </form>
                                 <ul class="nav navbar-nav">
-                                    <li id = 'id_li_cancel_provider' class="active"><a href="Javascript:Cancel_provider()"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> Отменить  <span class="sr-only">(current)</span></a></li>
-                                    <li id = 'id_li_save_provider' class="active"><a href="Javascript:Save_provider()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Сохранить  <span class="sr-only">(current)</span></a></li>
+                                    <li id = 'id_li_cancel_category' class="active"><a href="Javascript:Cancel_category()"><span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> Отменить  <span class="sr-only">(current)</span></a></li>
+                                    <li id = 'id_li_save_category' class="active"><a href="Javascript:Save_category()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Сохранить  <span class="sr-only">(current)</span></a></li>
                                 </ul>
                                 <ul class="nav navbar-nav">
-                                    <li id = 'id_li_add_provider' class="active"><a href="Javascript:Add_provider()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить <span class="sr-only">(current)</span></a></li>
+                                    <li id = 'id_li_add_category' class="active"><a href="Javascript:Add_category()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить <span class="sr-only">(current)</span></a></li>
 <!--                                    <li><a href="#">Link</a></li>-->
                                 </ul>
                                 
@@ -71,12 +63,13 @@
             </div>
             <div class="row">
 <!--                <table class="table table-hover table-bordered">-->
+                
                 <div class="table-responsive">
-                    <table class="display" id="id_providers_td" cellspacing="0" width="100%">
+                    <table class="display" id="id_categorys_td" cellspacing="0" width="100%">
                         <thead>
                             <tr class="active">
-                                <th style="width: 280px">Наименование</th>
-                                <th>Отслеживать</th>
+                                <th style="width: 10px"></th>
+                                <th style="width: 580px">Наименование</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -100,32 +93,25 @@
 
 var table;
 
-function Add_provider() {
+function Add_category() {
 
-        name = $('#id_name_provider').val();
-        watched = $('#id_watch_provider').prop('checked');
-        
-        if (watched) watch = 'on';
-        else  watch = 'off';
-        //alert(watch); return;
+        name = $('#id_name_category').val();
 
-        $('#id_msg_block_provider').css('display', 'none');
+        $('#id_msg_block_category').css('display', 'none');
         if (name==='') {
-            $('#id_error_msg_provider').text('Не введено поле Наименование');
-            $('#id_msg_block_provider').css('display', 'inline');
+            $('#id_error_msg_category').text('Не введено поле Наименование');
+            $('#id_msg_block_category').css('display', 'inline');
             return;
         }
-        //alert('name:'+name+';num:'+num+';date:'+date+';desc:'+desc); return;
         // Создадим новый объект типа FormData
         var data1 = new FormData();
         // Добавим в новую форму значение
         data1.append('name', name);
-        data1.append('watch', watch);
         $.ajax({
 //                headers: {
 //                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 //                },
-            url: '/providers/ajax_add',
+            url: '/categories/ajax_add',
             type: 'POST',
             data: data1,
 			// Эта опция не разрешает jQuery изменять данные
@@ -136,27 +122,25 @@ function Add_provider() {
             success: function (result) {
 //                console.log('8 ajax_start np_chg ' + (new Date().toISOString().slice(11, -1)));
                 if (result.status === 1) {
-                    table.ajax.url( '/providers/json' ).load();
+                    table.ajax.url( '/categories/json' ).load();
                     
-                    $('#id_name_provider').val('');
-                    $('#id_watch_provider').prop('checked', false);
-                    
+                    $('#id_name_category').val('');
                 }
             },
             // Что-то пошло не так
             error: function (result) {
-                $('#id_error_msg_provider').text('Данные в БД не добавлены');
-                $('#id_msg_block_provider').css('display', 'inline');
+                $('#id_error_msg_category').text('Данные в БД не добавлены');
+                $('#id_msg_block_category').css('display', 'inline');
             }
         });
 }
 
-function Edit_provider(pid) {
+function Edit_category(pid) {
     //n = $(obj).parent().parent();
     //alert(id);
     
         $.ajax({
-            url: '/providers/ajax_edit',
+            url: '/categories/ajax_edit',
             type: 'POST',
             data: {'id': pid},
 //			// Эта опция не разрешает jQuery изменять данные
@@ -168,46 +152,38 @@ function Edit_provider(pid) {
 //                console.log('8 ajax_start np_chg ' + (new Date().toISOString().slice(11, -1)));
                 if (result.status === 1) {
                     
-                    $('#id_msg_block_provider').css('display', 'none');
+                    $('#id_msg_block_category').css('display', 'none');
                     
-                    $('#id_id_provider').val(result.id);
-                    $('#id_name_provider').val(result.name);
-                    if (result.watch === 1)
-                        $('#id_watch_provider').prop('checked', true);
-                    else 
-                        $('#id_watch_provider').prop('checked', false);
+                    $('#id_id_category').val(result.id);
+                    $('#id_name_category').val(result.name);
                     
-                    $('#id_li_save_provider').css('display', 'inline');
-                    $('#id_li_cancel_provider').css('display', 'inline');
-                    $('#id_li_add_provider').css('display', 'none');
+                    $('#id_li_save_category').css('display', 'inline');
+                    $('#id_li_cancel_category').css('display', 'inline');
+                    $('#id_li_add_category').css('display', 'none');
                 }
             },
             // Что-то пошло не так
             error: function (result) {
-                $('#id_error_msg_provider').text('Данные из БД не получены');
-                $('#id_msg_block_provider').css('display', 'inline');
+                $('#id_error_msg_category').text('Данные из БД не получены');
+                $('#id_msg_block_category').css('display', 'inline');
             }
         });    
     
 }
 
-function Cancel_provider() {
+function Cancel_category() {
     
 }
 
-function Save_provider() {
+function Save_category() {
     
-        pid = $('#id_id_provider').val();
-        name = $('#id_name_provider').val();
-        watched = $('#id_watch_provider').prop('checked');
-        
-        if (watched) watch = 'on';
-        else  watch = 'off';        
+        pid = $('#id_id_category').val();
+        name = $('#id_name_category').val();
 
-        $('#id_msg_block_provider').css('display', 'none');
+        $('#id_msg_block_category').css('display', 'none');
         if (name==='') {
-            $('#id_error_msg_provider').text('Не введено поле Наименование');
-            $('#id_msg_block_provider').css('display', 'inline');
+            $('#id_error_msg_category').text('Не введено поле Наименование');
+            $('#id_msg_block_category').css('display', 'inline');
             return;
         }
 
@@ -216,15 +192,14 @@ function Save_provider() {
         // Добавим в новую форму значение
         data1.append('id', pid);
         data1.append('name', name);
-        data1.append('watch', watch);
         
         if (!pid) {
-                $('#id_error_msg_provider').text('Данные в БД не сохранены');
-                $('#id_msg_block_provider').css('display', 'inline');
+                $('#id_error_msg_category').text('Данные в БД не сохранены');
+                $('#id_msg_block_category').css('display', 'inline');
                 return;
         }
         $.ajax({
-            url: '/providers/ajax_save',
+            url: '/categories/ajax_save',
             type: 'POST',
             data: data1,
 			// Эта опция не разрешает jQuery изменять данные
@@ -235,21 +210,20 @@ function Save_provider() {
             success: function (result) {
 //                console.log('8 ajax_start np_chg ' + (new Date().toISOString().slice(11, -1)));
                 if (result.status === 1) {
-                    table.ajax.url( '/providers/json' ).load();
+                    table.ajax.url( '/categories/json' ).load();
                     
-                    $('#id_id_provider').val('');
-                    $('#id_name_provider').val('');
-                    $('#id_watch_provider').prop('checked', false);
+                    $('#id_id_category').val('');
+                    $('#id_name_category').val('');
                     
-                    $('#id_li_add_provider').css('display', 'inline');
-                    $('#id_li_cancel_provider').css('display', 'none');
-                    $('#id_li_save_provider').css('display', 'none');    
+                    $('#id_li_add_category').css('display', 'inline');
+                    $('#id_li_cancel_category').css('display', 'none');
+                    $('#id_li_save_category').css('display', 'none');    
                 }
             },
             // Что-то пошло не так
             error: function (result) {
-                $('#id_error_msg_provider').text('Данные в БД не сохранены');
-                $('#id_msg_block_provider').css('display', 'inline');
+                $('#id_error_msg_category').text('Данные в БД не сохранены');
+                $('#id_msg_block_category').css('display', 'inline');
             }
         });    
     
@@ -258,26 +232,25 @@ function Save_provider() {
 
 window.onload = function () {
     
-    $('#id_li_cancel_provider').css('display', 'none');
-    $('#id_li_save_provider').css('display', 'none');
-    $('#id_msg_block_provider').css('display', 'none');
+    $('#id_li_cancel_category').css('display', 'none');
+    $('#id_li_save_category').css('display', 'none');
+    $('#id_msg_block_category').css('display', 'none');
 
 };
 
 $(document).ready(function () {
 
-$('#id_btn_close_provider').click(function () {
-    $('#id_msg_block_provider').css('display', 'none');
+$('#id_btn_close_category').click(function () {
+    $('#id_msg_block_category').css('display', 'none');
 });
 
-$('#id_li_cancel_provider').click(function () {
-    $('#id_li_add_provider').css('display', 'inline');
-    $('#id_li_cancel_provider').css('display', 'none');
-    $('#id_li_save_provider').css('display', 'none');
-    $('#id_msg_block_provider').css('display', 'none');
+$('#id_li_cancel_category').click(function () {
+    $('#id_li_add_category').css('display', 'inline');
+    $('#id_li_cancel_category').css('display', 'none');
+    $('#id_li_save_category').css('display', 'none');
+    $('#id_msg_block_category').css('display', 'none');
 
-    $('#id_name_provider').val('');
-    $('#id_watch_provider').prop('checked', false);
+    $('#id_name_category').val('');
 });
 
 
@@ -287,7 +260,7 @@ headers: {
 }
 });
 
-table = $('#id_providers_td').DataTable({
+table = $('#id_categorys_td').DataTable({
 "language": {
 //    "columns": [
 //        null,
@@ -318,8 +291,8 @@ table = $('#id_providers_td').DataTable({
         "sortDescending": ": активировать для сортировки столбца по убыванию"
     }
 },
-"pageLength": 25,
-"ajax": "/providers/json",
+"pageLength": 10,
+"ajax": "/categories/json",
 "deferRender": true
 });
 

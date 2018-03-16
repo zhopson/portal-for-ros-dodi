@@ -123,6 +123,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/providers/ajax_edit', 'ProvidersController@prd_edit');
         Route::post('/providers/ajax_save', 'ProvidersController@prd_save');
         
+        Route::get('/groups', 'GroupsController@index')->name('groups');
+        Route::get('/groups/json', 'GroupsController@Get_json_groups');
+        Route::post('/groups/ajax_add', 'GroupsController@grp_add');
+        Route::post('/groups/ajax_edit', 'GroupsController@grp_edit');
+        Route::post('/groups/ajax_save', 'GroupsController@grp_save');
+
+        Route::get('/categories', 'CategoriesController@index')->name('categories');
+        Route::get('/categories/json', 'CategoriesController@Get_json_categories');
+        Route::post('/categories/ajax_add', 'CategoriesController@cat_add');
+        Route::post('/categories/ajax_edit', 'CategoriesController@cat_edit');
+        Route::post('/categories/ajax_save', 'CategoriesController@cat_save');
+        
         
 //        Route::middleware('role:Учителя')->group(function () {
 //
