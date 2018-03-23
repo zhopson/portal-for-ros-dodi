@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="panel panel-default" style="margin: -15px 25px 0px 25px">
+<div class="panel panel-default" style="margin: 55px 25px 0px 25px">
     <div class="panel-heading">
         <h3 class="panel-title">Протокол №{{ $id }}</h3>
     </div>

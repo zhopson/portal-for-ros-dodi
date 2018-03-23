@@ -3,7 +3,7 @@
 <link href="{{ asset('css/bootstrap-fileinput.css') }}" rel="stylesheet">
 @endsection
 @section('content')
-<div class="container-fluid" style="margin:0 280px 40px 30px">
+<div class="container-fluid" style="margin:0 280px 0 30px">
     <form method="POST" action="{{ route('documents.store') }}">
         {{ csrf_field() }}
 <!--                <div class="pull-right">
@@ -12,7 +12,7 @@
                 </div>-->
         
         <div class="row">
-            <div class="col-md-4"><h3 ><mark>Просмотр документа № {{ $doc->id }}</mark></h3></div>
+            <div class="col-md-4"><h3 style="margin:50px 0 10px 0" ><mark>Просмотр документа № {{ $doc->id }}</mark></h3></div>
         </div>
         <div class="panel panel-default">
             <div class="panel-body">

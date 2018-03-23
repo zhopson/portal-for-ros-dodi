@@ -24,7 +24,7 @@ if ($address_components) {
 
 <div class="container-fluid" style="margin:0 60px 0 60px">
     <div class="row">
-        <h3 style="margin-top:-10px">Изменить контакт</h3>
+        <h3 style="margin-top:25px"><div class="header-text">Изменить контакт</div></h3>
     </div>
     <div class="row">
         <div class="col-md-6">

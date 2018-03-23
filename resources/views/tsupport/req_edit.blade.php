@@ -3,11 +3,11 @@
 
 @endsection
 @section('content')
-<div class="container-fluid" style="margin:0 30px 40px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <form method="POST" action="{{ route('requests.update', ['id' => $req->id]) }}">
     {{ csrf_field() }}
     <div class="row">
-        <div class="col-md-3"><h3 style="margin-top:-10px">Редактировать обращение</h3></div>
+        <div class="col-md-3"><h3 style="margin-top:25px"><div class="header-text">Редактировать обращение</div></h3></div>
     </div>
         <div class="col-md-6">
             <div class="panel panel-default">

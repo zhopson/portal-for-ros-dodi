@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid" style="margin:0 30px 20px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
 <form class="form-horizontal" method="POST" action="{{ route('admin.users.store') }}">
 {{ csrf_field() }}
 
     <div class="row">
-        <div class="col-md-4"><h3 style="margin-top:-10px">Новый пользователь</h3></div>
+        <div class="col-md-4"><h3 style="margin-top:25px"><div class="header-text">Новый пользователь</div></h3></div>
     </div> 
 @if (count($errors) > 0)
   <div class="alert alert-danger">

@@ -5,11 +5,11 @@
 
 @section('content')
 
-<div class="container-fluid" style="margin:0 30px 45px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <div class="row">
         <div class="col-md-6">
-            <div class="page-header" style="margin-top:-18px">
-                <h2>Личный кабинет</h2>
+            <div class="page-header" style="margin-top:30px">
+                <h2><div class="header-text">Личный кабинет</div></h2>
             </div>            
         </div>
     </div>
@@ -23,7 +23,7 @@
   </div>
 @endif    
     <div class="row">
-        <h3 style="margin-top:-10px">{{ $client->clt_name }}</h3>
+        <h3 style="margin-top:25px"><div class="header-text">{{ $client->clt_name }}</div></h3>
     </div>
     <div class="row">
         <div class="col-md-6">

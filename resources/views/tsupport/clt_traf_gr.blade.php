@@ -21,9 +21,9 @@
   </div>
 @endif
 
-<div class="container-fluid" style="margin:0 30px 45px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <div class="row">
-        <h3 style="margin-top:-10px">Статистика по трафику клиентов</h3>
+        <h3 style="margin-top:25px"><div class="header-text">Статистика по трафику клиентов</div></h3>
     </div>
     <div class="row">
         <div class="panel panel-default">

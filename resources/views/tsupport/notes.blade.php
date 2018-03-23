@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid" style="margin:0 15px 30px 15px">
+<div class="container-fluid" style="margin:0 15px 0 15px">
     <div class="row">
-        <div class="col-md-3"><h3 style="margin-top:-10px">Заметки</h3></div>
+        <div class="col-md-3"><h3 style="margin-top:25px"><div class="header-text">Заметки</div></h3></div>
     </div>
 <div class="panel panel-default" style="margin: -5px 5px 60px 5px">
 <!--    <div class="panel-heading">

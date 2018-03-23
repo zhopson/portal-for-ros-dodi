@@ -9,7 +9,7 @@
 {{ csrf_field() }}
 
     <div class="row">
-        <h3 style="margin-top:-10px">Удаление протокола #{{$id}}</h3>
+        <h3 style="margin-top:25px"><div class="header-text">Удаление протокола #{{$id}}</div></h3>
     </div>
 
 @if (count($errors) > 0)

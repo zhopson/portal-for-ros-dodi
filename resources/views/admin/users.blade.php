@@ -3,7 +3,7 @@
 
 @endsection
 @section('content')
-<div class="container-fluid" style="margin:0 30px 20px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
 @if (count($errors) > 0)
   <div class="alert alert-danger">
     <ul>
@@ -14,7 +14,7 @@
   </div>
 @endif    
     <div class="row">
-        <div class="col-md-4"><h3 style="margin-top:-10px">Пользователи и группы</h3></div>
+        <div class="col-md-4"><h3 style="margin-top:25px"><div class="header-text">Пользователи и группы</div></h3></div>
     </div>
     <div class="col-md-6">
             <div class="panel panel-default">

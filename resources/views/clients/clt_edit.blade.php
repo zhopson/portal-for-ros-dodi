@@ -53,7 +53,7 @@ $users = App\User::orderBy('email','asc')->get();
 
 <div class="container-fluid" style="margin:0 60px 0 60px">
     <div class="row">
-        <h3 style="margin-top:-10px">Изменить данные пользователя</h3>
+        <h3 style="margin-top:25px"><div class="header-text">Изменить данные пользователя</div></h3>
     </div>
     <div class="row">
         <div class="col-md-6">

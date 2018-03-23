@@ -9,7 +9,7 @@
 {{ csrf_field() }}
 
     <div class="row">
-        <h3 style="margin-top:-10px">Параметры протокола #{{$id}}</h3>
+        <h3 style="margin-top:25px"><div class="header-text">Параметры протокола #{{$id}}</div></h3>
     </div>
     <div class="row">
         <div class="col-md-6">

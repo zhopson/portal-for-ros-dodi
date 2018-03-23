@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="margin:0 30px 45px 30px">
+<div class="container" style="margin:0 30px 0 30px">
     <div class="row">
         <div class="col-md-6">
-            <div class="page-header" style="margin-top:-18px">
-                <h2>Личный кабинет</h2>
+            <div class="page-header" style="margin-top:30px">
+                <h2><div class="header-text">Личный кабинет</div></h2>
             </div>            
         </div>
     </div>

@@ -12,9 +12,9 @@
   </div>
 @endif
 
-<div class="container-fluid" style="margin:0 30px 45px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <div class="row">
-        <h3 style="margin-top:-10px">Трафик общий (с Zabbix) </h3>
+        <h3 style="margin-top:25px"><div class="header-text">Трафик общий (с Zabbix) </div></h3>
     </div>
     <div class="row">
         <div class="panel panel-default">

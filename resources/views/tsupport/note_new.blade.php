@@ -3,11 +3,11 @@
 
 @endsection
 @section('content')
-<div class="container-fluid" style="margin:0 30px 40px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <form method="POST" action="{{ route('notes.store', ['id' => $client_id]) }}">
     {{ csrf_field() }}
     <div class="row">
-        <div class="col-md-4"><h3 style="margin-top:-10px">Новая заметка к протоколу <mark>#{{ $ch_id }}</mark></h3></div>
+        <div class="col-md-4"><h3 style="margin-top:25px"><div class="header-text">Новая заметка к протоколу <mark>#{{ $ch_id }}</mark></div></h3></div>
     </div>
         <div class="col-md-6">
             <div class="panel panel-default">

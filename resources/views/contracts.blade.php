@@ -4,7 +4,10 @@
 
 @section('content')
 
-<div class="panel panel-default" style="margin: -15px 5px 25px 5px">
+<div class="container-fluid" style="margin:0 15px 0 15px">
+    <div class="row">
+    </div>
+<div class="panel panel-default" style="margin: 5px 205px 60px 5px">
     <div class="panel-heading">
         <h3 class="panel-title">Контракты </h3>
     </div>
@@ -102,6 +105,7 @@
             </div>        
         </div>
     </div>
+</div>
 </div>
 @endsection
 

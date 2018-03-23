@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<div class="container-fluid" style="margin:0 30px 40px 30px">
+<div class="container-fluid" style="margin:0 30px 0 30px">
     <form method="POST" action="{{ route('documents.update', ['id' => $doc->id]) }}">
         {{ csrf_field() }}
 <!--                <div class="pull-right">
@@ -30,7 +30,7 @@
                 </div>-->
         
         <div class="row">
-            <div class="col-md-4"><h3 ><mark>Редактировать документ № {{ $doc->id }}</mark></h3></div>
+            <div class="col-md-4"><h3 style="margin:50px 0 10px 0"><mark>Редактировать документ № {{ $doc->id }}</mark></h3></div>
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
