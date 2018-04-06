@@ -163,3 +163,23 @@ window.onload = function () {
 };
 </script>
 @endsection
+@section('footer')
+<!--<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
+<script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+<!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
+<script type="text/javascript">
+
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
+window.onload = function () {
+
+@if (count($errors) > 0)
+    setTimeout(HideMsg,5000);
+@endif    
+        
+};
+
+</script>
+@endsection

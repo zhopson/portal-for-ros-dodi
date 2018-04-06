@@ -68,6 +68,10 @@
 
 <script type="text/javascript">
 
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
 $(document).ready(function () {
 
 $('input[type=radio][name=optionsRadiosPeriod]').on('change', function() {
@@ -92,7 +96,11 @@ $('input[type=radio][name=optionsRadiosPeriod]').on('change', function() {
 });
 
 });
+
 window.onload = function () {
+@if (session('status'))
+    setTimeout(HideMsg,5000);
+@endif    
             
 };
 

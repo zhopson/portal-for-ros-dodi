@@ -17,7 +17,7 @@
     @if ($clt_id)
     
     @foreach ($clients as $client)
-@if (session('status'))
+@if (session('status'))    
   <div class="alert alert-success">
         {{ session('status') }}
   </div>
@@ -435,6 +435,18 @@
 <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
 <!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
 <script type="text/javascript">
-    
+
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
+window.onload = function () {
+
+@if (session('status'))
+    setTimeout(HideMsg,4000);    
+@endif    
+        
+};
+
 </script>
 @endsection

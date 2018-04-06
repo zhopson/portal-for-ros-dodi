@@ -243,7 +243,7 @@ class ClientsController extends Controller
     }
 //var_dump($client);
 
- public function clt_new() {
+ public function clt_new($usr_id = null) {
 
         $clt_types = DB::table('clients_type')
             ->select('clients_type.id','clients_type.name')
@@ -251,12 +251,14 @@ class ClientsController extends Controller
         
         return view('clients.clt_new',[
             'clt_types' => $clt_types,
+            'usr_id' => $usr_id,
         ]);
  }    
 
  public function clt_store(Request $request) {
 
         $clients_type_id = $request->input('v_clt_type');
+        $clients_usr_id = $request->input('v_clt_new_usr_id');
 
         if ($clients_type_id == 1 || $clients_type_id == 2 || $clients_type_id == 4) {
             $name = $request->input('v_clt_name');
@@ -281,8 +283,20 @@ class ClientsController extends Controller
         $new_clt = '';
         if ($clients_type_id == 1) {
             $new_clt = Client::create(compact('clients_type_id', 'surname', 'name', 'patronymic', 'sex', 'mother', 'father', 'language'));
+            if ($clients_usr_id) {
+                $user = User::find($clients_usr_id);
+                $user->client_id = $new_clt->id;
+                $user->save();
+            }
+            
         } elseif ($clients_type_id == 2 || $clients_type_id == 4) {
             $new_clt = Client::create(compact('clients_type_id', 'surname', 'name', 'patronymic', 'sex', 'language'));
+            if ($clients_usr_id) {
+                $user = User::find($clients_usr_id);
+                $user->client_id = $new_clt->id;
+                $user->save();
+            }
+            
         } else {
             $new_clt = Client::create([
                 'clients_type_id' => $clients_type_id,

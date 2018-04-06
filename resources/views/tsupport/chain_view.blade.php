@@ -1,10 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="panel panel-default" style="margin: 55px 25px 0px 25px">
-    <div class="panel-heading">
-        <h3 class="panel-title">Протокол №{{ $id }}</h3>
+<div class="container-fluid" style="margin:0 15px 0 15px">
+    <div class="row">
+        <div class="col-md-3"><h3 style="margin-top:25px"><div class="header-text">Протокол №{{ $id }}</div></h3></div>
     </div>
+<div class="panel panel-default" style="margin: -5px 5px 60px 5px">
+<!--    <div class="panel-heading">
+        <h3 class="panel-title">Протокол №{{ $id }}</h3>
+    </div>-->
     <div class="panel-body">
         <div class="container-fluid">
             <div class="row">
@@ -244,5 +248,6 @@
             </div>        
         </div>
     </div>
+</div>
 </div>
 @endsection

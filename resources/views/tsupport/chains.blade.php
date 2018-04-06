@@ -1,9 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+    $clt = ''; $clt_name = '';
+    if ($clt_id) {
+        $clt = App\Client::find($clt_id);
+        if ($clt) $clt_name = $clt->surname.' '.$clt->name.' '.$clt->patronymic;
+        $clt_name = trim($clt_name);
+    }
+@endphp
+
 <div class="container-fluid" style="margin:0 15px 0 15px">
     <div class="row">
-        <div class="col-md-3"><h3 style="margin-top:25px"><div class="header-text">Протоколы</div></h3></div>
+        @if ($clt_id)
+        <div class="col-md-7"><h3 style="margin-top:25px"><div class="header-text">Протоколы пользователя <mark>{{ $clt_name }}</mark></div></h3></div>
+        @else
+            <div class="col-md-3"><h3 style="margin-top:25px"><div class="header-text">Протоколы</div></h3></div>
+        @endif
     </div>
 <div class="panel panel-default" style="margin: -5px 5px 60px 5px">
 <!--    <div class="panel-heading">
@@ -24,7 +38,7 @@
                 </div>
             </div>-->
             <div class="table-responsive">
-                <table class="display" id="id_chains_td"  cellspacing="0" width="100%">
+                <table class="display responsive" id="id_chains_td"  cellspacing="0" width="100%">
 <!--                <table class="table table-hover table-bordered table-condensed table-responsive" id="id_chains_td">-->
                     <thead>
                         <tr class="active">

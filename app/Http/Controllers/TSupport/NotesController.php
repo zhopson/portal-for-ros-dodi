@@ -159,7 +159,7 @@ class NotesController extends Controller
             
             array_push($data, 
               array(
-                date('d.m.y H:i',$note->creation_time),
+                date('Y.m.d H:i',$note->creation_time),
                 '<a href="'.route('clients.view', ['id' => $note->client_id]).'">'.$note->clt_name.'</a>',
                 $note->name,
                 $note->body,

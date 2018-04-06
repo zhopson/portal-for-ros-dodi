@@ -307,7 +307,7 @@ class RequestsController extends Controller
             
             array_push($data, 
               array(
-                date('d.m.y H:i',$request->creation_time),
+                date('Y.m.d H:i',$request->creation_time),
                 '<a href="'.route('clients.view', ['id' => $request->client_id]).'">'.$request->clt_name.'</a>',
                 $request->name,
                 $request->comment,

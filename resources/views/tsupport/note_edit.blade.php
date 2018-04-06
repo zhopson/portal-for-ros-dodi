@@ -84,12 +84,20 @@
 <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
 <script type="text/javascript">
 
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
 $(document).ready(function () {
 
 });
 
 window.onload = function () {
-   
+
+@if (count($errors) > 0)
+    setTimeout(HideMsg,5000);
+@endif   
+
 };
 </script>
 @endsection

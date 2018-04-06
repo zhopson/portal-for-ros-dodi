@@ -73,7 +73,12 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12"  style="height:400px; margin: 5px 5px 0 5px">
-                        <div id="container" style="height: 100%"></div>
+                        <div id="container_traf" style="height: 100%"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12"  style="height:400px; margin: 15px 5px 0 5px">
+                        <div id="container_band" style="height: 100%"></div>
                     </div>
                 </div>
             </div>
@@ -131,7 +136,8 @@ $(document).ready(function () {
                         
 //                        $('#id_stat_error_panel').css('display', 'none');
                         $('#id_DBReqModal').modal('hide');
-                        GraphReport('Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
+                        GraphReport('container_traf','Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
+                        GraphReport('container_band','Скорость',result.data_dates,result.data_values_in_sp,result.data_values_out_sp);
                     }
                 },
                 // Что-то пошло не так
@@ -145,6 +151,10 @@ $(document).ready(function () {
         });
 
 });
+
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
 
         window.onload = function () {
             $('#id_DBReqModal').modal('show');
@@ -164,7 +174,8 @@ $(document).ready(function () {
 //                        $('#id_stat_error_panel').css('display', 'none');
                         
                         $('#id_DBReqModal').modal('hide');
-                        GraphReport('Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
+                        GraphReport('container_traf','Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
+                        GraphReport('container_band','Скорость',result.data_dates,result.data_values_in_sp,result.data_values_out_sp);
                     }
                 },
                 // Что-то пошло не так
@@ -174,11 +185,15 @@ $(document).ready(function () {
                 }
             }); 
             
+            @if (session('status'))
+                setTimeout(HideMsg,5000);
+            @endif              
+            
         };
 
-function GraphReport(ptitle,pdata_dates,pdata_values_in,pdata_values_out) {
+function GraphReport(pcontainer,ptitle,pdata_dates,pdata_values_in,pdata_values_out) {
 
-var dom = document.getElementById("container");
+var dom = document.getElementById(pcontainer);
 var myChart = echarts.init(dom);
 var app = {};
 option = null;
@@ -307,10 +322,24 @@ option = {
                     str = String(value);
                     val = str.replace(",", "");
                     val = Number(val);
-                    if ( val < 1024 )  return val + " КБ";
-                    else if ( val > 1024 && val < 1048576 )  return Math.round(val/1024) + " МБ";
-                    else if ( val > 1048576 && val < 1073741824 ) return Math.round(val/1024/1024) + " ГБ";
-                    else return Math.round(val/1024/1024/1024) + " ТБ";
+                    
+                    if (pcontainer === 'container_traf') {
+                        LabelKB = " КБ";
+                        LabelMB = " МБ";
+                        LabelGB = " ГБ";
+                        LabelTB = " ТБ";
+                    }
+                    else {
+                        LabelKB = " Кб/C";
+                        LabelMB = " Мб/C";
+                        LabelGB = " Гб/C";
+                        LabelTB = " Тб/C";
+                    }
+                    
+                    if ( val <= 1024 )  return val + LabelKB;
+                    else if ( val > 1024 && val <= 1048576 )  return Math.round(val/1024) + LabelMB;
+                    else if ( val > 1048576 && val <= 1073741824 ) return Math.round(val/1024/1024) + LabelGB;
+                    else return Math.round(val/1024/1024/1024) + LabelTB;
                     //return str.replace(",", "");
                 }
             }

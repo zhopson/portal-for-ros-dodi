@@ -164,6 +164,10 @@
 <script type="text/javascript">
 var n = 0;
 
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
 function addfile2table(p_vfile,pfile,ptype,pext,pdesc) {
     n = n + 1;
     $("#id_td_files_new_doc").find('tbody')
@@ -261,6 +265,7 @@ $(document).ready(function () {
             // Что-то пошло не так
             error: function (result) {
                 $('#id_error_file_panel').css('display', 'inline');
+                setTimeout(HideMsg,5000);
             }
         });
         }

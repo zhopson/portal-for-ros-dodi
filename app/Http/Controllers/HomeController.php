@@ -163,6 +163,9 @@ class HomeController extends Controller
         $new_clt = '';
         if ($clients_type_id == 1) {
             $new_clt = Client::create(compact('clients_type_id', 'surname', 'name', 'patronymic', 'sex', 'mother', 'father', 'language'));
+            $user = User::find($request->user()->id);
+            $user->client_id = $new_clt->id;
+            $user->save();
         } else if ($clients_type_id == 2 || $clients_type_id == 4) {
             $new_clt = Client::create(compact('clients_type_id', 'surname', 'name', 'patronymic', 'sex', 'language'));
             $user = User::find($request->user()->id);
@@ -177,7 +180,11 @@ class HomeController extends Controller
         //return redirect()->route('clients.edit', [$new_clt])->with( 'new_clt', $new_clt );
         
         //return redirect()->route('clients.edit', compact('id','new_clt','providers','clt_groups','clt_contracts','regions'));
-        return redirect()->route('clients.edit', ['id' => $new_clt->id, 'src' => 'lc']);
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') )  
+            return redirect()->route('lc.personal')->with('status', 'Изменения сохранены!');
+        else
+            return redirect()->route('clients.edit', ['id' => $new_clt->id, 'src' => 'lc']);
         //return view('clients.clt_edit/{$id}',compact('new_clt','providers','clt_groups','clt_contracts','regions'));    
         //return redirect('clients.edit');  
     }

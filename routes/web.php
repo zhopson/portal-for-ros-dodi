@@ -73,6 +73,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/documents/ajax_remove_file', 'WikiController@do_ajax_remove_file');
         Route::post('/documents/ajax_remove_doc', 'WikiController@do_ajax_remove_doc');
         
+        Route::get('/clients/edit/{id}/{src?}', 'ClientsController@clt_edit')->name('clients.edit');        
+        Route::get('/clients/new/{usr_id?}', 'ClientsController@clt_new')->name('clients.new');
+        Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
+        Route::post('/clients/update/{id}', 'ClientsController@clt_update')->name('clients.update');
+        
+        
     });
     
     Route::middleware('role_tp')->group(function () {
@@ -86,11 +92,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/calls/store/{id}', 'TSupport\CallsController@call_store')->name('calls.store');
         Route::get('/calls/edit/{id}', 'TSupport\CallsController@call_edit')->name('calls.edit');
         Route::post('/calls/update/{id}', 'TSupport\CallsController@call_update')->name('calls.update');
-        
-        Route::get('/clients/edit/{id}/{src?}', 'ClientsController@clt_edit')->name('clients.edit');        
-        Route::get('/clients/new', 'ClientsController@clt_new')->name('clients.new');
-        Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
-        Route::post('/clients/update/{id}', 'ClientsController@clt_update')->name('clients.update');
         
         Route::get('/chains/edit/{id}', 'TSupport\ChainsController@chain_edit')->name('chains.edit');
         Route::post('/chains/update/{id}', 'TSupport\ChainsController@chain_update')->name('chains.update');

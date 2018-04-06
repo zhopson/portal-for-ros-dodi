@@ -123,6 +123,19 @@
             </div>    
             </div>
             <div class="modal-footer">
+
+                    <div class="form-group has-warning">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="pull-right">Статус SIP</div>
+                        </div>
+                        <div class="col-md-7"> 
+                            <input type="text" class="form-control" id="id_call_anytel_sip_log">
+                        </div>
+                    </div>
+                    </div>
+                
+                
                 <button type="button" id="id_call_btn" class="btn btn-primary">Позвонить</button>
                 <button type="button" id="id_call_hang_btn" class="btn btn-default">Положить</button>
             </div>
@@ -562,6 +575,10 @@
 var call_id = null;
 var is_called = 0;
 
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
 function call_client(pname,ptel){
     
     $('#id_CallModal').on('show.bs.modal', function () {
@@ -598,6 +615,7 @@ function CreateChainbyCall(){
         //var chain_id_exist = $('#id_call_new_exist_chain').val();
         var chain_id_exist = 'null';
 
+        if (comment === '') { alert('При создании протокола поле комментарий должно быть заполнено!'); return; }
         //alert(clt_id+'; open_chain_id:'+open_chain_id+'; chain_id_exist:'+chain_id_exist+'; category:'+category+'; interlocutor:'+interlocutor+'; comment:'+comment);
         $.ajax({
             url: '/clients/ajax_create_chain_by_call',
@@ -742,6 +760,10 @@ function UpdateCallStatusByTel(){
 
         //do login
         login();
+        
+        @if (session('status'))
+            setTimeout(HideMsg,4000);    
+        @endif          
 
         };
     

@@ -17,7 +17,6 @@
             <div class="row" id='id_msg_block_category'>
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <button type="button" id ='id_btn_close_category' class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<!--                    <button type="button" id ='id_btn_close_category' class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
                     <strong>Ошибка!</strong> <label id="id_error_msg_category"></label>
                 </div>
             </div>

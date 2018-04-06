@@ -15,6 +15,7 @@
                     <form class="form-horizontal"  method="POST" action="{{ route('clients.store') }}">
                     {{ csrf_field() }}
                     <div id='id_clt_common_section'>
+                        <input type="hidden" class="form-control" id="id_clt_new_usr_id" name="v_clt_new_usr_id" value="{{$usr_id}}">
                         <div class="page-header" style="margin: 0 0 0 10px">
                             <h4 style="margin-bottom:-3px">Общее</h4>
                         </div>

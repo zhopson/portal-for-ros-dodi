@@ -368,9 +368,15 @@ class TasksController extends Controller {
         $data = [];
         foreach ($tasks as $row=>$task) {
             
+            $date_start = date('Y.m.d H:i',$task->start_time);
+            $date_end = date('Y.m.d H:i',$task->deadline_time);
+            
+            if ($date_start === '1970.01.01 09:00') $date_start = '';
+            if ($date_end === '1970.01.01 09:00') $date_end = '';
+            
             array_push($data, 
               array(
-                date('d.m.y H:i',$task->creation_time),
+                date('Y.m.d H:i',$task->creation_time),
                 '<a href="'.route('clients.view', ['id' => $task->client_id]).'">'.$task->clt_name.'</a>',
                 $task->avtor,
                 $users->find($task->responsible_id)->name,
@@ -378,8 +384,8 @@ class TasksController extends Controller {
                 $task->message,
                 $tsk_priority[$task->priority],
                 $tsk_status[$task->tsk_status],
-                date('d.m.y H:i',$task->start_time),
-                date('d.m.y H:i',$task->deadline_time),
+                $date_start,
+                $date_end,
                 $chain_status[$task->chn_status],
                 '<a href="'.route('chains.view', ['id' => $task->chain_id]).'"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a>',
                 '<a href="'.route('tasks.edit', ['id' => $task->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>',

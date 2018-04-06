@@ -310,7 +310,7 @@ class CallsController extends Controller
             
             array_push($data, 
               array(
-                date('d.m.y H:i',$call->creation_time),
+                date('Y.m.d H:i',$call->creation_time),
                 '<a href="'.route('clients.view', ['id' => $call->client_id]).'">'.$call->clt_name.'</a>',
                 $call->interlocutor,
                 $call->name,

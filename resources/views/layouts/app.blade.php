@@ -29,7 +29,7 @@
     color: rgb(49, 151, 116);  Цвет текста 
    }*/
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .navbar-header {
     float: none;
   }
@@ -108,17 +108,17 @@
                                         </a>-->
 <!--                    <div class="navbar-left">
                         <a class="navbar-brand" href="{{ url('/') }}">
-                            <img alt="Brand" src={{ asset('images/logo.png') }} width=150>
+                            <img alt="Brand" src={{ asset('images/logo.png') }} width=150>width=240 height=135vh
                         </a>
                     </div>-->
-                    <a href="{{ url('/') }}"><img alt="Brand" src={{ asset('images/logo.png') }} width=250></a>
+                    <a href="{{ url('/') }}"><img alt="Brand" src={{ asset('images/logo.png') }} width=210></a> 
+<!--                    <a href="{{ url('/') }}"><img class="img-responsive" alt="Brand" src={{ asset('images/logo.png') }} width=20%></a> -->
                 </div>
-                <p class="navbar-text"> </p>
-                <p class="navbar-text"> </p>
-                <div class="collapse navbar-collapse" id="app-navbar-collapse1" style="font-family: sans-serif, Arial; font-size: 17px; background-color: white; margin: 0 -15px 0 -15px">
+<!--                <p class="navbar-text"> </p>-->
+                <div class="collapse navbar-collapse" id="app-navbar-collapse1" style="font-family: sans-serif, Arial; font-size: 17px; background-color: white; margin: 0 -15px 0 -15px;">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
+                    <ul class="nav navbar-nav" style="margin-top:4vh">
+<!--                        &nbsp;-->
 
                         @guest    
                         @else    
@@ -190,9 +190,8 @@
 
                         
                     </ul>
-
                     <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right" style="margin-top: 4vh;">
                         <!-- Authentication Links -->
                         @guest
                             <li><a href="{{ route('login') }}"><div class="menu-text">Войти</div></a></li>
@@ -248,7 +247,7 @@
                 <nav class="navbar navbar-nav navbar-static-bottom" style="background-color: #efffff; width:100%; height: 6vh">
                     <div class="container">
                         <div class="navbar-header">
-                            <p class="navbar-text"><strong>Copyright © <mark>m.a.n.</mark> 2017. All Rights Reserved.</strong></p>
+                            <p class="navbar-text"><strong>Copyright © <mark>m.a.n.</mark> 2017-2018. All Rights Reserved.</strong></p>
                         </div>
                         <div class="collapse navbar-collapse" id="footer-navbar-collapse">
                             <ul class="nav navbar-nav">

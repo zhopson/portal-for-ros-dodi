@@ -33,16 +33,18 @@ class NetFlowController extends Controller
             //$scale = 'КБ';
             
             if ($ip != 0)  //YYYY-MM-DD HH24:MI
-                $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where ip_addr='".$ip."' and period>'".$start_date."' and period<'".$end_date."'");
+                $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where ip_addr='".$ip."' and period>'".$start_date."' and period<'".$end_date."'");
             else if ($id != 0) 
-                $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where user_id=".$id." and period>'".$start_date."' and period<'".$end_date."'");
+                $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where user_id=".$id." and period>'".$start_date."' and period<'".$end_date."'");
             else //{ $scale = 'МБ';//traf for all clts 
-                $traf = DB::connection('pgsql_netflow')->select("select sum(bytes_in/1024) as bytes_in,sum(bytes_out/1024) as bytes_out,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where period>'".$start_date."' and period<'".$end_date."' group by period");
+                $traf = DB::connection('pgsql_netflow')->select("select sum(bytes_in/1024) as bytes_in,sum(bytes_out/1024) as bytes_out,sum(8*bytes_in/1024/900) as bytes_in_sp,sum(8*bytes_out/1024/900) as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where period>'".$start_date."' and period<'".$end_date."' group by period");
             //return Response::json(array('ddt'=>$end_date, 'status' => 1));
 
             $data_dates = [];
             $data_values_in = [];
             $data_values_out = [];
+            $data_values_in_sp = [];
+            $data_values_out_sp = [];
 //            $max_in = 0;
 //            $max_out = 0;
             
@@ -62,12 +64,19 @@ class NetFlowController extends Controller
 
                 array_push($data_values_out, $item->bytes_out
                 );
+                
+                array_push($data_values_in_sp, $item->bytes_in_sp
+                );
+
+                array_push($data_values_out_sp, $item->bytes_out_sp
+                );
+                
             }
             
 //             if ($max_in > 1048576 || $max_out > 1048576) $scale = 'МБ';
 //             else $scale = 'КБ';
             //return ['data'=>$data];
-            return Response::json(['data_dates' => $data_dates,'data_values_in' => $data_values_in,'data_values_out' => $data_values_out,'status' => 1]);
+            return Response::json(['data_dates' => $data_dates,'data_values_in' => $data_values_in,'data_values_out' => $data_values_out,'data_values_in_sp' => $data_values_in_sp,'data_values_out_sp' => $data_values_out_sp,'status' => 1]);
         }
         return 'error';
 //    return response()->json($chains->toJson());

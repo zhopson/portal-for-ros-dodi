@@ -33,6 +33,12 @@ if ($addresses!=='') {
 
 $users = App\User::orderBy('email','asc')->get();
 
+$suggested_user_id = '';
+$suggested_user = '';
+if ( ! $align_user ) {
+    if ($new_clt->email) $suggested_user = App\User::where('email',$new_clt->email)->first();
+    if ($suggested_user) $suggested_user_id = $suggested_user->id;
+}
 @endphp
 
 @if (count($errors) > 0)
@@ -506,6 +512,10 @@ $users = App\User::orderBy('email','asc')->get();
 <script type="text/javascript">
 var FlagClearAddress; 
 var nn = 0;
+
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
 
     function addip(ip,mask,gw,id = null) {
         var n = $("#id_clt_edit_inet_table_tbody").children('.table-tr-ips').length+1;
@@ -1068,7 +1078,16 @@ window.onload = function () {
         $('#id_clt_edit_dop_grps_btnadd').click();
         $('#id_clt_edit_dop_gr').val('0').change();
     @endforeach    
+    ////////////////////////////////////////////////////////////////////////////
+    var r = '{{$suggested_user_id}}';
+    if (r!=='') 
+        $('#id_clt_edit_user_align').val('{{$suggested_user_id}}').change();
+    
     //id_clt_edit_dop_gr
+    @if (count($errors) > 0 || session('status'))
+        setTimeout(HideMsg,5000);
+    @endif  
+    
 };
 </script>
 @endsection

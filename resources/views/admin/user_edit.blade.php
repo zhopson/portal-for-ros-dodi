@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+
+@php
+    $clt = ''; $clt_name = '';
+    if ( $user->client_id ) {
+        $clt = App\Client::find($user->client_id);
+        if ($clt) $clt_name = $clt->surname.' '.$clt->name.' '.$clt->patronymic;
+        $clt_name = trim($clt_name);
+    }
+@endphp
+
 <div class="container-fluid" style="margin:0 30px 0 30px">
 <form class="form-horizontal" method="POST" action="{{ route('admin.users.update', ['id' => $user->id]) }}">
 {{ csrf_field() }}
@@ -141,6 +151,38 @@
         </div>
     </div>
     <div class="row">
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Персональные данные</div>
+                <div class="panel-body">
+                    @if ( $user->client_id )
+                        <div class="row">
+                            <div class="pull-left"><h3 style="margin:20px 0 20px 30px"> {{ $clt_name }} </h3></div>
+                            <div class="pull-right"><a style="margin:20px 20px 60px 30px"  href="{{ route('clients.view', ['id' => $user->client_id]) }}" role="button" class="btn btn-info"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  Смотреть информацию</a></div>
+                        </div>
+                    @else
+                    <div class="form-group" style="margin-top:10px">
+                        <div class="row">
+                            <div class="pull-left"><h3 style="margin:20px 0 20px 30px">Персональные данные отсутствуют</h3></div>
+                            <div class="pull-right"><a style="margin:20px 20px 60px 30px"  href="{{  route('clients.new',['id' => $user->id]) }}" role="button" class="btn btn-info"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>  Добавить информацию</a></div>
+                        </div>
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <p class="bg-warning">
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                Также персональные данные пользователя можно добавить в Разделе 
+                                <mark><Техподдержка></mark> => <mark><Пользователи></mark>
+                            </p>
+                        </div>
+                        
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="row">
         <div class="col-md-1 col-md-offset-7">
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">
@@ -156,4 +198,24 @@
     </div>
 </form>
 </div>
+@endsection
+@section('footer')
+<!--<script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>-->
+<script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+<!--<script src="{{ asset('js/bootstrap.min.js') }}"></script>-->
+<script type="text/javascript">
+
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
+window.onload = function () {
+
+@if (count($errors) > 0)
+    setTimeout(HideMsg,5000);
+@endif    
+        
+};
+
+</script>
 @endsection

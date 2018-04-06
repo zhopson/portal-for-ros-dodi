@@ -109,13 +109,13 @@ class ChainsController extends Controller
             array_push($data, 
               array(
                 $chain->id,
-                date('d.m.y H:i',$chain->update_time),
+                date('Y.m.d H:i',$chain->update_time),
                 '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
                 $clt_adr,
                 $chain->u_name,
                 $usr_name,
                 $ch_status[$chain->status],
-                date('d.m.y H:i',$chain->opening_time),
+                date('Y.m.d H:i',$chain->opening_time),
                 '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',
                 $categories
               )

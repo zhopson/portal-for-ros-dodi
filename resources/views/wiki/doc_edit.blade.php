@@ -209,6 +209,10 @@
 <script src="{{ asset('js/modal.js') }}"></script>
 <script type="text/javascript">
 
+function HideMsg() {
+  $(".alert").css('display', 'none');  
+}
+
 function addfile2table(pid,p_vfile,pfile,ptype,pext,ploaddate,pdesc) {
     n = pid;
     home = '{{  asset('/') }}';
@@ -324,6 +328,8 @@ function removeFile(id) {
             // Что-то пошло не так
             error: function (result) {
                 $('#id_error_file_panel').css('display', 'inline');
+                setTimeout(HideMsg,5000);
+                
             }
         });
 }
@@ -377,6 +383,7 @@ $(document).ready(function () {
             // Что-то пошло не так
             error: function (result) {
                 $('#id_error_file_panel').css('display', 'inline');
+                setTimeout(HideMsg,5000);
             }
         });
         }
