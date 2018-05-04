@@ -421,10 +421,19 @@ window.onload = function () {
         var ddd = now.toISOString();
         strd = ddd.substr(0, 10);
         var strt = ddd.substr(11, 5);
-    
+
         $('#id_task_new_start_d').val(strd);
         //sdtField_dhcpo.value = strd;
         $('#id_task_new_start_t').val(strt);
+        
+        
+        now.setHours(now.getHours() + 24);
+        var dddd = now.toISOString();
+        stre = dddd.substr(0, 10);
+        
+        $('#id_task_new_srok_d').val(stre);
+        
+        
 };
 </script>
 @endsection

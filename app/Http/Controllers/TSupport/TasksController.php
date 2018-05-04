@@ -104,7 +104,7 @@ class TasksController extends Controller {
         $priority = $request->input('v_task_new_tsk_priority');
         $start_d = $request->input('v_task_new_start_d');
         $start_t = $request->input('v_task_new_start_t');
-        $deadline_time = strtotime($request->input('v_task_new_srok_d'));
+        $deadline_time = strtotime($request->input('v_task_new_srok_d').' 23:59');
         $progress = $request->input('v_task_new_tsk_progress');
         $departure = $request->input('v_task_new_tsk_dep');
         $message = $request->input('v_task_new_msg');

@@ -77,7 +77,13 @@
     </div>
 <div class="panel panel-default" style="margin: 5px 55px 60px 5px">
     <div class="panel-heading">
-        <h3 class="panel-title">Контакты </h3>
+        
+        @if ($punkt)
+            <h3 class="panel-title">Контакты внештатных помощников</h3>
+        @else
+            <h3 class="panel-title">Контакты </h3>
+        @endif        
+        
     </div>
     <div class="panel-body">
         <div class="container-fluid">
@@ -218,7 +224,12 @@ function call_client(pclt_id,pname,ptel){
                 }                
             },            
             "pageLength": 25,
+            
+            @if ($punkt)
+            "ajax": "/contacts/json4clt/"+'{{ $punkt }}', 
+            @else
             "ajax": "/contacts/json", 
+            @endif
             "deferRender": true            
         });            
             

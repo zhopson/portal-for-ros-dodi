@@ -16,10 +16,10 @@ class ContactsController extends Controller
             return redirect('forbidden');
         }  
 
-        $add2exist_chain_id = '';
+        $punkt = '';
         
         return view('contacts.contacts', [
-            'add2exist_chain_id' => $add2exist_chain_id,
+            'punkt' => $punkt,
             //'chains_opened' => $chains_opened,
         ]);
     }    
@@ -73,7 +73,72 @@ class ContactsController extends Controller
         return ['data'=>$data];
         
 //    return response()->json($chains->toJson());
+    }   
+    
+    
+    public function index4clt(Request $request, $punkt) {
+        
+        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') ) { 
+            return redirect('forbidden');
+        }  
+
+        return view('contacts.contacts', [
+            'punkt' => $punkt,
+            //'chains_opened' => $chains_opened,
+        ]);
+    }    
+    
+    public function Get_json_contacts4clt(Request $request, $punkt) {
+
+    $contacts = DB::table('contacts_view')->where('address', 'like', '%'.$punkt.'%')->get();//->paginate(100); 
+    //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
+
+        $isTeacher = $request->user()->hasRole('Учителя');
+        $data = [];
+        foreach ($contacts as $row=>$contact){
+            
+            $adr = '';
+            
+            $nums_str = '';
+            foreach (explode("\n",$contact->phones) as $number) {
+                $num_arr = (explode(":",$number));
+                $clt_name_clear =  str_replace('"', '', $contact->clt_name);
+                if ($isTeacher) 
+                    $nums_str = $nums_str.$num_arr[0];
+                else
+                    $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$contact->id."','".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                
+                if ( isset($num_arr[1]) &&  trim($num_arr[1])!='' )
+                    { $nums_str = $nums_str.'('.trim($num_arr[1]).'), '; }
+                else 
+                    { $nums_str = $nums_str.','; }
+                                            
+            }
+            $nums_str = rtrim($nums_str, ", "); 
+
+            $contact_edit_tag = '';
+            
+            if (!$isTeacher) 
+                $contact_edit_tag = '<a href="'.route('contacts.edit', ['id' => $contact->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>';
+                                
+            array_push($data, 
+              array(
+                //$contact->id,
+                $contact->clt_name,
+                $contact->address,
+                $contact->job,
+                $contact->post,
+                $contact->email,
+                $nums_str,
+                $contact_edit_tag,
+              )
+            );
+        }
+        return ['data'=>$data];
+        
+//    return response()->json($chains->toJson());
     }        
+
     
  public function cnt_new() {
      

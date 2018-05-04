@@ -354,7 +354,23 @@
                                     <div class="pull-right">Телефоны</div>
                                 </td>
                                 <td class="table-text">
-                                    <a href="#"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Внештатные помощники</a><br>
+                                    
+                                    
+                                    @if (count($addresses)>0)
+                                    
+                                    @foreach (explode(",",$addresses[0]->adr) as $address)
+                                        @if ($address!='""') 
+                                            @if (strpos($address, 'г.') !== false || strpos($address, 'у.') !== false )
+                                                <a href="{{ route('contacts_clt',[ 'punkt' => trim($address,'()"') ]) }}"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Внештатные помощники</a><br>
+                                                    @break
+                                            @endif
+                                        @endif
+                                    @endforeach                                    
+                                    
+                                    @endif
+                                    
+
+                                    
                                     @foreach (explode("\n",$client->numbers) as $number)
                                     @php    
                                         $nums_str = '';
