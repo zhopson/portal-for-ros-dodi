@@ -73,10 +73,28 @@ class NetFlowController extends Controller
                 
             }
             
+            
+            $a_in_sp = array_filter($data_values_in_sp, function($x) { return $x !== '0'; });
+            $a_out_sp = array_filter($data_values_out_sp, function($x) { return $x !== '0'; });
+            //$average = array_sum($a) / count($a);
+            
 //             if ($max_in > 1048576 || $max_out > 1048576) $scale = 'МБ';
 //             else $scale = 'КБ';
             //return ['data'=>$data];
-            return Response::json(['data_dates' => $data_dates,'data_values_in' => $data_values_in,'data_values_out' => $data_values_out,'data_values_in_sp' => $data_values_in_sp,'data_values_out_sp' => $data_values_out_sp,'status' => 1]);
+            return Response::json([
+                    'data_dates' => $data_dates,
+                    'data_values_in' => $data_values_in,
+                    'data_values_out' => $data_values_out,
+                    'data_values_in_sp' => $data_values_in_sp,
+                    'data_values_out_sp' => $data_values_out_sp,
+                    'sum_in' => round(array_sum($data_values_in) / 1024, 2),
+                    'sum_out' => round(array_sum($data_values_out) / 1024, 2),
+                    'max_sp_in' => round(max($data_values_in_sp), 2),
+                    'avg_sp_in' => round(array_sum($a_in_sp) / count($a_in_sp), 2),
+                    'max_sp_out' => round(max($data_values_out_sp), 2),
+                    'avg_sp_out' => round(array_sum($a_out_sp) / count($a_out_sp), 2),
+                    'status' => 1
+                   ]);
         }
         return 'error';
 //    return response()->json($chains->toJson());

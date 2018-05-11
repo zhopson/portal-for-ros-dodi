@@ -90,6 +90,7 @@ $(document).ready(function() {
                     "sortDescending": ": активировать для сортировки столбца по убыванию"
                 }                
             },
+            "order": [[ 0, "desc" ]],
             "ajax": "/notes/json", 
             "deferRender": true            
         });

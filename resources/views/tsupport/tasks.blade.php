@@ -102,6 +102,7 @@ $(document).ready(function() {
                     "sortDescending": ": активировать для сортировки столбца по убыванию"
                 }                
             },
+            "order": [[ 0, "desc" ]],
             "ajax": "/tasks/json", 
             "deferRender": true            
         });

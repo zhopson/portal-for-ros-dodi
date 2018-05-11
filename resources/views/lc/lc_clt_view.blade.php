@@ -238,9 +238,12 @@
                         <div class="col-md-3">
                             <a href="{{ route('tasks.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Задача</a>    
                         </div>-->
-                        <div class="col-md-3">
-                            <a href="{{ route('requests.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
-                        </div>
+                            <div class="pull-left" style="margin-left:10px">
+                                <a href="{{ route('requests.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
+                            </div>
+                            <div class="pull-right" style="margin-right:10px">
+                                <a href="{{ route('chains_usr', ['usr_id' => Auth::user()->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Протоколы созданные мной </a>    
+                            </div>
                     </div>
                     @if (count($chains_opened) > 0)
                     <div class="row">
@@ -399,7 +402,8 @@
                                 @endforeach
                             </tbody>                            
                         </table>
-                        <button style="margin-left:18px" type="button" class="btn btn-info"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Все протоколы пользователя</button>
+                        <a style="margin-left:18px" class="btn btn-info" href="{{ route('chains_clt',[ 'clt_id' => $client->id ]) }}" role="button"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Все протоколы на меня</a>
+<!--                        <button style="margin-left:18px" type="button" class="btn btn-info"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Все протоколы пользователя</button>-->
                     </div>
                     @endif                  
                 </div>

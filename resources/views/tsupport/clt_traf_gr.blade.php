@@ -72,6 +72,31 @@
             </div>
             <div class="panel-body">
                 <div class="row">
+                    <div class="panel panel-default" style="margin: 15px 15px 55px 15px">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">Статистика</div>
+                        <!-- Table -->
+                        <table class="table table-hover">
+                            <tr class="active">
+                                <th>Всего, входящий МБ</th>
+                                <th>Всего, исходящий МБ</th>
+                                <th>Макс скорость входящая Кбит/с</th>
+                                <th>Ср. скорость входящая Кбит/с</th>
+                                <th>Макс скорость исходящая Кбит/с</th>
+                                <th>Ср. скорость исходящая Кбит/с</th>
+                            </tr>
+                            <tr>
+                                <td class="table-text" id="id_sum_in"></td>
+                                <td class="table-text" id="id_sum_out"></td>
+                                <td class="table-text" id="id_max_sp_in"></td>
+                                <td class="table-text" id="id_avg_sp_in"></td>
+                                <td class="table-text" id="id_max_sp_out"></td>
+                                <td class="table-text" id="id_avg_sp_out"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12"  style="height:400px; margin: 5px 5px 0 5px">
                         <div id="container_traf" style="height: 100%"></div>
                     </div>
@@ -136,6 +161,14 @@ $(document).ready(function () {
                         
 //                        $('#id_stat_error_panel').css('display', 'none');
                         $('#id_DBReqModal').modal('hide');
+                        
+                        $('#id_sum_in').html(result.sum_in);
+                        $('#id_sum_out').html(result.sum_out);
+                        $('#id_max_sp_in').html(result.max_sp_in);
+                        $('#id_avg_sp_in').html(result.avg_sp_in);
+                        $('#id_max_sp_out').html(result.max_sp_out);
+                        $('#id_avg_sp_out').html(result.avg_sp_out);                        
+                        
                         GraphReport('container_traf','Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
                         GraphReport('container_band','Скорость',result.data_dates,result.data_values_in_sp,result.data_values_out_sp);
                     }
@@ -174,6 +207,14 @@ function HideMsg() {
 //                        $('#id_stat_error_panel').css('display', 'none');
                         
                         $('#id_DBReqModal').modal('hide');
+                        
+                        $('#id_sum_in').html(result.sum_in);
+                        $('#id_sum_out').html(result.sum_out);
+                        $('#id_max_sp_in').html(result.max_sp_in);
+                        $('#id_avg_sp_in').html(result.avg_sp_in);
+                        $('#id_max_sp_out').html(result.max_sp_out);
+                        $('#id_avg_sp_out').html(result.avg_sp_out);                       
+                        
                         GraphReport('container_traf','Трафик входящий/исходящий',result.data_dates,result.data_values_in,result.data_values_out);
                         GraphReport('container_band','Скорость',result.data_dates,result.data_values_in_sp,result.data_values_out_sp);
                     }

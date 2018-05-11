@@ -129,7 +129,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{  url('/lc') }}"><div class="menu-text">Профиль</div></a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="{{ route('lc.personal') }}"><div class="menu-text">Персональные данные</div></a></li>
+                                <li><a href="{{ route('lc.personal') }}"><div class="menu-text">Мои данные</div></a></li>
                             </ul>
                         </li>
                         @if ( Auth::user()->hasRole('Сотрудники ТП РОС') )

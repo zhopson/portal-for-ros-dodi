@@ -14,7 +14,9 @@
 <div class="container-fluid" style="margin:0 15px 0 15px">
     <div class="row">
         @if ($clt_id)
-        <div class="col-md-7"><h3 style="margin-top:25px"><div class="header-text">Протоколы пользователя <mark>{{ $clt_name }}</mark></div></h3></div>
+            <div class="col-md-7"><h3 style="margin-top:25px"><div class="header-text">Протоколы на пользователя <mark>{{ $clt_name }}</mark></div></h3></div>
+        @elseif ($usr_id)
+            <div class="col-md-7"><h3 style="margin-top:25px"><div class="header-text">Протоколы созданные <mark>{{  App\User::find($usr_id)->name }}</mark></div></h3></div>
         @else
             <div class="col-md-3"><h3 style="margin-top:25px"><div class="header-text">Протоколы</div></h3></div>
         @endif
@@ -111,8 +113,11 @@ $(document).ready(function() {
                 }                
             },
             "pageLength": 25,
+            "order": [[ 1, "desc" ]],
             @if ($clt_id)
             "ajax": "/chains/json4clt/"+'{{ $clt_id }}', 
+            @elseif ($usr_id)
+            "ajax": "/chains/json4usr/"+'{{ $usr_id }}', 
             @else
             "ajax": "/chains/json", 
             @endif

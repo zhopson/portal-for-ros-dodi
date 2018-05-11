@@ -165,6 +165,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/chains_clt/{clt_id}', 'TSupport\ChainsController@index4clt')->name('chains_clt');
             Route::get('/chains/json4clt/{clt_id}', 'TSupport\ChainsController@Get_json_chains4clt');
 
+            Route::get('/chains_usr/{usr_id}', 'TSupport\ChainsController@index4usr')->name('chains_usr');
+            Route::get('/chains/json4usr/{usr_id}', 'TSupport\ChainsController@Get_json_chains4usr');
+            
             Route::get('/clients', 'ClientsController@index')->name('clients');
             Route::get('/clients/json', 'ClientsController@Get_json_clients');
             Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
