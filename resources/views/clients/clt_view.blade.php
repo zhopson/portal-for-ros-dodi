@@ -143,6 +143,23 @@
     </div>
 </div>
 
+<div class="modal fade bs-example-modal-sm" id="id_PasswordModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Пароль</h4>
+            </div>
+        <div class="modal-body">
+            @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
+                @if ($vpn_status)
+                {{ $vpn_status[0]->pass }}
+                @endif
+            @endif
+        </div>        
+    </div>
+  </div>
+</div>
+
 
 @if (session('status'))
   <div class="alert alert-success">
@@ -198,7 +215,7 @@
                             </tr>
                             <tr>
                                 <td class="table-text">
-                                    <div class="pull-right">Привязка к логину</div>
+                                    <div class="pull-right">Логин</div>
                                 </td>
                                 <td class="table-text">
                                     @if (App\User::where('client_id',$client->id)->first())
@@ -297,6 +314,7 @@
                                 </td>
                             </tr>
                             @endif
+                            @if ($client->comment)
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Комментарий</div>
@@ -305,6 +323,7 @@
                                     {{$client->comment}}
                                 </td>
                             </tr>
+                            @endif
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Провайдер</div>
@@ -336,6 +355,22 @@
                                         <br>
                                     @endforeach                                      
                                     <a href="{{ route( 'netflow.clients.graph', [ 'id' => $client->id,'ip' => '0' ] ) }}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Статистика по пользователю</a>
+                                </td>
+                            </tr>
+                            @endif
+                            @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
+                            <tr>
+                                <td class="table-text">
+                                    <div class="pull-right">VPN</div>
+                                </td>
+                                <td class="table-text">
+<!--                                    Логин: user0001, Cтатус: ON-->
+                                    @if ($vpn_status)
+                                    Логин: {{ $vpn_status[0]->username }}, <a href="JavaScript:ShowPass();"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Пароль</a>, Cтатус: {{ $vpn_status[0]->status }}
+                                    @endif
+<!--                                    <a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>-->
+                                    
+<!--                                    <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" data-content="пароль">user0001</button>                                    -->
                                 </td>
                             </tr>
                             @endif
@@ -611,6 +646,17 @@ function call_client(pname,ptel){
     //alert(phost+" "+pnet);
 }    
 
+function ShowPass(){
+    
+//    $('#id_PasswordModal').on('show.bs.modal', function () {
+//        $('#id_PasswordModal').css("margin-left", $(window).width() - $('.modal-content').width());
+//        $('#id_PasswordModal').modal('show');
+//    });
+    
+    
+    $('#id_PasswordModal').modal('show');
+}
+
 $(document).ready(function () {
         
     $.ajaxSetup({
@@ -765,17 +811,20 @@ function UpdateCallStatusByTel(){
 
         window.onload = function () {
             
-            SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
-            SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
+            @if ( !Auth::user()->hasRole('Учителя') && !Auth::user()->hasRole('Ученики') )
             
-        //init sip stack
-            SIPml.init(readyCallback, errorCallback);
+                SetVar1('{{ base64_encode ( Auth::user()->sip_number ) }}');
+                SetVar2('{{ base64_encode ( Auth::user()->sip_secret ) }}');
+            
+                //init sip stack
+                SIPml.init(readyCallback, errorCallback);
 
-        //start stip stack
-            sipStack.start();
+                //start stip stack
+                sipStack.start();
 
-        //do login
-        login();
+                //do login
+                login();
+            @endif
         
         @if (session('status'))
             setTimeout(HideMsg,4000);    

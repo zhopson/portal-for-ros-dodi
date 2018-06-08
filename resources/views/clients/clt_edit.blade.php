@@ -403,6 +403,46 @@ if ( ! $align_user ) {
                                     </tr>
                                 </tbody>                                
                             </table>
+<!--                            <div class="page-header" style="margin: 20px 0 0 10px">
+                                <h4 style="margin-bottom:-3px">VPN</h4>
+                            </div>
+                            <div class="form-group" style="margin-top:10px">
+                                <label for="id_clt_edit_vpn_status" class="col-sm-3 control-label">Статус в БД VPN</label>
+                                <div class="col-sm-4">
+                                        
+                                    <div class="checkbox">
+                                        <label>
+                                                <input type="checkbox" id="id_clt_edit_vpn_status" name="v_clt_edit_vpn_status"  checked>
+                                            Включен
+                                        </label>
+                                    </div>                                        
+                                        
+                                </div>
+                            </div>                                                        
+                            <div class="form-group">
+                                <label for="id_clt_edit_vpn_user" class="col-sm-3 control-label">Имя пользователя</label>
+                                <div class="col-md-6">
+                                    <input id="id_clt_edit_vpn_user" class="form-control" name="v_clt_edit_vpn_user" value="user000111" readonly="true">
+                                </div>
+                            </div>                            
+
+                            <div class="form-group">
+                                <label for="id_clt_edit_vpn_password" class="col-md-3 control-label">Пароль</label>
+                                <div class="col-md-6">
+                                    <input id="id_clt_edit_vpn_password" type="password" class="form-control" name="v_clt_edit_vpn_password" value="">
+                                </div>
+                            </div>
+                    
+                        <input type="hidden" class="form-control" id="password_old" name="password_old" value="">                    
+
+                        <div class="form-group">
+                            <label for="id_clt_edit_vpn_password_confirm" class="col-md-3 control-label">Подтверждение пароля</label>
+                            <div class="col-md-6">
+                                <input id="id_clt_edit_vpn_password_confirm" type="password" class="form-control" name="v_clt_edit_vpn_password_confirm" value="">
+                            </div>
+                        </div>                            -->
+
+                            
                         </div>
                         <div id='id_clt_dop_view' style="display:none">
                             <div class="page-header" style="margin: 20px 0 0 10px">
@@ -470,7 +510,7 @@ if ( ! $align_user ) {
                             <div class="form-group">
                                 <label for="id_clt_edit_dop_prim" class="col-sm-3 control-label">Примечание</label>
                                 <div class="col-sm-8">
-                                    <textarea rows="10" cols="50" class="form-control" id="id_clt_edit_dop_prim" name="v_clt_edit_dop_prim">{{ $new_clt->comment }}</textarea>
+                                    <textarea rows="4" cols="50" class="form-control" id="id_clt_edit_dop_prim" name="v_clt_edit_dop_prim">{{ $new_clt->comment }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -498,7 +538,13 @@ if ( ! $align_user ) {
                 <li role="presentation" id="id_clt_edit_nav_dop"><a href="#">Дополнительно</a></li>   
             </ul>
             <ul class="nav nav-pills nav-stacked" style="margin-top:50px">
-                <li role="presentation"><a href="{{ url()->previous() }}">Вернуться назад</a></li>   
+                @if (strpos(url()->previous(), 'clients/new') !== false || strpos(url()->previous(), 'clients/vpn_error') !== false)
+                    <li role="presentation"><a href="{{ url('/clients') }}">Вернуться к списку клиентов</a></li>
+                @elseif (strpos(url()->previous(), 'lc/personal/new') !== false)
+                    <li role="presentation"><a href="{{ route('lc.personal') }}">Вернуться назад</a></li>
+                @else
+                    <li role="presentation"><a href="{{ url()->previous() }}">Вернуться назад</a></li>   
+                @endif
             </ul>
         </div>
     </div>

@@ -29,7 +29,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="margin-top:10px">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group input-group-sm">
                         @if ($id != 0) 
                             <input type="text" class="form-control" id="id_clt_traf_user" value="{{ $fio }}" readonly>
@@ -69,6 +69,18 @@
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="id_clt_traf_active" name="v_clt_traf_active" checked>
+                                    Только активные клиенты
+                                </label>
+                            </div>                        
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -94,6 +106,7 @@
                                 <td class="table-text" id="id_avg_sp_out"></td>
                             </tr>
                         </table>
+<!--                        <input type="text" class="form-control" id="id_1">-->
                     </div>
                 </div>
                 <div class="row">
@@ -135,7 +148,8 @@ $(document).ready(function () {
 
         $('#id_clt_traf_execute').click(function () {
             
-            var ip, id;
+            var ip, id, active;
+            
             $('#id_clt_traf_user').val('Пользователь');
             
             if ($('#id_clt_traf_ip').val() === '') ip = '0';
@@ -144,6 +158,11 @@ $(document).ready(function () {
             id = '0';
             
             if (ip === '0') { $('#id_clt_traf_user').val('Все пользователи');}
+            
+            actived = $('#id_clt_traf_active').prop('checked');
+            if (actived) active = 'on';
+            else active = 'off';            
+            
             //alert('ip:'+ip);
             $('#id_DBReqModal').modal('show');
             $.ajax({
@@ -152,13 +171,11 @@ $(document).ready(function () {
                 },
                 url: '/netflow/clients/ajax_get_traf',
                 type: 'POST',
-                data: {'id': id, 'ip': ip, 'date1': $('#id_clt_traf_date1').val(),'date2': $('#id_clt_traf_date2').val()},
+                data: {'id': id, 'ip': ip, 'date1': $('#id_clt_traf_date1').val(),'date2': $('#id_clt_traf_date2').val(),'only_active': active},
                 dataType: 'json',
                 success: function (result) {
                     if (result.status === 1) {
-                        //alert(result.ddt);
-                        //call_id = result.new_call_id;
-                        
+                        //$('#id_1').val(result.only_active);
 //                        $('#id_stat_error_panel').css('display', 'none');
                         $('#id_DBReqModal').modal('hide');
                         
@@ -190,6 +207,7 @@ function HideMsg() {
 }
 
         window.onload = function () {
+            active = 'on';
             $('#id_DBReqModal').modal('show');
             $.ajax({
                 headers: {
@@ -197,7 +215,7 @@ function HideMsg() {
                 },
                 url: '/netflow/clients/ajax_get_traf',
                 type: 'POST',
-                data: {'id': '{{ $id }}', 'ip': '{{ $ip }}', 'date1': $('#id_clt_traf_date1').val(),'date2': $('#id_clt_traf_date2').val()},
+                data: {'id': '{{ $id }}', 'ip': '{{ $ip }}', 'date1': $('#id_clt_traf_date1').val(),'date2': $('#id_clt_traf_date2').val(),'only_active': active},
                 dataType: 'json',
                 success: function (result) {
                     if (result.status === 1) {

@@ -25,6 +25,12 @@ class NetFlowController extends Controller
             $ip = $request->input('ip');
             $date1 = $request->input('date1');
             $date2 = $request->input('date2');
+            $only_active = $request->input('only_active');
+            
+            //var_dump($only_active); exit;
+            
+            //if ($only_active == 'on')
+            
 
             $start_date = $date1 . ' 00:00:00';
             $end_date = $date2 . ' 23:59:59';
@@ -36,8 +42,14 @@ class NetFlowController extends Controller
                 $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where ip_addr='".$ip."' and period>'".$start_date."' and period<'".$end_date."'");
             else if ($id != 0) 
                 $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where user_id=".$id." and period>'".$start_date."' and period<'".$end_date."'");
-            else //{ $scale = 'МБ';//traf for all clts 
-                $traf = DB::connection('pgsql_netflow')->select("select sum(bytes_in/1024) as bytes_in,sum(bytes_out/1024) as bytes_out,sum(8*bytes_in/1024/900) as bytes_in_sp,sum(8*bytes_out/1024/900) as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where period>'".$start_date."' and period<'".$end_date."' group by period");
+            else { //$scale = 'МБ';//traf for all clts 
+                if ($only_active == 'on') {
+                    $inactive = DB::select("select replace(replace(cast(array_agg(id) as varchar),'{','('),'}',')') from clients where active=0")[0]->replace;
+                    $traf = DB::connection('pgsql_netflow')->select("select sum(bytes_in/1024) as bytes_in,sum(bytes_out/1024) as bytes_out,sum(8*bytes_in/1024/900) as bytes_in_sp,sum(8*bytes_out/1024/900) as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where period>'".$start_date."' and period<'".$end_date."' and user_id not in ".$inactive." group by period");
+                }
+                else 
+                    $traf = DB::connection('pgsql_netflow')->select("select sum(bytes_in/1024) as bytes_in,sum(bytes_out/1024) as bytes_out,sum(8*bytes_in/1024/900) as bytes_in_sp,sum(8*bytes_out/1024/900) as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where period>'".$start_date."' and period<'".$end_date."' group by period");
+            }
             //return Response::json(array('ddt'=>$end_date, 'status' => 1));
 
             $data_dates = [];

@@ -112,7 +112,7 @@ class ClientsController extends Controller
                 '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>'.$groups,
                 $client->type_name,
                 $pol,
-                $client->address.$adr,
+                trim($client->address.$adr, ","),
                 $client->prd_name,
                 $nums_str,
                 $client->comment,
@@ -164,7 +164,8 @@ class ClientsController extends Controller
              ", [$id]);
     
 
-    $addresses = DB::select("select get_address_by_code(address_id) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
+//    $addresses = DB::select("select get_address_by_code(address_id) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
+    $addresses = DB::select("select get_address_by_aoid(address_aoid) as adr,address_number,address_building,address_apartment,'['||substring(creation_time::text from 0 for 11)||']' as date from postals where client_id=? order by creation_time desc",[$id]);
         
         $chains_opened = DB::select("select  users.name as avtor ,
                      chains.id ,
@@ -231,6 +232,15 @@ class ClientsController extends Controller
         
         //var_dump($ip_last_active);exit;
 
+        $vpn_status = DB::select("select * from vpn_userlist where id=?", [$id]);
+        
+        //$vpn_status[0]->username
+        //$vpn_status[0]->pass
+        //$vpn_status[0]->status
+        
+        //if ($vpn_status) ...
+        
+        
         return view('clients.clt_view', [
             'clients' => $client,
             'addresses' => $addresses,
@@ -239,10 +249,20 @@ class ClientsController extends Controller
             'tasks' => $tasks,
             'add2exist_chain_id' => $add2exist_chain_id,
             'ip_last_active' => $ip_last_active,
+            'vpn_status' => $vpn_status,
         ]);
     }
 //var_dump($client);
 
+ public function vpn_error($usr_id,$msg) {
+        
+        return view('clients.vpn_error',[
+            'msg' => $msg,
+            'id' => $usr_id,
+        ]);
+ }    
+    
+    
  public function clt_new($usr_id = null) {
 
         $clt_types = DB::table('clients_type')
@@ -303,11 +323,17 @@ class ClientsController extends Controller
                 'name' => $org,
             ]);
         }
+        // генерация нового VPN юзера для данного клиента
+        $vpn_res = DB::select("select * from portal_add_user(?)",[$new_clt->id])[0]->portal_add_user;
+        
 
         //return redirect()->route('clients.edit', [$new_clt])->with( 'new_clt', $new_clt );
         
         //return redirect()->route('clients.edit', compact('id','new_clt','providers','clt_groups','clt_contracts','regions'));
-        return redirect()->route('clients.edit', ['id' => $new_clt->id]);
+        if ($vpn_res!=='OK')
+            return redirect()->route('clients.vpn_error', ['id' => $new_clt->id,'msg' => $vpn_res]);
+        else
+            return redirect()->route('clients.edit', ['id' => $new_clt->id]);
         //return view('clients.clt_edit/{$id}',compact('new_clt','providers','clt_groups','clt_contracts','regions'));    
         //return redirect('clients.edit');  
  }
@@ -543,6 +569,8 @@ class ClientsController extends Controller
             }
             $n++; 
         }
+        
+        $is_clt_on = $clt->active;
         //var_dump($sex);
         //
         //
@@ -559,7 +587,18 @@ class ClientsController extends Controller
                 $usr_clt->save();
             }
         }
-        
+        ///////////////// обновление статуса VPN по статусу клиента ///////////////////////////////////////////
+        $is_vpn_on = 1;
+        $vpn_status = DB::select("select * from vpn_userlist where id=?", [$clt->id]);
+        if ($vpn_status) {
+            if ($vpn_status[0]->status == 'on') $is_vpn_on = 1;
+            else $is_vpn_on = 0;
+            
+            if ($is_vpn_on !== $is_clt_on) {
+                $vpn_res = DB::select("select * from portal_change_user_status(?,?)",[$clt->id,$is_clt_on])[0]->portal_change_user_status;    
+            }
+        }
+        ///////////////// обновление статуса VPN по статусу клиента ///////////////////////////////////////////
         $who_call = $request->input('v_clt_edit_src');
         
         if ( $who_call === 'lc' ) {

@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/clients/store', 'ClientsController@clt_store')->name('clients.store');
         Route::post('/clients/update/{id}', 'ClientsController@clt_update')->name('clients.update');
         
+        Route::get('/clients/vpn_error/{id}/{msg}', 'ClientsController@vpn_error')->name('clients.vpn_error');
         
     });
     

@@ -187,7 +187,14 @@ $('#id_clt_type').change(function(){
 });
 });
 window.onload = function () {
-    $('#id_clt_type').val('4').change();
+    
+    @if ( Auth::user()->hasRole('Ученики'))    
+        $('#id_clt_type').val('1').change();
+    @elseif ( Auth::user()->hasRole('Учителя'))    
+        $('#id_clt_type').val('2').change();
+    @else 
+        $('#id_clt_type').val('4').change();
+    @endif
     //$('#id_clt_type').prop("readonly", true);
 }
 </script>

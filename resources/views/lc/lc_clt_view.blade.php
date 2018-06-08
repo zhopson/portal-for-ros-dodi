@@ -22,6 +22,11 @@
         {{ session('status') }}
   </div>
 @endif    
+@if (session('status_vpn'))    
+  <div class="alert alert-warning">
+        {{ session('status_vpn') }}
+  </div>
+@endif    
     <div class="row">
         <h3 style="margin-top:25px"><div class="header-text">{{ $client->clt_name }}</div></h3>
     </div>
@@ -241,9 +246,11 @@
                             <div class="pull-left" style="margin-left:10px">
                                 <a href="{{ route('requests.new', ['id' => $client->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Обращение</a>    
                             </div>
+                            @if ( Auth::user()->hasRole('Учителя') )
                             <div class="pull-right" style="margin-right:10px">
                                 <a href="{{ route('chains_usr', ['usr_id' => Auth::user()->id]) }}"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Протоколы созданные мной </a>    
                             </div>
+                            @endif
                     </div>
                     @if (count($chains_opened) > 0)
                     <div class="row">
@@ -447,7 +454,7 @@ function HideMsg() {
 window.onload = function () {
 
 @if (session('status'))
-    setTimeout(HideMsg,4000);    
+    setTimeout(HideMsg,8000);    
 @endif    
         
 };

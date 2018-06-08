@@ -177,13 +177,19 @@ class HomeController extends Controller
                 'name' => $org,
             ]);
         }
-        //return redirect()->route('clients.edit', [$new_clt])->with( 'new_clt', $new_clt );
         
+        //return redirect()->route('clients.edit', [$new_clt])->with( 'new_clt', $new_clt );
         //return redirect()->route('clients.edit', compact('id','new_clt','providers','clt_groups','clt_contracts','regions'));
         
-        if (!$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') )  
-            return redirect()->route('lc.personal')->with('status', 'Изменения сохранены!');
-        else
+        if ( !$request->user()->hasRole('Сотрудники ТП ИНТ') && !$request->user()->hasRole('Сотрудники ТП РОС') && !$request->user()->hasRole('Сотрудники ТП ГБУ РЦИТ') && !$request->user()->hasRole('Руководство ГБУ РЦИТ') ) { 
+            // генерация нового VPN юзера для данного клиента
+            $vpn_res = DB::select("select * from portal_add_user(?)",[$new_clt->id])[0]->portal_add_user;
+            if ($vpn_res!=='OK')
+                return redirect()->route('lc.personal')->with('status', 'Изменения сохранены!')->with('status_vpn', $vpn_res);
+            else
+                return redirect()->route('lc.personal')->with('status', 'Изменения сохранены!');
+        }
+        else 
             return redirect()->route('clients.edit', ['id' => $new_clt->id, 'src' => 'lc']);
         //return view('clients.clt_edit/{$id}',compact('new_clt','providers','clt_groups','clt_contracts','regions'));    
         //return redirect('clients.edit');  
