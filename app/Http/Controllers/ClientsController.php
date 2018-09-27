@@ -608,5 +608,126 @@ class ClientsController extends Controller
         else return redirect()->route('clients.view', ['id' => $id])->with('status', 'Изменения сохранены!');
         //return redirect()->route('clients.edit', ['id' => $id])->with('status', 'Изменения сохранены!');   
     } 
+    
+ public function clt_advsearch(Request $request) {
+
+        $clt_find_fio = $request->input('v_clt_find_fio');
+        $clt_find_adr = $request->input('v_clt_find_adr');
+        $clt_find_prd = $request->input('v_clt_find_prd');
+        $clt_find_cnt = $request->input('v_clt_find_cnt');
+
+        $providers = Provider::all();
+        $clt_groups = Group::all();
+        $clt_contracts = Contract::all();
+        
+        
+        return view('clients.clt_advsearch',compact('clt_find_fio','clt_find_adr','clt_find_prd','clt_find_cnt','providers','clt_groups','clt_contracts'));
+ }    
+ 
+ public function Get_json_clt_advsearch(Request $request) {
+
+    //$clients = DB::table('clients_view')->orderBy('clients_view.clt_name', 'asc')->get();//->paginate(100); 
+    //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
+    
+        $clients = DB::select("select
+				clients_view.id,
+				clients_view.clt_name,
+				clients_view.type_name,
+				clients_view.address,
+				clients_view.address_number,
+				clients_view.address_building,
+				clients_view.address_apartment,
+                                clients_view.active,
+				contracts.title as contract_name,
+                                clients_view.gr_name,
+				array_agg(host(public.int2inet(ip_addresses.address)) ||
+				CASE WHEN ip_addresses.netmask is not null THEN ' / '||host(public.int2inet(ip_addresses.netmask)) else '' END ||
+				CASE WHEN ip_addresses.gateway is not null THEN ' / '||host(public.int2inet(ip_addresses.gateway)) else '' END ) as ip_addresses,
+                                clients_view.prd_name,
+                                clients_view.numbers 
+            from clients_view
+            left Join contracts on  clients_view.contract_id   =   contracts.id 
+            left Join ip_addresses on clients_view.id   =   ip_addresses.clients_id 
+		group by clients_view.id , clients_view.active , clients_view.clt_name, clients_view.active,contracts.title,
+                     clients_view.address , clients_view.type_name, clients_view.gr_name,clients_view.prd_name,                  
+                     clients_view.numbers,  clients_view.address_number, clients_view.address_building, clients_view.address_apartment");
+
+        //$isTeacher = $request->user()->hasRole('Учителя');
+        $data = [];
+        foreach ($clients as $row=>$client){
+            
+            $active = '';
+            $groups = '';
+            $adr = '';
+            $ips = '';
+            
+            if ($client->gr_name) {
+                foreach (explode(",",$client->gr_name) as $group) 
+                      $groups = $groups.'<li>'.$group.'</li>';
+            }
+            
+            if ($client->active == 1)
+                $active = 'Активный';
+//                $active = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
+            else 
+                $active = 'Неактивный';
+//                $active = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
+            
+            if ($client->address_number)
+                $adr = $adr.", д. ".$client->address_number;
+            if ($client->address_building)
+                $adr = $adr."/".$client->address_building;
+            if ($client->address_apartment)
+                $adr = $adr.", кв. ".$client->address_apartment;
+
+            $nums_str = '';
+            foreach (explode("\n",$client->numbers) as $number) {
+                $num_arr = (explode(":",$number));
+                //$clt_name_clear =  str_replace('"', '', $client->clt_name);
+//                if ($isTeacher) 
+                    $nums_str = $nums_str.$num_arr[0];
+//                else
+//                    $nums_str = $nums_str."<a href=\"JavaScript:call_client('".$client->id."','".$clt_name_clear."','".$num_arr[0]."');\">".$num_arr[0]."</a>";
+                
+                if ( isset($num_arr[1]) &&  trim($num_arr[1])!='' )
+                    { $nums_str = $nums_str.'('.trim($num_arr[1]).'), '; }
+                else 
+                    { $nums_str = $nums_str.','; }
+                                            
+            }
+            $nums_str = rtrim($nums_str, ", "); 
+
+            if ($client->ip_addresses != '{NULL}') {
+                $ips = str_replace(",", ";\r",trim($client->ip_addresses,'{}"'));
+                $ips = str_replace('"', '', $ips);
+            }
+            //$ips = str_replace(array("\n", "\r"), " ", $s);
+            
+//            $clt_edit_tag = '';
+//            
+//            if (!$isTeacher) 
+//                $clt_edit_tag = '<a href="'.route('clients.edit', ['id' => $client->id]).'"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>';
+                                
+            array_push($data, 
+              array(
+                $client->id,
+                $active,
+                '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>',
+                $client->type_name,
+                trim($client->address.$adr, ","),
+                $client->contract_name,
+                $client->prd_name,
+                $groups,
+                $ips,
+                $nums_str,
+                $client->clt_name,
+              )
+            );
+        }
+        return ['data'=>$data];
+        
+//    return response()->json($chains->toJson());
+    } 
+ 
 }
 

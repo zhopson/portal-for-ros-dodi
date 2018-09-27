@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/telephony/reports/ajax_rep_table', 'TelephonyController@Get_ajax_reports_table');
         
         Route::get('/netflow/clients/graph/{id?}/{ip?}', 'NetFlowController@clt_traf_gr')->name('netflow.clients.graph');
-        Route::any('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
+        Route::post('/netflow/clients/ajax_get_traf', 'NetFlowController@do_ajax_get_traf');
         Route::get('/netflow/common/graph', 'NetFlowController@cmn_traf_gr')->name('netflow.common.graph');
         
         Route::get('/documents', 'WikiController@index')->name('documents');
@@ -172,6 +172,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/clients', 'ClientsController@index')->name('clients');
             Route::get('/clients/json', 'ClientsController@Get_json_clients');
             Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
+            Route::get('/clients/advsearch', 'ClientsController@clt_advsearch')->name('clients.advsearch');
+            Route::get('/clients/json_advsearch', 'ClientsController@Get_json_clt_advsearch');
             //Route::post('/clients/ajax_get_chains_opened', 'TSupport\AjaxController@Get_json_chains_opened');
             
             Route::get('/calls', 'TSupport\CallsController@index')->name('calls');

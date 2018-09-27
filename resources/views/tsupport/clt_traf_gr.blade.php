@@ -150,14 +150,28 @@ $(document).ready(function () {
             
             var ip, id, active;
             
-            $('#id_clt_traf_user').val('Пользователь');
-            
+            id = '{{ $id }}';
+            //if (id!=='0') 
+                
             if ($('#id_clt_traf_ip').val() === '') ip = '0';
-            else ip = $('#id_clt_traf_ip').val();
+            else { 
+                ip = $('#id_clt_traf_ip').val();
+                $('#id_clt_traf_user').val('Пользователь');
+                id = '0';
+            }            
+            if (ip === '0' && id === '0') { $('#id_clt_traf_user').val('Все пользователи');}
             
-            id = '0';
-            
-            if (ip === '0') { $('#id_clt_traf_user').val('Все пользователи');}
+//            $('#id_clt_traf_user').val('Пользователь');
+//            
+//            if ($('#id_clt_traf_ip').val() === '') ip = '0';
+//            else { 
+//                ip = $('#id_clt_traf_ip').val();
+//                $('#id_clt_traf_user').val('Пользователь');
+//            }
+//            
+//            id = '0';
+//            
+//            if (ip === '0') { $('#id_clt_traf_user').val('Все пользователи');}
             
             actived = $('#id_clt_traf_active').prop('checked');
             if (actived) active = 'on';
@@ -194,6 +208,17 @@ $(document).ready(function () {
                 error: function (result) {
                     $('#id_DBReqModal').modal('hide');
                     //$('#id_call_error').css('display', 'inline');
+                    
+                        $('#id_sum_in').html('0');
+                        $('#id_sum_out').html('0');
+                        $('#id_max_sp_in').html('0');
+                        $('#id_avg_sp_in').html('0');
+                        $('#id_max_sp_out').html('0');
+                        $('#id_avg_sp_out').html('0');                      
+                    
+                        GraphReport('container_traf','Трафик входящий/исходящий',[],[],[]);
+                        GraphReport('container_band','Скорость',[],[],[]);
+                    
                 }
             }); 
 
