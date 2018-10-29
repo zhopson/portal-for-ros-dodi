@@ -10,12 +10,13 @@ $region_guid = '';
 $raion_guid = '';
 $np_guid = '';
 $st_guid = '';
+
 if ($address_components) {
     foreach ($address_components as $component) { 
         if ($component->taolevel == 1) { $region_guid = $component->taoguid; }
         if ($component->taolevel == 3) { $raion_guid = $component->taoguid; }
         if ($component->taolevel == 4) { $city_guid = $component->taoguid; }
-        if ($component->taolevel == 6) { $np_guid = $component->taoguid; }
+        if ($component->taolevel == 6) { $np_guid = $component->taoguid; if ($component->toffname === 'Маган' or $component->toffname === 'Жатай' or $component->toffname === 'Хатассы') {$city_guid = '';$raion_guid = '';} }
         if ($component->taolevel > 6) { $st_guid = $component->taoid; }
     }
 }
@@ -835,7 +836,13 @@ $(document).ready(function () {
         $('#id_clt_edit_adr_st').children().remove().end().append('<option selected value="0">- Выберите -</option>');
         var data = $(this).val();
         console.log('2 region_chg ' + (new Date().toISOString().slice(11, -1)));
-        ajax_fill_addr_sel("#id_clt_edit_adr_raion", data, 'raion', '{{$raion_guid}}');
+        
+        city_guid = '{{$city_guid}}';
+        raion_guid = '{{$raion_guid}}';  
+        if ( city_guid === '' && raion_guid === '' ) 
+            ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np_city', '{{$st_guid}}');
+        else
+            ajax_fill_addr_sel("#id_clt_edit_adr_raion", data, 'raion', '{{$raion_guid}}');
         //$('#id_clt_edit_adr_raion option[value="{{$raion_guid}}"]').prop('selected', true);
         //$('#id_clt_edit_adr_raion option[value="{{$raion_guid}}"]').attr('selected', 'selected');
         //$('#id_clt_edit_adr_raion').val('{{$raion_guid}}').change();
@@ -852,7 +859,6 @@ $(document).ready(function () {
         var data = $(this).val();
         //if (data === null) data = '{{$raion_guid}}';
         console.log('22 raion_chg ' + (new Date().toISOString().slice(11, -1)));
-        //if ? 
         ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np', '{{$np_guid}}');
         //alert('{{$raion_guid}}');
         //$('#id_clt_edit_adr_raion').val('{{$raion_guid}}').change();

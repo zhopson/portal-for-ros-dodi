@@ -109,7 +109,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/contacts', 'ContactsController@index')->name('contacts');
         Route::get('/contacts/json', 'ContactsController@Get_json_contacts');
         
-        Route::get('/contacts_clt/{punkt}', 'ContactsController@index4clt')->name('contacts_clt');;
+        Route::get('/contacts_clt/{punkt}', 'ContactsController@index4clt')->name('contacts_clt');
         Route::get('/contacts/json4clt/{punkt}', 'ContactsController@Get_json_contacts4clt');
         
         Route::get('/contacts/new', 'ContactsController@cnt_new')->name('contacts.new');

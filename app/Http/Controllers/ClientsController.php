@@ -477,7 +477,7 @@ class ClientsController extends Controller
         if (!$adr_korp) $adr_korp = '';
         if (!$adr_kv) $adr_kv = '';
         
-        if (  ( $clt->address_aoid!=$adr_st || $clt->address_number!=$adr_dom || $clt->address_building!=$adr_korp || $clt->address_apartment!=$adr_kv ) && $adr_region !=='0'  ) {
+        if (  ( $clt->address_aoid!=$adr_st || $clt->address_number!=$adr_dom || $clt->address_building!=$adr_korp || $clt->address_apartment!=$adr_kv ) && $adr_region !=='0' && $adr_st != null ) {
             
             if (  $adr_st !== '0' && ($adr_city !== '0' || $adr_np !== '0') ) {
 
