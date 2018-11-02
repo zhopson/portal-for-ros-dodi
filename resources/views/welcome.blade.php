@@ -3,7 +3,7 @@
 <style>
     html, body {
         background: url({{ asset('images/background/backgrnd.jpg') }}) no-repeat;
-        background-size: 100% 110%;  
+        background-size: 100% 100%;  
         
         background-color: #fff;
 /*        color: #636b6f;*/
@@ -15,7 +15,7 @@
     }
 
     .full-height {
-        margin-top: -20px;
+/*        margin-top: -20px;*/
         height: 78vh;
     }
 

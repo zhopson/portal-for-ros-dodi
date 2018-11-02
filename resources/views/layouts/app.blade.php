@@ -115,7 +115,7 @@
 <!--                    <a href="{{ url('/') }}"><img class="img-responsive" alt="Brand" src={{ asset('images/logo.png') }} width=20%></a> -->
                 </div>
 <!--                <p class="navbar-text"> </p>-->
-                <div class="collapse navbar-collapse" id="app-navbar-collapse1" style="font-family: sans-serif, Arial; font-size: 17px; background-color: white; margin: 0 -15px 0 -15px;">
+                <div class="collapse navbar-collapse" id="app-navbar-collapse1" style="font-family: sans-serif, Arial; font-size: 17px; background-color: white;">  <!--margin: 0 -15px 0 -15px;-->
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav" style="margin-top:4vh">
 <!--                        &nbsp;-->

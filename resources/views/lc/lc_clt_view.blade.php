@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="container-fluid" style="margin:0 30px 0 30px">
+<div class="container" style="margin:0 30px 0 30px">
     <div class="row">
         <div class="col-md-6">
             <div class="page-header" style="margin-top:30px">

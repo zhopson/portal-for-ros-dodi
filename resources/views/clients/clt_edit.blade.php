@@ -10,6 +10,7 @@ $region_guid = '';
 $raion_guid = '';
 $np_guid = '';
 $st_guid = '';
+$adr_exist = '';
 
 if ($address_components) {
     foreach ($address_components as $component) { 
@@ -19,6 +20,7 @@ if ($address_components) {
         if ($component->taolevel == 6) { $np_guid = $component->taoguid; if ($component->toffname === 'Маган' or $component->toffname === 'Жатай' or $component->toffname === 'Хатассы') {$city_guid = '';$raion_guid = '';} }
         if ($component->taolevel > 6) { $st_guid = $component->taoid; }
     }
+    $adr_exist = '1';
 }
 
 $dom = '';
@@ -269,6 +271,7 @@ if ( ! $align_user ) {
                                     <select class="form-control" id="id_clt_edit_adr_st" name="v_clt_edit_adr_st">
                                         <option value="0">- Выберите -</option>
                                     </select>
+                                    <input type="text" class="form-control" id="id_clt_edit_adr_find_st" placeholder="поиск улицы">
                                 </div>
                             </div>                            
                             <div class="form-group">
@@ -838,8 +841,10 @@ $(document).ready(function () {
         console.log('2 region_chg ' + (new Date().toISOString().slice(11, -1)));
         
         city_guid = '{{$city_guid}}';
-        raion_guid = '{{$raion_guid}}';  
-        if ( city_guid === '' && raion_guid === '' ) 
+        raion_guid = '{{$raion_guid}}'; 
+        adr_components = '{{$adr_exist}}';
+        //alert(adr_components);
+        if ( city_guid === '' && raion_guid === '' && adr_components !== '' && FlagClearAddress === 0) // для НП Маган Жатай Хатассы, которые не относятся к г. Якутску
             ajax_fill_addr_sel("#id_clt_edit_adr_np", data, 'np_city', '{{$st_guid}}');
         else
             ajax_fill_addr_sel("#id_clt_edit_adr_raion", data, 'raion', '{{$raion_guid}}');
@@ -1069,9 +1074,20 @@ $(document).ready(function () {
         //alert($('#id_clt_edit_contacts_mail').val());
     });
 
-//    $('#id_clt_edit_contacts_mail').onkeyup(function () {
-//    });        
-
+    $('#id_clt_edit_adr_find_st').on('input keyup', function(e) {
+        myText = $('#id_clt_edit_adr_find_st').val();
+        
+        var opt = $('#id_clt_edit_adr_st option');
+        opt.each(function(indx, element){
+//            if ( $(this).text().toLowerCase() == 'Новосибирск'.toLowerCase() ) {$(this).attr("selected", "selected");}
+            if ( $(this).text().toLowerCase().indexOf(myText,0) !== -1 ) {$(this).prop("selected", "selected");}
+        });        
+        //alert (s);
+        //$("#id_clt_edit_adr_st option:contains(myText)").prop("selected", "true"); 
+        //$("#id_clt_edit_adr_st option:contains(myText)").change();
+        //$("#id_clt_edit_adr_st :contains(myText)").prop("selected", "selected"); 
+        //alert($('#id_clt_edit_adr_find_st').val());
+    });
 
 });
 
