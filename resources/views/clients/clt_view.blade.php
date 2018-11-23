@@ -169,7 +169,8 @@
 <div class="container-fluid" style="margin:0 30px 0 30px">
     @foreach ($clients as $client)
     <div class="row">
-        <h3 style="margin-top:25px"><div class="header-text">{{ $client->clt_name }}</div></h3>
+{{--        <h3 style="margin-top:25px"><div class="header-text">{{ $client->clt_name }}</div></h3> --}}
+        <h3 style="margin-top:25px"><div class="header-text">ID {{ $client->id }}</div></h3>
     </div>
     <div class="row">
         <div class="col-md-6">

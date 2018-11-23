@@ -69,6 +69,12 @@
 $(document).ready(function() {
     
         $('#id_calls_td').DataTable({
+            
+            "columnDefs": [{
+                    "targets": [1],
+                    "visible": false,
+                    "searchable": false                },
+            ],            
             "language": {
                 //"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
                 "processing": "Подождите...",

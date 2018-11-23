@@ -32,7 +32,8 @@
                     <div class="col-md-2">
                         <div class="form-group input-group-sm">
                         @if ($id != 0) 
-                            <input type="text" class="form-control" id="id_clt_traf_user" value="{{ $fio }}" readonly>
+                            <input type="text" class="form-control" id="id_clt_traf_user" value="ID {{ $id }}" readonly>
+                            {{-- <input type="text" class="form-control" id="id_clt_traf_user" value="{{ $fio }}" readonly> --}}
                         @elseif ($ip != 0)
                             <input type="text" class="form-control" id="id_clt_traf_user" placeholder="Пользователь" readonly>
                         @else 

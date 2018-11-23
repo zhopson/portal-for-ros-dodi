@@ -107,7 +107,8 @@ class ClientsController extends Controller
                                 
             array_push($data, 
               array(
-                $client->id,
+                '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->id.'</a></div>',
+                //$client->id,
                 $active,
                 '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>'.$groups,
                 $client->type_name,
@@ -500,7 +501,7 @@ class ClientsController extends Controller
         
         $phone_book = '';
         $n = 1;
-        while ( $n <= 15 ) {
+        while ( $n <= 25 ) {
             if ($request->input('v_clt_edit_contacts_tel' . $n)) {
                 $phone_book = $phone_book . $request->input('v_clt_edit_contacts_tel' . $n) . ':';
                 if ($request->input('v_clt_edit_contacts_name' . $n))
@@ -532,8 +533,9 @@ class ClientsController extends Controller
         if ($dop_prim != null) $clt->comment = $dop_prim;
         else $clt->comment = '';
         
+        $ips_clt = IPAddress::where('clients_id', '=', $id)->delete();
             $n = 1;
-        while ( $n <= 10 ) {
+        while ( $n <= 20 ) {
             if ($request->input('v_clt_edit_inet_ip' . $n)) {
                 $ip = '';
                 $mask = '';
@@ -547,7 +549,8 @@ class ClientsController extends Controller
                 $id_ip = $request->input('v_clt_edit_id_ip' . $n);
                 if ($default_ip_ind == $n)
                     $act = 1;
-                $new_ip = IPAddress::updateOrCreate(['id' => $id_ip], ['address' => ip2long($ip), 'clients_id' => $id, 'netmask' => ip2long($mask), 'gateway' => ip2long($gate), 'default' => $act]);
+                //$new_ip = IPAddress::updateOrCreate(['id' => $id_ip], ['address' => ip2long($ip), 'clients_id' => $id, 'netmask' => ip2long($mask), 'gateway' => ip2long($gate), 'default' => $act]);
+                $new_ip = IPAddress::create(['address' => ip2long($ip), 'clients_id' => $id, 'netmask' => ip2long($mask), 'gateway' => ip2long($gate), 'default' => $act]);
             }
             $n++;
         }
@@ -710,7 +713,8 @@ class ClientsController extends Controller
                                 
             array_push($data, 
               array(
-                $client->id,
+                //$client->id,
+                '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->id.'</a></div>',
                 $active,
                 '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>',
                 $client->type_name,

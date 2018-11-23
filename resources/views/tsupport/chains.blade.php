@@ -89,6 +89,13 @@
 $(document).ready(function() {
     
         $('#id_chains_td').DataTable({
+            
+            "columnDefs": [{
+                    "targets": [2],
+                    "visible": false,
+                    "searchable": false                },
+            ],
+            
             "language": {
                 //"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
                 "processing": "Подождите...",

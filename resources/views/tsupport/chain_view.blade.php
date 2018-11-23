@@ -59,11 +59,19 @@
                         Пользователь
                     </div>
                     <div class="col-md-3">
+                        {{--
                         @if ( (Auth::user()->hasRole('Учителя') && Auth::user()->client_id==$chain->client_id) || Auth::user()->hasRole('Ученики') )
                         <a href="{{ route('lc.personal') }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a>
                         @else
                         <a href="{{ route('clients.view', ['id' => $chain->client_id]) }}">{{ $chain->surname." ".$chain->c_name." ".$chain->patronymic }}</a>
                         @endif
+                        --}}
+                        @if ( (Auth::user()->hasRole('Учителя') && Auth::user()->client_id==$chain->client_id) || Auth::user()->hasRole('Ученики') )
+                        <a href="{{ route('lc.personal') }}">{{ $chain->client_id }}</a>
+                        @else
+                        <a href="{{ route('clients.view', ['id' => $chain->client_id]) }}">{{ $chain->client_id }}</a>
+                        @endif
+                        
                     </div>
                 </div>
             </div>

@@ -448,6 +448,12 @@ $(document).ready(function () {
 
 
     var table = $('#id_clients_td').DataTable({
+            "columnDefs": [{
+                    "targets": [2],
+                    "visible": false,
+                    "searchable": false                
+                },
+            ],          
         initComplete: function () {
 //            this.api().columns().every( function () {
 //                var column = this;

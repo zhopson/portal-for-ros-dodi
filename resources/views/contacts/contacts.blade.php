@@ -200,6 +200,13 @@ function call_client(pclt_id,pname,ptel){
             });
             
         $('#id_contacts_td').DataTable({
+            
+            "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false                
+                },
+            ],             
             "language": {
                 //"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
                 "processing": "Подождите...",

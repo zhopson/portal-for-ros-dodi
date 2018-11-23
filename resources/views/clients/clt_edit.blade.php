@@ -562,13 +562,15 @@ if ( ! $align_user ) {
 <script type="text/javascript">
 var FlagClearAddress; 
 var nn = 0;
+var nnn = 0;
 
 function HideMsg() {
   $(".alert").css('display', 'none');  
 }
 
     function addip(ip,mask,gw,id = null) {
-        var n = $("#id_clt_edit_inet_table_tbody").children('.table-tr-ips').length+1;
+        nnn = nnn + 1;
+//        var n = $("#id_clt_edit_inet_table_tbody").children('.table-tr-ips').length+1;
         //alert(n+1);
         var raw = $('<tr/>', {
             'class': 'table-tr-ips'
@@ -578,13 +580,13 @@ function HideMsg() {
         }).appendTo(raw);
         var input_id = $('<input/>', {
             value: id,
-            name: 'v_clt_edit_id_ip'+n,
+            name: 'v_clt_edit_id_ip'+nnn,
             type: 'hidden',
             'class': 'form-control'
         }).appendTo(td1);        
         var input1 = $('<input/>', {
             value: ip,
-            name: 'v_clt_edit_inet_ip'+n,
+            name: 'v_clt_edit_inet_ip'+nnn,
             type: 'text',
             'class': 'form-control'
         }).appendTo(td1);
@@ -593,7 +595,7 @@ function HideMsg() {
         }).appendTo(raw);
         var input2 = $('<input/>', {
             value: mask,
-            name: 'v_clt_edit_mask_ip'+n,
+            name: 'v_clt_edit_mask_ip'+nnn,
             type: 'text',
             'class': 'form-control'
         }).appendTo(td2);
@@ -602,10 +604,11 @@ function HideMsg() {
         }).appendTo(raw);
         var input3 = $('<input/>', {
             value: gw,
-            name: 'v_clt_edit_gate_ip'+n,
+            name: 'v_clt_edit_gate_ip'+nnn,
             type: 'text',
             'class': 'form-control'
         }).appendTo(td3);
+        
         var td4 = $('<td/>', {
             'class': 'table-text',
             align: 'center'
@@ -619,12 +622,31 @@ function HideMsg() {
         var radio_sel = $('<input/>', {
             type: 'radio',
             name: 'clt_edit_inet_table_optionsRadios',
-            value: n//$('#id_clt_edit_inet_table_tbody').rows - 1
+            value: nnn//$('#id_clt_edit_inet_table_tbody').rows - 1
         }).appendTo(div_label);
 
-//        btn_del.click(function () {
-//            $(this).parent().parent().parent().remove();
-//        });
+        var td5 = $('<td/>', {
+            'class': 'table-text',
+            align: 'center'
+        }).appendTo(raw);
+
+        var div_span_sm1 = $('<span/>', {
+            'class': 'input-group-btn'
+        }).appendTo(td5);
+        var btn_del = $('<button/>', {
+            //value : '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>',
+            type: 'button',
+            'class': 'btn btn-default'
+        }).appendTo(div_span_sm1);
+        var span_img = $('<span/>', {
+            'class': 'glyphicon glyphicon-minus',
+            'aria-hidden': 'true'
+        }).appendTo(btn_del);
+        btn_del.click(function () {
+            $(this).parent().parent().parent().remove();
+        });
+
+
     }
 
     function addcontacts() {

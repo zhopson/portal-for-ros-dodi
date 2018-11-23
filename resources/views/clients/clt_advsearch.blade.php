@@ -22,8 +22,8 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="id_clt_advsearch_col2_filter">ФИО</label>
-                                                <input type="text" class="form-control input-sm column_filter_r" id="id_clt_advsearch_col2_filter" data-column="2" name="v_clt_advsearch_fio" >
+<!--                                                <label for="id_clt_advsearch_col2_filter">ФИО</label>
+                                                <input type="text" class="form-control input-sm column_filter_r" id="id_clt_advsearch_col2_filter" data-column="2" name="v_clt_advsearch_fio" >-->
                                             </div>                                                
                                     </div>
                                     <div class="col-md-4">
@@ -325,6 +325,11 @@ $(document).ready(function () {
 //            } );            
         },
         "columnDefs": [
+            {
+                "targets": [ 2 ],
+                "visible": false,
+                "searchable": false
+            },
             {
                 "targets": [ 10 ],
                 "visible": false,
