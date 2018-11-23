@@ -11,6 +11,5 @@ npm-debug.log
 yarn-error.log
 .env
 .phpstorm.meta.php
-composer.lock
 /nbproject/private/
 /config/database.php
