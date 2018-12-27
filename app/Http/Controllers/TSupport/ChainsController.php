@@ -71,6 +71,52 @@ class ChainsController extends Controller
         
     }
 
+//    public function json_fix_cyr($json_str) {
+//    $cyr_chars = array (
+//        '\u0430' => 'а', '\u0410' => 'А',
+//        '\u0431' => 'б', '\u0411' => 'Б',
+//        '\u0432' => 'в', '\u0412' => 'В',
+//        '\u0433' => 'г', '\u0413' => 'Г',
+//        '\u0434' => 'д', '\u0414' => 'Д',
+//        '\u0435' => 'е', '\u0415' => 'Е',
+//        '\u0451' => 'ё', '\u0401' => 'Ё',
+//        '\u0436' => 'ж', '\u0416' => 'Ж',
+//        '\u0437' => 'з', '\u0417' => 'З',
+//        '\u0438' => 'и', '\u0418' => 'И',
+//        '\u0439' => 'й', '\u0419' => 'Й',
+//        '\u043a' => 'к', '\u041a' => 'К',
+//        '\u043b' => 'л', '\u041b' => 'Л',
+//        '\u043c' => 'м', '\u041c' => 'М',
+//        '\u043d' => 'н', '\u041d' => 'Н',
+//        '\u043e' => 'о', '\u041e' => 'О',
+//        '\u043f' => 'п', '\u041f' => 'П',
+//        '\u0440' => 'р', '\u0420' => 'Р',
+//        '\u0441' => 'с', '\u0421' => 'С',
+//        '\u0442' => 'т', '\u0422' => 'Т',
+//        '\u0443' => 'у', '\u0423' => 'У',
+//        '\u0444' => 'ф', '\u0424' => 'Ф',
+//        '\u0445' => 'х', '\u0425' => 'Х',
+//        '\u0446' => 'ц', '\u0426' => 'Ц',
+//        '\u0447' => 'ч', '\u0427' => 'Ч',
+//        '\u0448' => 'ш', '\u0428' => 'Ш',
+//        '\u0449' => 'щ', '\u0429' => 'Щ',
+//        '\u044a' => 'ъ', '\u042a' => 'Ъ',
+//        '\u044b' => 'ы', '\u042b' => 'Ы',
+//        '\u044c' => 'ь', '\u042c' => 'Ь',
+//        '\u044d' => 'э', '\u042d' => 'Э',
+//        '\u044e' => 'ю', '\u042e' => 'Ю',
+//        '\u044f' => 'я', '\u042f' => 'Я',
+// 
+//        '\r' => '',
+//        '\n' => '<br />',
+//        '\t' => ''
+//    );
+// 
+//    foreach ($cyr_chars as $cyr_char_key => $cyr_char) {
+//        $json_str = str_replace($cyr_char_key, $cyr_char, $json_str);
+//    }
+//    return $json_str;
+//}
     public function Get_json_chains() {
 
     $chains = DB::select('select * from chains_aoid_view');
@@ -90,9 +136,11 @@ class ChainsController extends Controller
         $data = [];
         foreach ($chains as $row=>$chain){
             $categories = '';
+            if ($chain->cat_names!='NULL') {
             foreach (explode(",",$chain->cat_names) as $cat_name) {
                 if($cat_name != 'NULL')
                     $categories = $categories.'<li>'.rtrim($cat_name, ", ").'</li>';
+            }
             }
             
             $usr_name = '';
@@ -101,17 +149,18 @@ class ChainsController extends Controller
                 
             $clt_adr = '';
             if ($chain->address) $clt_adr = $chain->address;
-            else { 
-                $clt_adr = DB::select("select title from public.clt_adr_area_view where clt_adr_area_view.address_id = ? limit 1",[$chain->address_id]);
-                if ($clt_adr) $clt_adr = $clt_adr[0]->title;
-            }
+//            else { 
+//                $clt_adr = DB::select("select title from public.clt_adr_area_view where clt_adr_area_view.address_id = ? limit 1",[$chain->address_id]);
+//                if ($clt_adr) $clt_adr = $clt_adr[0]->title;
+//            }
             
             
             array_push($data, 
               array(
                 $chain->id,
                 date('Y.m.d H:i',$chain->update_time),
-                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
+//                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
+                "",
                 $clt_adr,
                 $chain->u_name,
                 $usr_name,
