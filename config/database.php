@@ -57,7 +57,8 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '178.170.180.16'),
+//            'host' => env('DB_HOST', '178.170.180.16'),
+            'host' => '172.16.4.52',
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'portal'),
 //            'username' => env('DB_USERNAME', 'forge'),
@@ -71,7 +72,7 @@ return [
 
         'pgsql_adr' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '178.170.180.16'),
+            'host' => '172.16.4.52',
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'portal'),
 //            'username' => env('DB_USERNAME', 'forge'),

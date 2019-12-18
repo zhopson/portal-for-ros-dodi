@@ -174,6 +174,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/clients/view/{id}', 'ClientsController@clt_view')->name('clients.view');
             Route::get('/clients/advsearch', 'ClientsController@clt_advsearch')->name('clients.advsearch');
             Route::get('/clients/json_advsearch', 'ClientsController@Get_json_clt_advsearch');
+            Route::post('/clients/ajax_get_clt_traf', 'ClientsController@do_ajax_get_clt_traf');
             //Route::post('/clients/ajax_get_chains_opened', 'TSupport\AjaxController@Get_json_chains_opened');
             
             Route::get('/calls', 'TSupport\CallsController@index')->name('calls');

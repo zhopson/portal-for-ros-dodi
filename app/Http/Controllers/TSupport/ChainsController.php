@@ -13,6 +13,8 @@ use App\ChainCategory;
 use App\User;
 use App\ChainUser;
 
+use DataTables;
+
 class ChainsController extends Controller
 {
     public function index(Request $request) {
@@ -65,9 +67,12 @@ class ChainsController extends Controller
 //            'users' => $users,
 //            'ch_status' =>  $ch_status,
 //        ]);
+        
+        $users = User::select('id','name')->get();
+        
         $clt_id = '';
         $usr_id = '';
-        return view('tsupport.chains',compact('clt_id','usr_id'));
+        return view('tsupport.chains',compact('clt_id','usr_id','users'));
         
     }
 
@@ -124,55 +129,99 @@ class ChainsController extends Controller
     //$chains = DB::table('chains_view')->select('id','c_name')->get();//->paginate(100); 
     
 
-        $ch_status = array(
-            'OPENED' => 'Открыт',
-            'CLOSED' => 'Закрыт',
-        );        
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
   
-        $users = User::select('id','name')->get();//::all();
+        //$users = User::select('id','name')->get();//::all();
 
 //        $chains = Chain::paginate(100);//all();
         //$chains = DB::table('chains')->get();
-        $data = [];
-        foreach ($chains as $row=>$chain){
-            $categories = '';
-            if ($chain->cat_names!='NULL') {
-            foreach (explode(",",$chain->cat_names) as $cat_name) {
-                if($cat_name != 'NULL')
-                    $categories = $categories.'<li>'.rtrim($cat_name, ", ").'</li>';
-            }
-            }
-            
-            $usr_name = '';
-            $usr = $users->find($chain->operator_id);
-            if ($usr) $usr_name = $usr->name;
-                
-            $clt_adr = '';
-            if ($chain->address) $clt_adr = $chain->address;
-//            else { 
-//                $clt_adr = DB::select("select title from public.clt_adr_area_view where clt_adr_area_view.address_id = ? limit 1",[$chain->address_id]);
-//                if ($clt_adr) $clt_adr = $clt_adr[0]->title;
+//        $data = [];
+//        foreach ($chains as $row=>$chain){
+//            $categories = '';
+//            if ($chain->cat_names!='NULL') {
+//            foreach (explode(",",$chain->cat_names) as $cat_name) {
+//                if($cat_name != 'NULL')
+//                    $categories = $categories.'<li>'.rtrim($cat_name, ", ").'</li>';
 //            }
-            
-            
-            array_push($data, 
-              array(
-                $chain->id,
-                date('Y.m.d H:i',$chain->update_time),
-//                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
-                "",
-                $clt_adr,
-                $chain->u_name,
-                $usr_name,
-                $ch_status[$chain->status],
-                date('Y.m.d H:i',$chain->opening_time),
-                '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',
-                $categories
-              )
-            );
-        }
-        return ['data'=>$data];
-        
+//            }
+//            
+//            $usr_name = '';
+//            $usr = $users->find($chain->operator_id);
+//            if ($usr) $usr_name = $usr->name;
+//                
+//            $clt_adr = '';
+//            if ($chain->address) $clt_adr = $chain->address;
+////            else { 
+////                $clt_adr = DB::select("select title from public.clt_adr_area_view where clt_adr_area_view.address_id = ? limit 1",[$chain->address_id]);
+////                if ($clt_adr) $clt_adr = $clt_adr[0]->title;
+////            }
+//            
+//            
+//            array_push($data, 
+//              array(
+//                $chain->id,
+//                date('Y.m.d H:i',$chain->update_time),
+////                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
+//                "",
+//                $clt_adr,
+//                $chain->u_name,
+//                $usr_name,
+//                $ch_status[$chain->status],
+//                date('Y.m.d H:i',$chain->opening_time),
+//                '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',
+//                $categories
+//              )
+//            );
+//        }
+//        return ['data'=>$data];
+
+        $chainsDetails = DataTables::collection($chains)
+//            ->addColumn('action', function ($bookings) {
+//                return '<a href="/bookings/'.$bookings->_id.'" class="btn btn-xs btn-danger deleteEvent" data-id="'.$bookings->_id.'"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+//            })
+                ->addColumn('utime', function ($chains) {
+                    return date('Y.m.d H:i', $chains->update_time);
+                })
+                ->addColumn('clt_adr', function ($chains) {
+                    $clt_adr = '';
+                    if ($chains->address)
+                        $clt_adr = $chains->address;
+                    return $clt_adr;
+                })
+                ->addColumn('operator', function ($chains) {
+                    $usr_name = $chains->operator_id;
+//                    foreach ($users as $user) {
+//                        if ($chains->operator_id === $user->id) $usr_name = $user->name;
+//                    }
+                    return $usr_name;
+                })
+//                ->addColumn('ch_status', function ($chains) {
+//                    return $ch_status[$chains->status];
+//                })
+                ->addColumn('otime', function ($chains) {
+                    return date('Y.m.d H:i', $chains->opening_time);
+                })
+                ->addColumn('action_view', function ($chains) {
+                    return '<a href="' . route('chains.view', ['id' => $chains->id]) . '">' . $chains->last_comment . '</a>';
+                })
+                ->addColumn('categories', function ($chains) {
+                    $categories = '';
+                    if ($chains->cat_names != 'NULL') {
+                        foreach (explode(",", $chains->cat_names) as $cat_name) {
+                            if ($cat_name != 'NULL')
+                                $categories = $categories . '<li>' . rtrim($cat_name, ", ") . '</li>';
+                        }
+                    }
+                    return ($categories);
+                })
+                ->rawColumns(['categories','action_view'])
+                ->make(true);
+
+        return $chainsDetails;    
+    
 //    return response()->json($chains->toJson());
     }
     
@@ -189,7 +238,9 @@ class ChainsController extends Controller
 //            'ch_status' =>  $ch_status,
 //        ]);
         $usr_id = '';
-        return view('tsupport.chains',compact('clt_id','usr_id'));
+        $users = User::select('id','name')->get();
+        
+        return view('tsupport.chains',compact('clt_id','usr_id','users'));
     }
     
     
@@ -197,12 +248,12 @@ class ChainsController extends Controller
 
     $chains = DB::table('chains_aoid_view')->where('client_id', '=', $clt_id)->get();
 
-        $ch_status = array(
-            'OPENED' => 'Открыт',
-            'CLOSED' => 'Закрыт',
-        );        
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
   
-        $users = User::select('id','name')->get();//::all();
+        //$users = User::select('id','name')->get();//::all();
 
         $data = [];
         foreach ($chains as $row=>$chain){
@@ -216,11 +267,13 @@ class ChainsController extends Controller
               array(
                 $chain->id,
                 date('Y.m.d H:i',$chain->update_time),
-                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
+//                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
                 $chain->address,
                 $chain->u_name,
-                $users->find($chain->operator_id)->name,
-                $ch_status[$chain->status],
+                //$users->find($chain->operator_id)->name,
+                $chain->operator_id,
+                //$ch_status[$chain->status],
+                $chain->status,
                 date('d.m.y H:i',$chain->opening_time),
                 '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',
                 $categories
@@ -243,7 +296,9 @@ class ChainsController extends Controller
 //            'ch_status' =>  $ch_status,
 //        ]);
         $clt_id = '';
-        return view('tsupport.chains',compact('clt_id','usr_id'));
+        $users = User::select('id','name')->get();
+        
+        return view('tsupport.chains',compact('clt_id','usr_id','users'));
     }
     
     
@@ -251,12 +306,12 @@ class ChainsController extends Controller
 
     $chains = DB::table('chains_aoid_view')->where('user_id', '=', $usr_id)->get();
 
-        $ch_status = array(
-            'OPENED' => 'Открыт',
-            'CLOSED' => 'Закрыт',
-        );        
+//        $ch_status = array(
+//            'OPENED' => 'Открыт',
+//            'CLOSED' => 'Закрыт',
+//        );        
   
-        $users = User::select('id','name')->get();//::all();
+       // $users = User::select('id','name')->get();//::all();
 
         $data = [];
         foreach ($chains as $row=>$chain){
@@ -270,11 +325,13 @@ class ChainsController extends Controller
               array(
                 $chain->id,
                 date('Y.m.d H:i',$chain->update_time),
-                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
+//                '<a href="'.route('clients.view', ['id' => $chain->client_id]).'">'.$chain->surname.' '.$chain->c_name.' '.$chain->patronymic.'</a>',
                 $chain->address,
                 $chain->u_name,
-                $users->find($chain->operator_id)->name,
-                $ch_status[$chain->status],
+                //$users->find($chain->operator_id)->name,
+                  $chain->operator_id,
+                //$ch_status[$chain->status],
+                  $chain->status,
                 date('d.m.y H:i',$chain->opening_time),
                 '<a href="'.route('chains.view', ['id' => $chain->id]).'">'.$chain->last_comment.'</a>',
                 $categories

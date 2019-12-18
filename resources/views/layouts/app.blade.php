@@ -247,7 +247,7 @@
                 <nav class="navbar navbar-nav navbar-static-bottom" style="background-color: #efffff; width:100%; height: 6vh">
                     <div class="container">
                         <div class="navbar-header">
-                            <p class="navbar-text"><strong>Copyright © <mark>m.a.n.</mark> 2017-2018. All Rights Reserved.</strong></p>
+                            <p class="navbar-text"><strong>Copyright © <mark>m.a.n.</mark> 2017-2019. All Rights Reserved.</strong></p>
                         </div>
                         <div class="collapse navbar-collapse" id="footer-navbar-collapse">
                             <ul class="nav navbar-nav">

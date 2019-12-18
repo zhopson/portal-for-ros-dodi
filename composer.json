@@ -12,7 +12,8 @@
         "fzaninotto/faker": "1.4.*@dev",
         "graham-campbell/exceptions": "^10.0",
         "laravel/framework": "5.5.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "filp/whoops": "^2.1",

@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2018-10-02 09:37:48.
+    * Generated on 2019-04-11 13:38:28.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -46,6 +46,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -183,6 +186,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -320,6 +326,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -457,6 +466,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -594,6 +606,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -731,6 +746,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,
@@ -868,6 +886,9 @@ namespace PHPSTORM_META {
         'command.laracasts.seed' => \Laracasts\Generators\Commands\SeedMakeCommand::class,
         'command.laracasts.migrate' => \Laracasts\Generators\Commands\MigrationMakeCommand::class,
         'command.laracasts.migrate.pivot' => \Laracasts\Generators\Commands\PivotMigrationMakeCommand::class,
+        'datatables' => \Yajra\DataTables\DataTables::class,
+        'datatables.request' => \Yajra\DataTables\Utilities\Request::class,
+        'datatables.config' => \Yajra\DataTables\Utilities\Config::class,
         'blade.compiler' => \Illuminate\View\Compilers\BladeCompiler::class,
         'translation.loader' => \Illuminate\Translation\FileLoader::class,
         'translator' => \Illuminate\Translation\Translator::class,

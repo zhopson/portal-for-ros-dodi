@@ -52,7 +52,7 @@
                             </div>                  
                         </div>
                         <div id="container_img">
-                            <img src="{{ asset('images/zabbix/zabbix_graph_1388_21600.png').'?ver='.date("YmdHis") }}"  style="max-width: 100%" class="img-responsive center-block" alt="Responsive image">
+                            <img src="{{ asset('images/zabbix/zabbix_graph_1580_21600.png').'?ver='.date("YmdHis") }}"  style="max-width: 100%" class="img-responsive center-block" alt="Responsive image">
                         </div>
                     </div>
                 </div>
@@ -78,18 +78,18 @@ $('input[type=radio][name=optionsRadiosPeriod]').on('change', function() {
      switch($(this).val()) {
          case '3600':
              //alert("1 hour");
-             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1388_3600.png') }}");
+             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1580_3600.png') }}"); // старый graph id = 1388
              break;
          case '21600':
-             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1388_21600.png') }}");
+             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1580_21600.png') }}");
              //alert("6 hours");
              break;
          case '43200':
-             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1388_43200.png') }}");
+             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1580_43200.png') }}");
              //alert("12 hours");
              break;
          case '86400':
-             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1388_86400.png') }}");
+             $("img").attr('src', "{{ asset('images/zabbix/zabbix_graph_1580_86400.png') }}");
              //alert("24 hours");
              break;
      }
