@@ -104,11 +104,11 @@ class ClientsController extends Controller {
                 $clt_edit_tag = '<a href="' . route('clients.edit', ['id' => $client->id]) . '"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>';
 
             array_push($data, array(
-                '<div><a href="' . route('clients.view', ['id' => $client->id]) . '">' . $client->id . '</a></div>',
+                '<div><a href="' . route('clients.view', ['id' => $client->id]) . '" data-toggle="tooltip" title="'.str_replace('"', '', $client->clt_name).'">' . $client->id . '</a></div>',
                 //$client->id,
                 $active,
 //                '<div><a href="'.route('clients.view', ['id' => $client->id]).'">'.$client->clt_name.'</a></div>'.$groups,
-                "",
+                $client->clt_name,
                 $client->type_name,
                 $pol,
                 trim($client->address . $adr, ","),
@@ -729,7 +729,7 @@ class ClientsController extends Controller {
 
             array_push($data, array(
                 //$client->id,
-                '<div><a href="' . route('clients.view', ['id' => $client->id]) . '">' . $client->id . '</a></div>',
+                '<div><a href="' . route('clients.view', ['id' => $client->id]) . '" data-toggle="tooltip" title="'.str_replace('"', '', $client->clt_name).'">' . $client->id . '</a></div>',
                 $active,
                 '<div><a href="' . route('clients.view', ['id' => $client->id]) . '">' . $client->clt_name . '</a></div>',
                 $client->type_name,

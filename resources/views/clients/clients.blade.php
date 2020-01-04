@@ -186,8 +186,8 @@
                             <thead>
                                 <tr id="id_filter_fields">
                                     <td> </td>
-                                    <td> </td>
                                     <td align="left"><input type="text" class="column_filter" style="width: 250px" name="v_clt_find_fio" id="id_col2_filter" data-column="2" placeholder="Поиск по ФИО"></td>
+                                    <td> </td>
                                     <td></td>
                                     <td></td>
                                     <td align="left"><input type="text" class="column_filter" style="width: 280px" name="v_clt_find_adr" id="id_col5_filter" data-column="5" placeholder="Поиск по адресу"></td>
@@ -199,7 +199,9 @@
                                 <tr class="active">
                                     <th>№</th>
                                     <th></th>
-                                    <th style="width: 280px">ФИО/Наименование</th>
+<!--                                    <th style="width: 280px">ФИО/Наименование</th>-->
+                                    <th></th>
+<!--                                    <th style="width: 280px"></th>-->
                                     <th>Тип</th>
                                     <th></th>
                                     <th>Адрес</th>
@@ -213,7 +215,8 @@
                                 <tr class="active">
                                     <th>№</th>
                                     <th></th>
-                                    <th style="width: 280px">ФИО/Наименование</th>
+<!--                                    <th style="width: 280px">ФИО/Наименование</th>-->
+                                    <th></th>
                                     <th>Тип</th>
                                     <th></th>
                                     <th>Адрес</th>
@@ -451,13 +454,13 @@ $(document).ready(function () {
             "columnDefs": [{
                     "targets": [2],
                     "visible": false,
-                    "searchable": false                
+//                    "searchable": false                
                 },
             ],          
         initComplete: function () {
 //            this.api().columns().every( function () {
 //                var column = this;
-                var column = table.column(6);
+                    var column = table.column(6);
                 var select = $('#id_col6_filter');
 //                var select = $('<select><option value=""></option></select>')
 //                    .appendTo( $(column.footer()).empty() )
