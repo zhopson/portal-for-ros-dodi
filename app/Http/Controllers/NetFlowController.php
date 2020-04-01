@@ -38,10 +38,10 @@ class NetFlowController extends Controller
             $traf = '';
             //$scale = 'КБ';
             
-            if ($ip != 0)  //YYYY-MM-DD HH24:MI // встречается один ip несколько клиентов, поэтому добавилось distinct
-                $traf = DB::connection('pgsql_netflow')->select("select distinct bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where ip_addr='".$ip."' and period>'".$start_date."' and period<'".$end_date."'");
+            if ($ip != 0)  //YYYY-MM-DD HH24:MI
+                $traf = DB::connection('pgsql_netflow')->select("select distinct bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period,period as period1 from public.view_user_stat_graph where ip_addr='".$ip."' and period>'".$start_date."' and period<'".$end_date."' order by period1");
             else if ($id != 0) 
-                $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period from public.view_user_stat_graph where user_id=".$id." and period>'".$start_date."' and period<'".$end_date."'");
+                $traf = DB::connection('pgsql_netflow')->select("select bytes_in/1024 as bytes_in,bytes_out/1024 as bytes_out,8*bytes_in/1024/900 as bytes_in_sp,8*bytes_out/1024/900 as bytes_out_sp,to_char(period,'DD-MM HH24:MI') as period,period as period1 from public.view_user_stat_graph where user_id=".$id." and period>'".$start_date."' and period<'".$end_date."' order by period1");
             else { //$scale = 'МБ';//traf for all clts 
                 if ($only_active == 'on') {
                     $inactive = DB::select("select replace(replace(cast(array_agg(id) as varchar),'{','('),'}',')') from clients where active=0")[0]->replace;
