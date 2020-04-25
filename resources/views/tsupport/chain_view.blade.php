@@ -185,7 +185,7 @@
                                 @endif
                             </td>
                             <td class="table-text">
-                                <div>{{ $users->find($item->responsible_id)['name'] }}</div>
+                                @if ($item->responsible_id) <div>{{ $users->find($item->responsible_id)['name'] }}</div> @endif
                             </td>
                             <td class="table-text">
                                 @if ($item->progress) 

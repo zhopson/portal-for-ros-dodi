@@ -37,7 +37,7 @@ class TasksController extends Controller {
         $chain_categories = Category::all();
         $users = User::select('id', 'name')->get();
         $chains_opened = Chain::select('id', 'last_comment', 'creation_time', 'user_id')->where([['status', '=', 'OPENED'],['client_id', '=', $id],['deleted', '=', 0]])->get();
-
+        //var_dump($chains_opened); exit;
         $tsk_status = array(
             'NEW' => 'Новый',
             'PROCESSED' => 'В работе',

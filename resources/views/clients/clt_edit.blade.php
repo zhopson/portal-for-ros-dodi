@@ -196,6 +196,7 @@ if ( ! $align_user ) {
                                 <div class="col-sm-8">
                                     <select class="form-control" id="id_clt_edit_adr_prev" name="v_clt_edit_adr_prev ">
                                         <option value="0"></option>
+                                        @if ($addresses != null)
                                         @for ($i = 1; $i < count($addresses); $i++)
                                         <option value="{{ $addresses[$i]->address_aoid }}">
                                             {{ $addresses[$i]->date.' ' }}
@@ -215,6 +216,7 @@ if ( ! $align_user ) {
                                             @endif                                            
                                         </option>
                                         @endfor
+                                        @endif
                                     </select>
                                 </div>
                             </div>                            

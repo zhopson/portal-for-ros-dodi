@@ -82,7 +82,7 @@
                                     <div class="pull-right">Адрес</div>
                                 </td>
                                 <td class="table-text">
-                                    @if (count($addresses)>0)
+                                    @if ($addresses != null)
                                     {{ $addresses[0]->date }}
                                     @foreach (explode(",",$addresses[0]->adr) as $address)
                                         @if ($address!='""') 
@@ -101,12 +101,14 @@
                                     @endif
                                 </td>
                             </tr>
+                            @if ($addresses != null)
                             @if (count($addresses)>1)
                             <tr>
                                 <td class="table-text">
                                     <div class="pull-right">Предыдущие адреса</div>
                                 </td>
                                 <td class="table-text">
+                                    @if ($addresses != null)
                                     @for ($i = 1; $i < count($addresses); $i++)
                                         {{ $addresses[$i]->date }}
                                         @foreach (explode(",",$addresses[$i]->adr) as $address)
@@ -125,8 +127,10 @@
                                         @endif
                                         <br>
                                     @endfor
+                                    @endif
                                 </td>
                             </tr>                                
+                            @endif  
                             @endif  
                             @if ($client->diagnose)
                             <tr>
@@ -370,7 +374,7 @@ $(document).ready(function () {
 });
 
 window.onload = function () {
-    @if (count($task)>0)
+    @if ($task != null)
         $('#id_task_edit_otvetstv').val('{{$task->responsible_id}}');
         $('#id_task_edit_status').val('{{$task->status}}');
         $('#id_task_edit_priority').val('{{$task->priority}}');

@@ -347,7 +347,6 @@ class ChainsController extends Controller
             'OPENED' => 'Открыт',
             'CLOSED' => 'Закрыт',
         );        
-
     $chain = DB::table('chains')
             ->leftJoin('users', 'chains.user_id', '=', 'users.id')
             ->leftJoin('clients', 'chains.client_id', '=', 'clients.id')
@@ -360,7 +359,7 @@ class ChainsController extends Controller
                     ))
             ->groupBy('chains.status','chains.creation_time','users.name','chains.client_id','clients.surname','clients.name','clients.patronymic','clients.address_number','clients.address_building','clients.address_apartment')
             ->where('chains.id', '=', $id)->first();
-    
+
     $adr_code = DB::table('chains')
             ->Join('clients', 'chains.client_id', '=', 'clients.id')
             ->select('clients.address_id as adr_id')->where('chains.id', '=', $id)->get();
@@ -403,6 +402,8 @@ class ChainsController extends Controller
                     )
             ->where('chain_items.chain_id', '=', $id)
             ->orderBy('creation_time', 'desc')->get();
+
+    //var_dump($chains_items); exit;
     
     $users = User::select('id','name')->get();
     

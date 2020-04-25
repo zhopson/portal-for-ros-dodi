@@ -82,7 +82,7 @@
                                     <div class="pull-right">Адрес</div>
                                 </td>
                                 <td class="table-text">
-                                    @if (count($addresses)>0)
+                                    @if ($addresses != null)
                                     {{ $addresses[0]->date }}
                                     @foreach (explode(",",$addresses[0]->adr) as $address)
                                         @if ($address!='""') 
@@ -101,6 +101,7 @@
                                     @endif
                                 </td>
                             </tr>
+                            @if ($addresses != null)
                             @if (count($addresses)>1)
                             <tr>
                                 <td class="table-text">
@@ -127,6 +128,7 @@
                                     @endfor
                                 </td>
                             </tr>                                
+                            @endif  
                             @endif  
                             @if ($client->diagnose)
                             <tr>
@@ -264,7 +266,7 @@
 <script type="text/javascript">
 
 window.onload = function () {
-    @if (count($cal)>0)
+    @if ($cal!=null)
     
         $('#id_call_edit_abon').val('{{$cal->interlocutor}}');
         $('#id_call_edit_comment').val('{{$cal->comment}}');
