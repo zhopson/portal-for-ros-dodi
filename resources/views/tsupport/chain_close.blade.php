@@ -12,7 +12,7 @@
         <h3 style="margin-top:25px"><div class="header-text">Закрытие протокола #{{$id}}</div></h3>
     </div>
 
-@if (count($errors) > 0)
+@if ($errors != null)
 
 <div class="row">
   <div class="alert alert-danger">
@@ -69,7 +69,7 @@ function HideMsg() {
 
 window.onload = function () {
 
-@if (count($errors) > 0)
+@if ($errors != null)
     setTimeout(HideMsg,5000);
 @endif    
         

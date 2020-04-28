@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-md-4"><h3 style="margin-top:25px"><div class="header-text">Изменить данные пользователя</div></h3></div>
     </div> 
-@if (count($errors) > 0)
+@if ($errors != null)
   <div class="alert alert-danger">
     <ul>
       @foreach ($errors->all() as $error)
@@ -211,7 +211,7 @@ function HideMsg() {
 
 window.onload = function () {
 
-@if (count($errors) > 0)
+@if ($errors != null)
     setTimeout(HideMsg,5000);
 @endif    
         

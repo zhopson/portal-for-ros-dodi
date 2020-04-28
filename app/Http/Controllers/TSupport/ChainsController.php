@@ -449,6 +449,7 @@ class ChainsController extends Controller
         
         if (count($open_tasks)>0) 
             $errors = ["Есть открытые задачи"];
+        else $errors = null;
         //$categories = Category::all();
         return view('tsupport.chain_close', compact('id','errors'));
     }    

@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 <div class="container-fluid" style="margin:0 30px 0 30px">
-@if (count($errors) > 0)
+@if ($errors != null)
   <div class="alert alert-danger">
     <ul>
       @foreach ($errors->all() as $error)
@@ -175,7 +175,7 @@ function HideMsg() {
 
 window.onload = function () {
 
-@if (count($errors) > 0)
+@if ($errors != null)
     setTimeout(HideMsg,5000);
 @endif    
         
