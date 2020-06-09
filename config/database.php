@@ -39,24 +39,26 @@ return [
             'prefix' => '',
         ],
 
+        // asterisk voip server
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'host' => '178.170.180.23',
+            'port' => '3306',
+            'database' => 'asteriskcdrdb',
+            'username' => 'www_portal',
+            'password' => 'petroSS',
+//            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
             'prefix' => '',
-            'strict' => true,
-            'engine' => null,
+            'strict' => false,
+//            'engine' => null,
         ],
 
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '178.170.180.16'),
+//            'host' => '172.16.4.52',
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'portal'),
 //            'username' => env('DB_USERNAME', 'forge'),
@@ -68,6 +70,35 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_adr' => [
+            'driver' => 'pgsql',
+//            'host' => '172.16.4.52',
+            'host' => env('DB_HOST', '178.170.180.16'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'portal'),
+//            'username' => env('DB_USERNAME', 'forge'),
+            'username' => env('DB_USERNAME', 'site_user'),
+            'password' => env('DB_PASSWORD', 'eloquent135'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'fias_base',
+            'sslmode' => 'prefer',
+        ],
+        
+        'pgsql_netflow' => [
+            'driver' => 'pgsql',
+            'host' => '178.170.180.17',
+            'port' => env('DB_PORT', '5432'),
+            'database' => 'netflow',
+            'username' => 'www_portal',
+            'password' => 'Nikond5100',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+        
+        
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),

@@ -1,0 +1,17 @@
+/node_modules
+/public/hot
+/public/storage
+/public/attachments
+/storage/*.key
+/storage/
+/vendor
+/.idea
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.env
+.phpstorm.meta.php
+/nbproject/private/
+/config/database.php

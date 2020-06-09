@@ -21,6 +21,8 @@ class User extends Authenticatable
         'is_admin',
         'status_id',
         'password',
+        'sip_number',
+        'sip_secret',
     ];
 
     /**
@@ -29,7 +31,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','sip_secret',
     ];
     
   public function roles()
@@ -37,6 +39,15 @@ class User extends Authenticatable
     return $this->belongsToMany('App\Role','users_roles', 'user_id', 'role_id');
   }
 
+  public function hasRole($role)
+  {
+      
+      $r = $this->roles;
+      $rr = $r->where('role', '=' ,$role)->first();
+      if ($rr == null) return false;
+      else return true;
+  }
+  
   public function client()
   {
     return $this->HasOne('App\Client');

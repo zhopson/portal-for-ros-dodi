@@ -36,7 +36,20 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
+        
+//        'TP_users' => [
+//            'role:Сотрудники ТП ИНТ',
+//            'role:Сотрудники ТП РОС',
+//            'role:Сотрудники ТП ГБУ РЦИТ',
+//        ],
+//
+//        'TP_teachers_users' => [
+//            'role:Сотрудники ТП ИНТ',
+//            'role:Сотрудники ТП РОС',
+//            'role:Сотрудники ТП ГБУ РЦИТ',
+//            'role:Учителя',
+//        ],
+//        
         'api' => [
             'throttle:60,1',
             'bindings',
@@ -57,5 +70,9 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'admin' => \App\Http\Middleware\IsAdmin::class,
+        'role' => \App\Http\Middleware\CheckRole::class,
+        'role_tp' => \App\Http\Middleware\CheckRoleTP::class,
+        'role_tp_tch' => \App\Http\Middleware\CheckRoleTPTeach::class,
     ];
 }
