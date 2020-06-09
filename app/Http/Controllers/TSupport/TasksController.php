@@ -119,8 +119,6 @@ class TasksController extends Controller {
         
         $start_d = $start_d.' '.$start_t;
         $start_date = strtotime($start_d);
-        //var_dump($start_date); exit;
-//        $start_time = strtotime($start_d.' 00:00');
         
         $user_id =  $request->user()->id;
         $contract_id = Client::find($id)->contract_id;
