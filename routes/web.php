@@ -11,6 +11,11 @@
   |
  */
 
+
+    
+
+Route::middleware('set_debug')->group(function () {
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,7 +24,6 @@ Route::get('/', function () {
 
         Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
         Route::post('login', 'Auth\LoginController@login');
-
 Route::middleware('auth')->group(function () {
 
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
@@ -234,4 +238,6 @@ Route::middleware('auth')->group(function () {
 //        exit;
         return view('deny_info');
     })->name('forbidden');
+});
+
 });

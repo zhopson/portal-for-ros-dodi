@@ -19,6 +19,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
+        //\App\Http\Middleware\setDebug::class,
     ];
 
     /**
@@ -74,5 +75,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\CheckRole::class,
         'role_tp' => \App\Http\Middleware\CheckRoleTP::class,
         'role_tp_tch' => \App\Http\Middleware\CheckRoleTPTeach::class,
+        'set_debug' => \App\Http\Middleware\setDebug::class,
     ];
 }
